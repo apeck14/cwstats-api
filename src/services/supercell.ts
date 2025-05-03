@@ -73,3 +73,15 @@ export const searchClans = async (name: string) => {
 
   return handleSupercellResponse(response)
 }
+
+export const getRiverRace = async (tag: string) => {
+  const url = `${BASE_URL}/clans/%23${formatTag(tag, false)}/currentriverrace`
+  const response = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
+    },
+    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
+  })
+
+  return handleSupercellResponse(response)
+}

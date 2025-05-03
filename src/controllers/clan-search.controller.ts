@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { clanSearchSchema } from '../schemas/zod/supercell'
+import { searchSchema } from '../schemas/zod/supercell'
 import { searchClans } from '../services/supercell'
 
 /**
@@ -9,7 +9,7 @@ import { searchClans } from '../services/supercell'
  */
 export const clanSearchController = async (req: Request, res: Response) => {
   try {
-    const parsed = clanSearchSchema.parse({
+    const parsed = searchSchema.parse({
       query: req.query,
     })
 
