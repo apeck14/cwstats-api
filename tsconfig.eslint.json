@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src", "jest.config.ts"] // add other root level config files here
+}
