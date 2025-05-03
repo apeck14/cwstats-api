@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { ZodError } from 'zod'
 
 import { searchSchema } from '../schemas/zod/supercell'
 import { searchClans } from '../services/supercell'
@@ -24,6 +25,14 @@ export const clanSearchController = async (req: Request, res: Response) => {
 
     res.status(200).json(clans)
   } catch (err) {
+    if (err instanceof ZodError) {
+      res.status(400).json({
+        error: err.errors[0].message,
+        status: 400,
+      })
+      return
+    }
+
     res.status(400).json({ details: err, error: 'Invalid request' })
   }
 }
