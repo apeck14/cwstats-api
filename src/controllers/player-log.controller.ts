@@ -14,6 +14,7 @@ export const playerLogController = async (req: Request, res: Response) => {
 
     if (error) {
       res.status(status).json({ error, status })
+      return
     }
 
     res.status(200).json(log)

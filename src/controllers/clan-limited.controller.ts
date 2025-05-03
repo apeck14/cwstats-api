@@ -14,6 +14,7 @@ export const clanLimitedController = async (req: Request, res: Response) => {
 
     if (error) {
       res.status(status).json({ error, status })
+      return
     }
 
     // only large prop

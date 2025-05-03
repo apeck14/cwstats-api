@@ -14,6 +14,7 @@ export const playerLimitedController = async (req: Request, res: Response) => {
 
     if (error || !player) {
       res.status(status).json({ error, status })
+      return
     }
 
     const propsToRemove = [
