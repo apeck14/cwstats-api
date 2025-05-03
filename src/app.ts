@@ -4,6 +4,7 @@ import helmet from 'helmet'
 
 import { errorHandler, notFound } from './middleware/errors'
 import clanRouter from './routes/clan'
+import leaderboardRouter from './routes/leaderboard'
 import playerRouter from './routes/player'
 
 // Initialize express app
@@ -24,6 +25,7 @@ app.use((req: Request, res: Response, next) => {
 // API routes
 app.use('/api/player', playerRouter)
 app.use('/api/clan', clanRouter)
+app.use('/api/leaderboard', leaderboardRouter)
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {

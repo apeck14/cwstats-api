@@ -19,3 +19,19 @@ export const searchSchema = z.object({
     name: z.string().min(1, { message: 'Name cannot be empty' }),
   }),
 })
+
+export const leaderboardWarSchema = z.object({
+  params: z.object({
+    locationId: z.union([z.literal('global'), z.string().regex(/^\d+$/).transform(Number)]),
+  }),
+  query: z.object({
+    limit: z
+      .string()
+      .regex(/^\d+$/)
+      .transform(Number)
+      .refine((val) => val > 0, {
+        message: 'limit must be greater than 0',
+      })
+      .optional(),
+  }),
+})

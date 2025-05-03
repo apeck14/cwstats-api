@@ -85,3 +85,15 @@ export const getRiverRace = async (tag: string) => {
 
   return handleSupercellResponse(response)
 }
+
+export const getWarLeaderboard = async (locationId: string | number, limit?: number) => {
+  const url = `${BASE_URL}/locations/${locationId}/rankings/clanwars?limit=${limit || 100}`
+  const response = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
+    },
+    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
+  })
+
+  return handleSupercellResponse(response)
+}
