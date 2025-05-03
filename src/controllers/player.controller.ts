@@ -1,17 +1,16 @@
 import { Request, Response } from 'express'
 
 import { getPlayer } from '../services/supercell'
-import { formatTag } from '../utils/format'
 
 /**
- * Get player by tag
+ * Get player
  * @route GET /api/player/:tag
  */
 export const playerController = async (req: Request, res: Response) => {
   try {
     const { tag } = req.params
 
-    const { data: player, error, status } = await getPlayer(formatTag(tag, false))
+    const { data: player, error, status } = await getPlayer(tag)
 
     if (error) {
       res.status(status).json({ error, status })
@@ -19,7 +18,7 @@ export const playerController = async (req: Request, res: Response) => {
 
     res.status(200).json(player)
   } catch {
-    res.status(500).json({ error: 'Server error', status: 500 })
+    res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }
 
