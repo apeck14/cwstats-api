@@ -3,6 +3,7 @@ import express, { Application, json, Request, Response, urlencoded } from 'expre
 import helmet from 'helmet'
 
 import { errorHandler, notFound } from './middleware/errors'
+import clanRouter from './routes/clan'
 import playerRouter from './routes/player'
 
 // Initialize express app
@@ -22,9 +23,10 @@ app.use((req: Request, res: Response, next) => {
 
 // API routes
 app.use('/api/player', playerRouter)
+app.use('/api/clan', clanRouter)
 
 // Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
+app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is running', status: 'ok' })
 })
 

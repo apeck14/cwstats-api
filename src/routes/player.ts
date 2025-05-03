@@ -4,7 +4,7 @@ import playerController from '../controllers/player.controller'
 import playerLimitedController from '../controllers/player-limited.controller'
 import playerLogController from '../controllers/player-log.controller'
 import validation from '../middleware/validation'
-import { playerSchema } from '../schemas/zod/player'
+import { playerSchema } from '../schemas/zod/supercell'
 
 const router: Router = Router()
 

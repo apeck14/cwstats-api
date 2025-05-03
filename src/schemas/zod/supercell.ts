@@ -7,3 +7,9 @@ export const playerSchema = z.object({
     tag: tagSchema,
   }),
 })
+
+export const clanSchema = z.object({
+  params: z.object({
+    tag: tagSchema,
+  }),
+})
