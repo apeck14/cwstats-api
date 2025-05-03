@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 
+import { formatTag } from '../utils/format'
+
 const BASE_URL = 'https://api.clashroyale.com/v1'
 
 export const handleSupercellResponse = (res: AxiosResponse) => {
@@ -25,7 +27,20 @@ export const handleSupercellResponse = (res: AxiosResponse) => {
 }
 
 export const getPlayer = async (tag: string) => {
-  const response = await axios.get(`${BASE_URL}/players/%23${tag}`, {
+  const url = `${BASE_URL}/players/%23${formatTag(tag, false)}`
+  const response = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
+    },
+    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
+  })
+
+  return handleSupercellResponse(response)
+}
+
+export const getPlayerBattleLog = async (tag: string) => {
+  const url = `${BASE_URL}/players/%23${formatTag(tag, false)}/battlelog`
+  const response = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
     },
