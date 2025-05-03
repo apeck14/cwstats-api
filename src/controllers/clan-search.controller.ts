@@ -33,7 +33,7 @@ export const clanSearchController = async (req: Request, res: Response) => {
       return
     }
 
-    res.status(400).json({ details: err, error: 'Invalid request' })
+    res.status(400).json({ error: 'Internal server error', status: 500 })
   }
 }
 
