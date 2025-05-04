@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { tagSchema } from './utils'
+
 export const playerDocumentSchema = z.object({
-  tag: z.string().min(1, 'tag is required'),
+  tag: tagSchema,
 })

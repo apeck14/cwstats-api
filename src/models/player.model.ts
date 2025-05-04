@@ -6,11 +6,14 @@ export interface Player extends Document {
   clanName: string
 }
 
-const playerSchema = new Schema<Player>({
-  clanName: { default: '', type: String },
-  name: { required: true, type: String },
-  tag: { required: true, type: String }, // don't add unique index, calls to add player are non-blocking (performance isn't priority)
-})
+const playerSchema = new Schema<Player>(
+  {
+    clanName: { default: '', type: String },
+    name: { required: true, type: String },
+    tag: { required: true, trim: true, type: String }, // don't add unique index, calls to add player are non-blocking (performance isn't priority)
+  },
+  { collection: 'Players' },
+)
 
 export const PlayerModel: Model<Player> =
-  mongoose.models.Players || mongoose.model<Player>('Players', playerSchema)
+  mongoose.models.Player || mongoose.model<Player>('Player', playerSchema)

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { ZodError } from 'zod'
 
 import { addPlayer } from '../services/mongo'
 import { getPlayer } from '../services/supercell'
@@ -21,12 +22,20 @@ export const playerAddController = async (req: Request, res: Response) => {
       return
     }
 
-    const data = { clanName: player?.clan?.name, name: player.name, tag: player.tag.substr(1) }
+    const data = { clanName: player?.clan?.name, name: player.name, tag: player.tag }
 
     await addPlayer(data)
 
     res.status(200).json({ success: true, ...data })
-  } catch {
+  } catch (err) {
+    if (err instanceof ZodError) {
+      res.status(400).json({
+        error: err.errors[0].message,
+        status: 400,
+      })
+      return
+    }
+
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

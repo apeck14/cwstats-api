@@ -12,7 +12,8 @@ export const connectDB = async (): Promise<void> => {
       return
     }
 
-    const uri = process.env.NODE_ENV === 'test' ? process.env.MONGODB_TEST_URI : process.env.MONGODB_URI
+    const uri =
+      process.env.NODE_ENV === 'development' ? process.env.MONGODB_TEST_URI : process.env.MONGODB_URI
 
     if (!uri) {
       throw new Error('MongoDB URI is not defined in environment variables')
