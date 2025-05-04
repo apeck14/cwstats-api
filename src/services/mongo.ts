@@ -1,5 +1,6 @@
 import { connectDB } from '../config/db'
 import { PlayerModel } from '../models/player.model'
+import { PlusClanModel } from '../models/plus-clan.model'
 
 interface PlayerInput {
   tag: string
@@ -21,4 +22,16 @@ export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
   }
 
   return updatedPlayer
+}
+
+export const getAllPlusClans = async (tagsOnly: boolean) => {
+  await connectDB()
+
+  const plusClans = await PlusClanModel.find({}, { _id: 0 }).lean()
+
+  if (tagsOnly) {
+    return plusClans.map((doc) => doc.tag)
+  }
+
+  return plusClans
 }

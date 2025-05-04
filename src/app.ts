@@ -6,6 +6,7 @@ import { errorHandler, notFound } from './middleware/errors'
 import clanRouter from './routes/clan.routes'
 import leaderboardRouter from './routes/leaderboard.routes'
 import playerRouter from './routes/player.routes'
+import plusRouter from './routes/plus.routes'
 
 // Initialize express app
 const app: Application = express()
@@ -26,6 +27,7 @@ app.use((req: Request, res: Response, next) => {
 app.use('/api/player', playerRouter)
 app.use('/api/clan', clanRouter)
 app.use('/api/leaderboard', leaderboardRouter)
+app.use('/api/plus', plusRouter)
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
