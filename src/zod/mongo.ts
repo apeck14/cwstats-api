@@ -34,3 +34,15 @@ export const guildCommandCooldownSchema = z.object({
     id: guildIdSchema,
   }),
 })
+
+export const guildUserNicknameSchema = z.object({
+  body: z.object({
+    nickname: z
+      .string({ message: 'nickname must be a string' })
+      .min(1, { message: 'nickname cannot be empty' }),
+    userId: z.string({ message: 'userId must be a string' }).min(1, { message: 'userId cannot be empty' }),
+  }),
+  params: z.object({
+    id: guildIdSchema,
+  }),
+})
