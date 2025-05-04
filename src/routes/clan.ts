@@ -1,9 +1,9 @@
 import { Router } from 'express'
 
-import clanController from '../controllers/clan.controller'
-import clanLimitedController from '../controllers/clan-limited.controller'
-import clanRaceController from '../controllers/clan-race.controller'
-import clanSearchController from '../controllers/clan-search.controller'
+import clanController from '../controllers/get-clan'
+import clanLimitedController from '../controllers/get-clan-limited'
+import clanRaceController from '../controllers/get-clan-race'
+import clanSearchController from '../controllers/get-clan-search'
 import validation from '../middleware/validation'
 import { clanSchema } from '../schemas/supercell'
 
