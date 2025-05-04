@@ -20,3 +20,17 @@ export const guildClansSchema = z.object({
     id: guildIdSchema,
   }),
 })
+
+export const guildCommandCooldownSchema = z.object({
+  body: z.object({
+    commandName: z
+      .string({ message: 'commandName must be a string' })
+      .min(1, { message: 'commandName cannot be empty' }),
+    delay: z
+      .number({ message: 'delay must be a number' })
+      .min(0, { message: 'delay must be a non-negative number' }),
+  }),
+  params: z.object({
+    id: guildIdSchema,
+  }),
+})
