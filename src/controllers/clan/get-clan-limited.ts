@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 
-import { getClan } from '../services/supercell'
+import { getClan } from '../../services/supercell'
 
 /**
  * Get clan
- * @route GET /api/clan/:tag
+ * @route GET /api/clan/:tag/limited
  */
-export const clanController = async (req: Request, res: Response) => {
+export const clanLimitedController = async (req: Request, res: Response) => {
   try {
     const { tag } = req.params
 
@@ -17,10 +17,13 @@ export const clanController = async (req: Request, res: Response) => {
       return
     }
 
+    // only large prop
+    delete clan.memberList
+
     res.status(200).json(clan)
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }
 
-export default clanController
+export default clanLimitedController

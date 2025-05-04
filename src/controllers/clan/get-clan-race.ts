@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { getRiverRace } from '../services/supercell'
+import { getRiverRace } from '../../services/supercell'
 
 /**
  * Get clan

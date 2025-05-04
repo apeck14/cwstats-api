@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import plusClansController from '../controllers/get-plus-clans'
+import plusClansController from '../controllers/plus/get-plus-clans'
 
 const router: Router = Router()
 

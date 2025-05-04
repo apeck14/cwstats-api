@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { getLinkedClansByGuild } from '../services/mongo'
+import { getLinkedClansByGuild } from '../../services/mongo'
 
 /**
  * Get all linked clans by guild
