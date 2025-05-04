@@ -9,7 +9,6 @@ export const connectDB = async (): Promise<void> => {
   try {
     // Prevent duplicate connections in development environments (e.g., nodemon restarts)
     if (mongoose.connection.readyState === 1) {
-      console.log('MongoDB is already connected')
       return
     }
 
