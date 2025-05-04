@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
-import { searchSchema } from '../schemas/zod/supercell'
+import { searchSchema } from '../schemas/supercell'
 import { searchClans } from '../services/supercell'
 
 /**

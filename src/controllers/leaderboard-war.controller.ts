@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
-import { leaderboardWarSchema } from '../schemas/zod/supercell'
+import { leaderboardWarSchema } from '../schemas/supercell'
 import { getWarLeaderboard } from '../services/supercell'
 
 /**

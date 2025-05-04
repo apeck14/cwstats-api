@@ -16,7 +16,7 @@ export const clanSchema = z.object({
 
 export const searchSchema = z.object({
   query: z.object({
-    name: z.string().min(1, { message: 'Name cannot be empty' }),
+    name: z.string().min(1, { message: 'name cannot be empty' }),
   }),
 })
 
