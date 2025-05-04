@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { tagSchema } from './utils'
+import { guildIdSchema, tagSchema } from './utils'
 
 export const playerDocumentSchema = z.object({
   tag: tagSchema,
@@ -12,5 +12,11 @@ export const plusClansSchema = z.object({
       .enum(['true', 'false'], { message: "tagsOnly must be 'true' or 'false'" })
       .optional()
       .default('false'),
+  }),
+})
+
+export const guildClansSchema = z.object({
+  params: z.object({
+    id: guildIdSchema,
   }),
 })

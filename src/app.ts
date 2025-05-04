@@ -4,6 +4,7 @@ import helmet from 'helmet'
 
 import { errorHandler, notFound } from './middleware/errors'
 import clanRouter from './routes/clan.routes'
+import guildRouter from './routes/guild.routes'
 import leaderboardRouter from './routes/leaderboard.routes'
 import playerRouter from './routes/player.routes'
 import plusRouter from './routes/plus.routes'
@@ -28,6 +29,7 @@ app.use('/api/player', playerRouter)
 app.use('/api/clan', clanRouter)
 app.use('/api/leaderboard', leaderboardRouter)
 app.use('/api/plus', plusRouter)
+app.use('/api/guild', guildRouter)
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {

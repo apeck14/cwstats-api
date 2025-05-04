@@ -1,4 +1,5 @@
 import { connectDB } from '../config/db'
+import { LinkedClanModel } from '../models/linked-clan.model'
 import { PlayerModel } from '../models/player.model'
 import { PlusClanModel } from '../models/plus-clan.model'
 
@@ -34,4 +35,12 @@ export const getAllPlusClans = async (tagsOnly: boolean) => {
   }
 
   return plusClans
+}
+
+export const getLinkedClansByGuild = async (id: string) => {
+  await connectDB()
+
+  const linkedClans = await LinkedClanModel.find({ guildID: id }, { _id: 0 }).lean()
+
+  return linkedClans
 }
