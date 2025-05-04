@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
-import { searchSchema } from '../schemas/supercell'
 import { searchClans } from '../services/supercell'
+import { searchSchema } from '../zod/supercell'
 
 /**
  * Get clan

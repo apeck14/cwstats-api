@@ -5,7 +5,7 @@ import clanLimitedController from '../controllers/get-clan-limited'
 import clanRaceController from '../controllers/get-clan-race'
 import clanSearchController from '../controllers/get-clan-search'
 import validation from '../middleware/validation'
-import { clanSchema } from '../schemas/supercell'
+import { clanSchema } from '../zod/supercell'
 
 const router: Router = Router()
 

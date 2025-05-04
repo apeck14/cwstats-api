@@ -3,9 +3,9 @@ import express, { Application, json, Request, Response, urlencoded } from 'expre
 import helmet from 'helmet'
 
 import { errorHandler, notFound } from './middleware/errors'
-import clanRouter from './routes/clan'
-import leaderboardRouter from './routes/leaderboard'
-import playerRouter from './routes/player'
+import clanRouter from './routes/clan.routes'
+import leaderboardRouter from './routes/leaderboard.routes'
+import playerRouter from './routes/player.routes'
 
 // Initialize express app
 const app: Application = express()
