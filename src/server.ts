@@ -29,7 +29,6 @@ process.on('SIGTERM', () => {
   }
 })
 
-// Connect to mongo and set server
 connectDB()
   .then(() => {
     server = app.listen(PORT, HOST, () =>
