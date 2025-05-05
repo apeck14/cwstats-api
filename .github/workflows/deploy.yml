@@ -32,15 +32,15 @@ jobs:
           echo ".env" >> rsync_exclude.txt
           rsync -avz --delete --exclude-from=rsync_exclude.txt -e "ssh -o StrictHostKeyChecking=no" ./ $VPS_USER@$VPS_HOST:$VPS_PATH
 
-      - name: Build and Reload PM2
+      - name: Install, Build, and Reload PM2 on VPS
         env:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PATH: ${{ secrets.VPS_PATH }}
         run: |
-          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-            cd $VPS_PATH
-            npm install --omit=dev
-            npm run build
+          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST "
+            cd $VPS_PATH &&
+            npm ci &&
+            npm run build &&
             pm2 reload cwstats-api
-          EOF
+          "
