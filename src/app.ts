@@ -2,7 +2,7 @@ import cors from 'cors'
 import express, { Application, json, Request, Response, urlencoded } from 'express'
 import helmet from 'helmet'
 
-import verifyInternalToken from '../src/middleware/auth'
+import verifyInternalToken from './middleware/auth'
 import { errorHandler, notFound } from './middleware/errors'
 import clanRouter from './routes/clan.routes'
 import guildRouter from './routes/guild.routes'
