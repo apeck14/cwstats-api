@@ -49,7 +49,7 @@ app.use('/api/guild', guildRouter)
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({ message: 'Server is running', status: 'ok' })
+  res.status(200).json({ message: 'Server is running', status: 200 })
 })
 
 // Error handlers
