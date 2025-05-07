@@ -10,8 +10,6 @@ export const playerLimitedController = async (req: Request, res: Response) => {
   try {
     const { tag } = req.params
 
-    console.log(tag)
-
     const { data: player, error, status } = await getPlayer(tag)
 
     if (error || !player) {
