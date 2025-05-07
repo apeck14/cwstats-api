@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 
-import { formatTag } from '../utils/format'
+import { formatTag } from '../lib/format'
 
 const BASE_URL = 'https://api.clashroyale.com/v1'
 

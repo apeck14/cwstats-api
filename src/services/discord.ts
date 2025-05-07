@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 
-import { DiscordApiError } from '../utils/errors'
+import { DiscordApiError } from '../lib/errors'
 
 interface discordUserNicknameInput {
   guildId: string

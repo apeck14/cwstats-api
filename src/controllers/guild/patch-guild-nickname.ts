@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
 import { updateDiscordUserNickname } from '../../services/discord'
-import { DiscordApiError } from '../../utils/errors'
+import { DiscordApiError } from '../../lib/errors'
 import { guildUserNicknameSchema } from '../../zod/mongo'
 
 /**
