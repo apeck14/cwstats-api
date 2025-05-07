@@ -44,10 +44,12 @@ export const getAllPlusClans = async (tagsOnly: boolean) => {
   return plusClans
 }
 
-export const getGuild = async (id: string) => {
+export const getGuild = async (id: string, limited?: boolean) => {
   await connectDB()
 
-  const guild = await GuildModel.findOne({ guildID: id }, { _id: 0 }).lean()
+  const projection = limited ? { _id: 0, nudges: 0 } : { _id: 0 }
+
+  const guild = await GuildModel.findOne({ guildID: id }, { ...projection }).lean()
 
   return guild
 }

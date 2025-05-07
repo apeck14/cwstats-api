@@ -15,12 +15,6 @@ export const plusClansSchema = z.object({
   }),
 })
 
-export const guildClansSchema = z.object({
-  params: z.object({
-    id: guildIdSchema,
-  }),
-})
-
 export const guildSchema = z.object({
   params: z.object({
     id: guildIdSchema,
