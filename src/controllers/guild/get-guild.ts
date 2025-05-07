@@ -12,6 +12,11 @@ export const getGuildController = async (req: Request, res: Response) => {
 
     const data = await getGuild(id)
 
+    if (!data) {
+      res.status(404).json({ error: 'Guild not found', status: 404 })
+      return
+    }
+
     res.status(200).json(data)
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
