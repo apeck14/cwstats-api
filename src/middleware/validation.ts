@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { AnyZodObject, ZodError, ZodIssue } from 'zod'
+import { AnyZodObject, ZodError } from 'zod'
 
 export default (schema: AnyZodObject) => async (req: Request, res: Response, next: NextFunction) => {
   try {
