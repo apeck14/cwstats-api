@@ -1,16 +1,8 @@
 import { Request, Response } from 'express'
 
+import { getClanBadge } from '../../lib/utils'
 import { getRiverRace } from '../../services/supercell'
-
-interface Participant {
-  tag: string
-  name: string
-  fame: number
-  repairPoints: number
-  boatAttacks: number
-  decksUsed: number
-  decksUsedToday: number
-}
+import { RaceClan, RaceParticipant } from '../../types/supercell.types'
 
 /**
  * Get clan
@@ -30,14 +22,19 @@ export const clanRaceController = async (req: Request, res: Response) => {
     const dayIndex = race.periodIndex % 7
     const isColosseum = race.periodType === 'colosseum'
     const isTraining = race.periodType === 'training'
-    const decksUsed = race.clan.participants.reduce((a: number, b: Participant) => a + b.decksUsedToday, 0)
+    const clanIndex = race.clans.findIndex((c: RaceClan) => c.tag === race.clan.tag)
+
+    delete race.clan
+
+    // add decks used for each clan
+    for (const c of race.clans) {
+      c.decksUsed = c.participants.reduce((a: number, b: RaceParticipant) => a + b.decksUsedToday, 0)
+      c.badge = getClanBadge(c.badgeId, c.trophyCount)
+    }
 
     const fullRace = {
+      clanIndex,
       ...race,
-      clan: {
-        decksUsed,
-        ...race.clan,
-      },
       dayIndex,
       isColosseum,
       isTraining,

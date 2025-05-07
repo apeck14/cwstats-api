@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import { getRiverRace } from '../../services/supercell'
+import { RaceClan } from '../../types/supercell.types'
 
 /**
  * Get clan
@@ -17,7 +18,22 @@ export const clanRaceLimitedController = async (req: Request, res: Response) => 
       return
     }
 
-    res.status(200).json({ data: race })
+    const dayIndex = race.periodIndex % 7
+    const isColosseum = race.periodType === 'colosseum'
+    const isTraining = race.periodType === 'training'
+    const clanIndex = race.clans.findIndex((c: RaceClan) => c.tag === race.clan.tag)
+
+    delete race.clan
+
+    const limitedRace = {
+      clanIndex,
+      ...race,
+      dayIndex,
+      isColosseum,
+      isTraining,
+    }
+
+    res.status(200).json({ data: limitedRace })
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
