@@ -44,6 +44,14 @@ export const getAllPlusClans = async (tagsOnly: boolean) => {
   return plusClans
 }
 
+export const getGuild = async (id: string) => {
+  await connectDB()
+
+  const guild = await GuildModel.findOne({ guildID: id }, { _id: 0 }).lean()
+
+  return guild
+}
+
 export const getLinkedClansByGuild = async (id: string) => {
   await connectDB()
 

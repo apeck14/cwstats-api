@@ -21,6 +21,12 @@ export const guildClansSchema = z.object({
   }),
 })
 
+export const guildSchema = z.object({
+  params: z.object({
+    id: guildIdSchema,
+  }),
+})
+
 export const guildCommandCooldownSchema = z.object({
   body: z.object({
     commandName: z
