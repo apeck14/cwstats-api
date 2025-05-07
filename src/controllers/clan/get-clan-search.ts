@@ -23,7 +23,7 @@ export const clanSearchController = async (req: Request, res: Response) => {
       return
     }
 
-    res.status(200).json(clans)
+    res.status(200).json({ data: clans })
   } catch (err) {
     if (err instanceof ZodError) {
       res.status(400).json({

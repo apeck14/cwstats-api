@@ -20,7 +20,7 @@ export const clanLimitedController = async (req: Request, res: Response) => {
     // only large prop
     delete clan.memberList
 
-    res.status(200).json(clan)
+    res.status(200).json({ data: clan })
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }

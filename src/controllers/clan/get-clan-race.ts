@@ -17,7 +17,7 @@ export const clanRaceController = async (req: Request, res: Response) => {
       return
     }
 
-    res.status(200).json(race)
+    res.status(200).json({ data: race })
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }

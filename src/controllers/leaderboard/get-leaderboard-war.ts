@@ -25,7 +25,7 @@ export const leaderboardWarController = async (req: Request, res: Response) => {
       return
     }
 
-    res.status(200).json(leaderboard)
+    res.status(200).json({ data: leaderboard })
   } catch (err) {
     if (err instanceof ZodError) {
       res.status(400).json({

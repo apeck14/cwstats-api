@@ -10,6 +10,8 @@ export const playerLimitedController = async (req: Request, res: Response) => {
   try {
     const { tag } = req.params
 
+    console.log(tag)
+
     const { data: player, error, status } = await getPlayer(tag)
 
     if (error || !player) {
@@ -37,7 +39,7 @@ export const playerLimitedController = async (req: Request, res: Response) => {
       delete limitedPlayer[p]
     }
 
-    res.status(200).json(limitedPlayer)
+    res.status(200).json({ data: limitedPlayer })
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
