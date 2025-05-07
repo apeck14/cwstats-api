@@ -26,7 +26,7 @@ export const clanRaceController = async (req: Request, res: Response) => {
 
     delete race.clan
 
-    // add decks used for each clan
+    // add custom data
     for (const c of race.clans) {
       c.decksUsed = c.participants.reduce((a: number, b: RaceParticipant) => a + b.decksUsedToday, 0)
       c.badge = getClanBadge(c.badgeId, c.trophyCount)
