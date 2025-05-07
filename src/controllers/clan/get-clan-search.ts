@@ -6,7 +6,7 @@ import { searchSchema } from '../../zod/supercell'
 
 /**
  * Get clan
- * @route GET /api/clan/search?name=
+ * @route GET /clan/search?name=
  */
 export const clanSearchController = async (req: Request, res: Response) => {
   try {

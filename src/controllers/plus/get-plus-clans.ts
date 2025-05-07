@@ -6,7 +6,7 @@ import { plusClansSchema } from '../../zod/mongo'
 
 /**
  * Get all plus clans
- * @route GET /api/plus/clans?tagsOnly=
+ * @route GET /plus/clans?tagsOnly=
  */
 export const plusClansController = async (req: Request, res: Response) => {
   try {

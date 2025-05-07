@@ -4,7 +4,7 @@ import { getClan } from '../../services/supercell'
 
 /**
  * Get clan
- * @route GET /api/clan/:tag
+ * @route GET /clan/:tag
  */
 export const clanController = async (req: Request, res: Response) => {
   try {

@@ -4,7 +4,7 @@ import { getPlayer } from '../../services/supercell'
 
 /**
  * Get player
- * @route GET /api/player/:tag
+ * @route GET /player/:tag
  */
 export const playerController = async (req: Request, res: Response) => {
   try {

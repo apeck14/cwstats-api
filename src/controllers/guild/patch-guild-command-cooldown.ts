@@ -6,7 +6,7 @@ import { guildCommandCooldownSchema } from '../../zod/mongo'
 
 /**
  * Set a command cooldown
- * @route PATCH /api/guild/:id/command-cooldown
+ * @route PATCH /guild/:id/command-cooldown
  */
 export const patchGuildCommandCooldown = async (req: Request, res: Response) => {
   try {

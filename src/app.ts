@@ -41,14 +41,14 @@ app.use((req: Request, res: Response, next) => {
 app.use(verifyInternalToken)
 
 // API routes
-app.use('/api/player', playerRouter)
-app.use('/api/clan', clanRouter)
-app.use('/api/leaderboard', leaderboardRouter)
-app.use('/api/plus', plusRouter)
-app.use('/api/guild', guildRouter)
+app.use('/player', playerRouter)
+app.use('/clan', clanRouter)
+app.use('/leaderboard', leaderboardRouter)
+app.use('/plus', plusRouter)
+app.use('/guild', guildRouter)
 
 // Health check endpoint
-app.get('/api/health', (req: Request, res: Response) => {
+app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is running', status: 200 })
 })
 

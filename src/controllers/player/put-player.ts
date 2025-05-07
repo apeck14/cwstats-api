@@ -7,7 +7,7 @@ import { playerDocumentSchema } from '../../zod/mongo'
 
 /**
  * Get player
- * @route PUT /api/player
+ * @route PUT /player
  */
 export const playerAddController = async (req: Request, res: Response) => {
   try {

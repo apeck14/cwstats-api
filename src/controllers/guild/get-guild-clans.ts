@@ -4,7 +4,7 @@ import { getLinkedClansByGuild } from '../../services/mongo'
 
 /**
  * Get all linked clans by guild
- * @route GET /api/guild/:id/clans
+ * @route GET /guild/:id/clans
  */
 export const getGuildClansController = async (req: Request, res: Response) => {
   try {

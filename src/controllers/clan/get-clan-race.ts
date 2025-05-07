@@ -4,7 +4,7 @@ import { getRiverRace } from '../../services/supercell'
 
 /**
  * Get clan
- * @route GET /api/clan/:tag/race
+ * @route GET /clan/:tag/race
  */
 export const clanRaceController = async (req: Request, res: Response) => {
   try {

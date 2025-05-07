@@ -6,7 +6,7 @@ import { leaderboardWarSchema } from '../../zod/supercell'
 
 /**
  * Get clan
- * @route GET /api/leaderboard/:locationId/war
+ * @route GET /leaderboard/:locationId/war
  */
 export const leaderboardWarController = async (req: Request, res: Response) => {
   try {

@@ -7,7 +7,7 @@ import { guildUserNicknameSchema } from '../../zod/mongo'
 
 /**
  * Set a user's nickname within a specific guild
- * @route PATCH /api/guild/:id/user-nickname
+ * @route PATCH /guild/:id/user-nickname
  */
 export const patchGuildUserNickname = async (req: Request, res: Response) => {
   try {

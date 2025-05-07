@@ -4,7 +4,7 @@ import { getPlayerBattleLog } from '../../services/supercell'
 
 /**
  * Get player battle log
- * @route GET /api/player/:tag/log
+ * @route GET /player/:tag/log
  */
 export const playerLogController = async (req: Request, res: Response) => {
   try {
