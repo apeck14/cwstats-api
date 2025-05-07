@@ -16,7 +16,7 @@ export const getLeague = (trophyCount: number): string => {
   ]
 
   const found = leagues.find(({ min }) => trophyCount >= min)
-  return found?.name ?? 'bronze-1'
+  return found?.name ?? 'bronze1'
 }
 
 export const getClanBadge = (badgeId: number, trophyCount: number): string => {
