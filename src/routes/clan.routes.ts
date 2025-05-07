@@ -1,12 +1,12 @@
 import { Router } from 'express'
 
-import clanController from '../controllers/clan/get-clan'
-import clanLimitedController from '../controllers/clan/get-clan-limited'
-import clanRaceController from '../controllers/clan/get-clan-race'
-import clanRaceLimitedController from '../controllers/clan/get-clan-race-limited'
-import clanSearchController from '../controllers/clan/get-clan-search'
-import validation from '../middleware/validation'
-import { clanSchema } from '../zod/supercell'
+import clanController from '@/controllers/clan/get-clan'
+import clanLimitedController from '@/controllers/clan/get-clan-limited'
+import clanRaceController from '@/controllers/clan/get-clan-race'
+import clanRaceLimitedController from '@/controllers/clan/get-clan-race-limited'
+import clanSearchController from '@/controllers/clan/get-clan-search'
+import validation from '@/middleware/validation'
+import { clanSchema } from '@/zod/supercell'
 
 const router: Router = Router()
 

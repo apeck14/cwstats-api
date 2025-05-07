@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { getPlayer } from '../../services/supercell'
+import { getPlayer } from '@/services/supercell'
 
 /**
  * Get player

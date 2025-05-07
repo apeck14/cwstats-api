@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { tagSchema } from './utils'
+import { tagSchema } from '@/zod/utils'
 
 export const playerSchema = z.object({
   params: z.object({

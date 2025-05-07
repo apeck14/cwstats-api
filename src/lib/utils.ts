@@ -1,4 +1,4 @@
-import badges from '../static/badges.json'
+import badges from '@/static/badges.json'
 
 export const getLeague = (trophyCount: number): string => {
   const leagues = [

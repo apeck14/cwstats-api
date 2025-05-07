@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
-import { setCommandCooldown } from '../../services/mongo'
-import { guildCommandCooldownSchema } from '../../zod/mongo'
+import { setCommandCooldown } from '@/services/mongo'
+import { guildCommandCooldownSchema } from '@/zod/mongo'
 
 /**
  * Set a command cooldown

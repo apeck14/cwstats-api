@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { getGuild } from '../../services/mongo'
+import { getGuild } from '@/services/mongo'
 
 /**
  * Get guild data by id

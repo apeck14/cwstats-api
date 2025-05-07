@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 
-import { getClanBadge } from '../../lib/utils'
-import { getRiverRace } from '../../services/supercell'
-import { RaceClan, RaceParticipant } from '../../types/supercell.types'
+import { getClanBadge } from '@/lib/utils'
+import { getRiverRace } from '@/services/supercell'
+import { RaceClan, RaceParticipant } from '@/types/supercell.types'
 
 /**
  * Get clan

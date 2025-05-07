@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import leaderboardWarController from '../controllers/leaderboard/get-leaderboard-war'
+import leaderboardWarController from '@/controllers/leaderboard/get-leaderboard-war'
 
 const router: Router = Router()
 

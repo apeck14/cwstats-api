@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
-import { getWarLeaderboard } from '../../services/supercell'
-import { leaderboardWarSchema } from '../../zod/supercell'
+import { getWarLeaderboard } from '@/services/supercell'
+import { leaderboardWarSchema } from '@/zod/supercell'
 
 /**
  * Get clan

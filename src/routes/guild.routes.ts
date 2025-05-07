@@ -1,12 +1,12 @@
 import { Router } from 'express'
 
-import getGuildController from '../controllers/guild/get-guild'
-import getGuildClansController from '../controllers/guild/get-guild-clans'
-import getGuildLimitedController from '../controllers/guild/get-guild-limited'
-import patchGuildCommandCooldown from '../controllers/guild/patch-guild-command-cooldown'
-import patchGuildUserNickname from '../controllers/guild/patch-guild-nickname'
-import validation from '../middleware/validation'
-import { guildSchema } from '../zod/mongo'
+import getGuildController from '@/controllers/guild/get-guild'
+import getGuildClansController from '@/controllers/guild/get-guild-clans'
+import getGuildLimitedController from '@/controllers/guild/get-guild-limited'
+import patchGuildCommandCooldown from '@/controllers/guild/patch-guild-command-cooldown'
+import patchGuildUserNickname from '@/controllers/guild/patch-guild-nickname'
+import validation from '@/middleware/validation'
+import { guildSchema } from '@/zod/mongo'
 
 const router: Router = Router()
 

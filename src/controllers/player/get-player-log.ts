@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { getPlayerBattleLog } from '../../services/supercell'
+import { getPlayerBattleLog } from '@/services/supercell'
 
 /**
  * Get player battle log

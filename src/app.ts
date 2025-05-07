@@ -2,13 +2,13 @@ import cors from 'cors'
 import express, { Application, json, Request, Response, urlencoded } from 'express'
 import helmet from 'helmet'
 
-import verifyInternalToken from './middleware/auth'
-import { errorHandler, notFound } from './middleware/errors'
-import clanRouter from './routes/clan.routes'
-import guildRouter from './routes/guild.routes'
-import leaderboardRouter from './routes/leaderboard.routes'
-import playerRouter from './routes/player.routes'
-import plusRouter from './routes/plus.routes'
+import verifyInternalToken from '@/middleware/auth'
+import { errorHandler, notFound } from '@/middleware/errors'
+import clanRouter from '@/routes/clan.routes'
+import guildRouter from '@/routes/guild.routes'
+import leaderboardRouter from '@/routes/leaderboard.routes'
+import playerRouter from '@/routes/player.routes'
+import plusRouter from '@/routes/plus.routes'
 
 // Initialize express app
 const app: Application = express()

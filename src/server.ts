@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import { config } from 'dotenv'
 
+import { connectDB } from '@/config/db'
+
 import app from './app'
-import { connectDB } from './config/db'
 
 config()
 

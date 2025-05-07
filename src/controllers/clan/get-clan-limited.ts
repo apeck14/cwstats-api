@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { getClan } from '../../services/supercell'
+import { getClan } from '@/services/supercell'
 
 /**
  * Get clan

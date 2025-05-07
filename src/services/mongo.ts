@@ -1,8 +1,8 @@
-import { connectDB } from '../config/db'
-import { GuildModel } from '../models/guild.model'
-import { LinkedClanModel } from '../models/linked-clan.model'
-import { PlayerModel } from '../models/player.model'
-import { PlusClanModel } from '../models/plus-clan.model'
+import { connectDB } from '@/config/db'
+import { GuildModel } from '@/models/guild.model'
+import { LinkedClanModel } from '@/models/linked-clan.model'
+import { PlayerModel } from '@/models/player.model'
+import { PlusClanModel } from '@/models/plus-clan.model'
 
 interface PlayerInput {
   tag: string

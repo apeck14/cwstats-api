@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
-    "dev": "nodemon --exec ts-node src/server.ts",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "test": "jest --detectOpenHandles",
@@ -45,6 +45,7 @@
     "prettier": "^3.5.3",
     "supertest": "^7.1.0",
     "ts-jest": "^29.3.2",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
   }
 }

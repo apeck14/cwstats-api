@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
-import { getClanBadge } from '../../lib/utils'
-import { getClan } from '../../services/supercell'
+import { getClanBadge } from '@/lib/utils'
+import { getClan } from '@/services/supercell'
 
 /**
  * Get clan

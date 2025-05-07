@@ -8,7 +8,20 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "src/",
+    "paths": {
+      "@/config/*": ["config/*"],
+      "@/controllers/*": ["controllers/*"],
+      "@/lib/*": ["lib/*"],
+      "@/middleware/*": ["middleware/*"],
+      "@/models/*": ["models/*"],
+      "@/routes/*": ["routes/*"],
+      "@/services/*": ["services/*"],
+      "@/static/*": ["static/*"],
+      "@/types/*": ["types/*"],
+      "@/zod/*": ["zod/*"]
+    }
   },
   "include": ["src/**/*.ts"]
 }
