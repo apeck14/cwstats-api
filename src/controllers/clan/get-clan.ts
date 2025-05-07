@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { getClanBadge } from '../../lib/utils'
 import { getClan } from '../../services/supercell'
 
 /**
@@ -17,7 +18,9 @@ export const clanController = async (req: Request, res: Response) => {
       return
     }
 
-    res.status(200).json({ data: clan })
+    const badge = getClanBadge(clan.badgeId, clan.clanScore)
+
+    res.status(200).json({ data: { badge, ...clan } })
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
