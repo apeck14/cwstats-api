@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { omit } from 'lodash'
 
 import { getPlayer } from '@/services/supercell'
 
@@ -17,7 +18,7 @@ export const playerLimitedController = async (req: Request, res: Response) => {
       return
     }
 
-    const propsToRemove = [
+    const limitedPlayer = omit(player, [
       'badges',
       'achievements',
       'cards',
@@ -28,14 +29,7 @@ export const playerLimitedController = async (req: Request, res: Response) => {
       'lastPathOfLegendSeasonResult',
       'bestPathOfLegendSeasonResult',
       'leagueStatistics',
-      'progress',
-    ]
-
-    const limitedPlayer = { ...player }
-
-    for (const p of propsToRemove) {
-      delete limitedPlayer[p]
-    }
+    ])
 
     res.status(200).json({ data: limitedPlayer })
   } catch {

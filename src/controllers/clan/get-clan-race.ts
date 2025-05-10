@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
+import { omit } from 'lodash'
 
 import { getClanBadge } from '@/lib/utils'
 import { getRiverRace } from '@/services/supercell'
-import { RaceClan, RaceParticipant } from '@/types/supercell.types'
+import { ApiRace } from '@/types/api/race'
 
 /**
  * Get clan
@@ -14,30 +15,37 @@ export const clanRaceController = async (req: Request, res: Response) => {
 
     const { data: race, error, status } = await getRiverRace(tag)
 
-    if (error) {
+    if (error || !race) {
       res.status(status).json({ error, status })
       return
     }
 
-    const dayIndex = race.periodIndex % 7
-    const isColosseum = race.periodType === 'colosseum'
-    const isTraining = race.periodType === 'training'
-    const clanIndex = race.clans.findIndex((c: RaceClan) => c.tag === race.clan.tag)
+    const clanTag = race.clan.tag
 
-    delete race.clan
+    const clans = race.clans.map((c) => {
+      let decksUsed = 0
+      let slotsUsed = 0
 
-    // add custom data
-    for (const c of race.clans) {
-      c.decksUsed = c.participants.reduce((a: number, b: RaceParticipant) => a + b.decksUsedToday, 0)
-      c.badge = getClanBadge(c.badgeId, c.trophyCount)
-    }
+      for (const p of c.participants) {
+        decksUsed += p.decksUsedToday
+        if (p.decksUsedToday) slotsUsed++
+      }
 
-    const fullRace = {
-      clanIndex,
-      ...race,
-      dayIndex,
-      isColosseum,
-      isTraining,
+      return {
+        ...c,
+        badge: getClanBadge(c.badgeId, c.clanScore),
+        decksUsed,
+        slotsUsed,
+      }
+    })
+
+    const fullRace: ApiRace = {
+      ...omit(race, ['clan']),
+      clanIndex: clans.findIndex((c) => c.tag === clanTag),
+      clans,
+      dayIndex: race.periodIndex % 7,
+      isColosseum: race.periodType === 'colosseum',
+      isTraining: race.periodType === 'training',
     }
 
     res.status(200).json({ data: fullRace })

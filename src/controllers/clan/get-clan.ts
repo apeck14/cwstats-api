@@ -13,7 +13,7 @@ export const clanController = async (req: Request, res: Response) => {
 
     const { data: clan, error, status } = await getClan(tag)
 
-    if (error) {
+    if (error || !clan) {
       res.status(status).json({ error, status })
       return
     }

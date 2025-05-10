@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { omit } from 'lodash'
 
 import { getClan } from '@/services/supercell'
 
@@ -17,10 +18,9 @@ export const clanLimitedController = async (req: Request, res: Response) => {
       return
     }
 
-    // only large prop
-    delete clan.memberList
+    const limitedClan = omit(clan, ['memberList'])
 
-    res.status(200).json({ data: clan })
+    res.status(200).json({ data: limitedClan })
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }

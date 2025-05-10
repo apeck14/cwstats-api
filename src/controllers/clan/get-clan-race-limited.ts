@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
+import { omit } from 'lodash'
 
 import { getRiverRace } from '@/services/supercell'
-import { RaceClan } from '@/types/supercell.types'
+import { ApiRaceLimited } from '@/types/api/race'
 
 /**
  * Get clan
@@ -13,24 +14,21 @@ export const clanRaceLimitedController = async (req: Request, res: Response) => 
 
     const { data: race, error, status } = await getRiverRace(tag)
 
-    if (error) {
+    if (error || !race) {
       res.status(status).json({ error, status })
       return
     }
 
-    const dayIndex = race.periodIndex % 7
-    const isColosseum = race.periodType === 'colosseum'
-    const isTraining = race.periodType === 'training'
-    const clanIndex = race.clans.findIndex((c: RaceClan) => c.tag === race.clan.tag)
+    const clanTag = race.clan.tag
 
-    delete race.clan
+    const raceWithoutClan = omit(race, ['clan'])
 
-    const limitedRace = {
-      clanIndex,
-      ...race,
-      dayIndex,
-      isColosseum,
-      isTraining,
+    const limitedRace: ApiRaceLimited = {
+      clanIndex: race.clans.findIndex((c) => c.tag === clanTag),
+      dayIndex: race.periodIndex % 7,
+      isColosseum: race.periodType === 'colosseum',
+      isTraining: race.periodType === 'training',
+      ...raceWithoutClan,
     }
 
     res.status(200).json({ data: limitedRace })

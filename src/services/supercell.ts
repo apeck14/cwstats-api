@@ -1,11 +1,28 @@
 import axios, { AxiosResponse } from 'axios'
 
 import { formatTag } from '@/lib/format'
+import { SupercellClan, SupercellClansSearch } from '@/types/supercell/clan'
+import { SupercellWarLeaderboard } from '@/types/supercell/leaderboard'
+import { SupercellBattleLog, SupercellPlayer } from '@/types/supercell/player'
+import { SupercellRace } from '@/types/supercell/race'
 
 const BASE_URL = 'https://api.clashroyale.com/v1'
 
-export const handleSupercellResponse = (res: AxiosResponse) => {
-  const { data, status } = res
+interface SupercellResponse<T> {
+  data?: T
+  error?: string
+  status: number
+}
+
+export const handleSupercellRequest = async <T>(url: string): Promise<SupercellResponse<T>> => {
+  const response: AxiosResponse = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
+    },
+    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
+  })
+
+  const { data, status } = response
 
   if (status === 200) {
     return {
@@ -26,74 +43,32 @@ export const handleSupercellResponse = (res: AxiosResponse) => {
   }
 }
 
-export const getPlayer = async (tag: string) => {
+export const getPlayer = (tag: string) => {
   const url = `${BASE_URL}/players/%23${formatTag(tag, false)}`
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
-    },
-    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
-  })
-
-  return handleSupercellResponse(response)
+  return handleSupercellRequest<SupercellPlayer>(url)
 }
 
-export const getPlayerBattleLog = async (tag: string) => {
+export const getPlayerBattleLog = (tag: string) => {
   const url = `${BASE_URL}/players/%23${formatTag(tag, false)}/battlelog`
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
-    },
-    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
-  })
-
-  return handleSupercellResponse(response)
+  return handleSupercellRequest<SupercellBattleLog>(url)
 }
 
-export const getClan = async (tag: string) => {
+export const getClan = (tag: string) => {
   const url = `${BASE_URL}/clans/%23${formatTag(tag, false)}`
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
-    },
-    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
-  })
-
-  return handleSupercellResponse(response)
+  return handleSupercellRequest<SupercellClan>(url)
 }
 
-export const searchClans = async (name: string) => {
+export const searchClans = (name: string) => {
   const url = `${BASE_URL}/clans?name=${encodeURIComponent(name)}`
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
-    },
-    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
-  })
-
-  return handleSupercellResponse(response)
+  return handleSupercellRequest<SupercellClansSearch>(url)
 }
 
-export const getRiverRace = async (tag: string) => {
+export const getRiverRace = (tag: string) => {
   const url = `${BASE_URL}/clans/%23${formatTag(tag, false)}/currentriverrace`
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
-    },
-    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
-  })
-
-  return handleSupercellResponse(response)
+  return handleSupercellRequest<SupercellRace>(url)
 }
 
-export const getWarLeaderboard = async (locationId: string | number, limit?: number) => {
+export const getWarLeaderboard = (locationId: string | number, limit?: number) => {
   const url = `${BASE_URL}/locations/${locationId}/rankings/clanwars?limit=${limit || 100}`
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
-    },
-    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
-  })
-
-  return handleSupercellResponse(response)
+  return handleSupercellRequest<SupercellWarLeaderboard>(url)
 }
