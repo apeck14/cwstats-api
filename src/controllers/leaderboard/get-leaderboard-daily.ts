@@ -7,7 +7,7 @@ import { leaderboardDailySchema } from '@/zod/supercell'
 
 /**
  * Get clan
- * @route GET /leaderboard/daily?key=global&limit=100&maxTrophies=6000&minTrophies=4000
+ * @route GET /leaderboard/daily?key=US&limit=100&maxTrophies=6000&minTrophies=4000
  */
 export const leaderboardDailyController = async (req: Request, res: Response) => {
   try {
