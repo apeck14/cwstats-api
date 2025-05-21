@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
-import { getDailyLeaderboard } from '@/services/mongo'
+import { getDailyLeaderboard, getStatistics } from '@/services/mongo'
 import locations from '@/static/locations.json'
 import { leaderboardDailySchema } from '@/zod/supercell'
 
@@ -25,9 +25,12 @@ export const leaderboardDailyController = async (req: Request, res: Response) =>
       return
     }
 
-    const dailyLb = await getDailyLeaderboard({ limit, maxTrophies, minTrophies, name: location?.name })
+    const [dailyLb, stats] = await Promise.all([
+      getDailyLeaderboard({ limit, maxTrophies, minTrophies, name: location?.name }),
+      getStatistics(),
+    ])
 
-    res.status(200).json({ data: dailyLb })
+    res.status(200).json({ data: { clans: dailyLb, lastUpdated: stats?.lbLastUpdated } })
   } catch (err) {
     if (err instanceof ZodError) {
       res.status(400).json({

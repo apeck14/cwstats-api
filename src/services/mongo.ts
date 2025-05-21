@@ -6,6 +6,7 @@ import { GuildModel } from '@/models/guild.model'
 import { LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
 import { PlusClanModel } from '@/models/plus-clan.model'
+import { StatisticsModel } from '@/models/statistics.model'
 
 interface PlayerInput {
   tag: string
@@ -118,4 +119,10 @@ export const getDailyLeaderboard = async ({
   return dailyLb
 }
 
-export const getStatistics = async () => {}
+export const getStatistics = async () => {
+  await connectDB()
+
+  const stats = await StatisticsModel.findOne({})
+
+  return stats
+}

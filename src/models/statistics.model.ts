@@ -51,5 +51,5 @@ const StatisticsSchema = new Schema<Statistics>(
   { collection: 'Statistics' },
 )
 
-export const StaticsModel: Model<Statistics> =
+export const StatisticsModel: Model<Statistics> =
   mongoose.models.Statistics || mongoose.model<Statistics>('Statistics', StatisticsSchema)
