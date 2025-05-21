@@ -35,3 +35,30 @@ export const leaderboardWarSchema = z.object({
       .optional(),
   }),
 })
+
+export const leaderboardDailySchema = z.object({
+  query: z
+    .object({
+      key: z.string().max(5, { message: 'invalid location key' }),
+      limit: z
+        .string()
+        .regex(/^\d+$/)
+        .transform(Number)
+        .refine((val) => val > 0, {
+          message: 'limit must be greater than 0',
+        })
+        .optional(),
+      maxTrophies: z.string().regex(/^\d+$/).transform(Number).optional(),
+      minTrophies: z.string().regex(/^\d+$/).transform(Number).optional(),
+    })
+    .refine(
+      (data) =>
+        data.minTrophies === undefined ||
+        data.maxTrophies === undefined ||
+        data.minTrophies < data.maxTrophies,
+      {
+        message: 'minTrophies must be less than maxTrophies',
+        path: ['minTrophies'],
+      },
+    ),
+})

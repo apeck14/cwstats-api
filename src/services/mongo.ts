@@ -1,4 +1,5 @@
 import { connectDB } from '@/config/db'
+import { DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
 import { GuildModel } from '@/models/guild.model'
 import { LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
@@ -14,6 +15,13 @@ interface CommandCooldownInput {
   id: string
   commandName: string
   delay: number
+}
+
+interface DailyLeaderboardInput {
+  key: string
+  limit: number
+  maxTrophies: number
+  minTrophies: number
 }
 
 export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
@@ -77,3 +85,14 @@ export const setCommandCooldown = async ({ commandName, delay, id }: CommandCool
     },
   )
 }
+
+export const getDailyLeaderboard = async ({
+  key,
+  limit,
+  maxTrophies,
+  minTrophies,
+}: DailyLeaderboardInput) => {
+  await connectDB()
+}
+
+export const getStatistics = async () => {}
