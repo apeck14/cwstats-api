@@ -17,15 +17,15 @@ export const leaderboardDailyController = async (req: Request, res: Response) =>
 
     const { key, limit = 0, maxTrophies = Infinity, minTrophies = 0 } = parsed.query
 
-    const formattedKey = key.toLowerCase()
+    const formattedKey = key?.toLowerCase()
     const location = locations.find((l) => l.key.toLowerCase() === formattedKey)
 
-    if (!location) {
-      res.status(404).json({ error: 'Region not found' })
+    if (!location && key) {
+      res.status(404).json({ error: 'Region not found', status: 404 })
       return
     }
 
-    const dailyLb = await getDailyLeaderboard({ key, limit, maxTrophies, minTrophies })
+    const dailyLb = await getDailyLeaderboard({ limit, maxTrophies, minTrophies, name: location?.name })
 
     res.status(200).json({ data: dailyLb })
   } catch (err) {

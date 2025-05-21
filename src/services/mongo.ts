@@ -1,5 +1,7 @@
+import { FilterQuery } from 'mongoose'
+
 import { connectDB } from '@/config/db'
-import { DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
+import { DailyLeaderboard, DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
 import { GuildModel } from '@/models/guild.model'
 import { LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
@@ -18,7 +20,7 @@ interface CommandCooldownInput {
 }
 
 interface DailyLeaderboardInput {
-  key: string
+  name?: string
   limit: number
   maxTrophies: number
   minTrophies: number
@@ -87,12 +89,33 @@ export const setCommandCooldown = async ({ commandName, delay, id }: CommandCool
 }
 
 export const getDailyLeaderboard = async ({
-  key,
   limit,
   maxTrophies,
   minTrophies,
+  name,
 }: DailyLeaderboardInput) => {
   await connectDB()
+
+  const query: FilterQuery<DailyLeaderboard> = {
+    clanScore: {
+      ...(minTrophies ? { $gte: minTrophies } : {}),
+      ...(maxTrophies ? { $lte: maxTrophies } : {}),
+    },
+  }
+
+  // if no name provided, assume global (all clans)
+  if (name) query['location.name'] = name
+
+  const dailyLb = await DailyLeaderboardModel.find(query)
+    .sort({
+      notRanked: 1,
+      // eslint-disable-next-line perfectionist/sort-objects
+      fameAvg: -1,
+      rank: 1,
+    })
+    .limit(limit || 0)
+
+  return dailyLb
 }
 
 export const getStatistics = async () => {}
