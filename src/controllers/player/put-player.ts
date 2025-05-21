@@ -17,8 +17,8 @@ export const playerAddController = async (req: Request, res: Response) => {
 
     const { data: player, error, status } = await getPlayer(tag)
 
-    if (error) {
-      res.status(status).json({ error, status })
+    if (error || !player) {
+      res.status(status || 404).json({ error: error || 'Not found.', status })
       return
     }
 
