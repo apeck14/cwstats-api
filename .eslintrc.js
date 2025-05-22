@@ -32,7 +32,7 @@ module.exports = {
     'no-console': 'warn',
     'no-debugger': 'warn',
     'max-len': ['error', { code: 110, ignoreComments: true, ignoreStrings: true }],
-    complexity: ['warn', 10],
+    complexity: ['warn', 12],
     'no-param-reassign': ['error', { props: false }],
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     camelcase: 'off',
