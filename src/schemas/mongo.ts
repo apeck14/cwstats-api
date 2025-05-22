@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { guildIdSchema, tagSchema } from '@/zod/utils'
+import { guildIdSchema, tagSchema } from '@/schemas/utils'
 
 export const playerDocumentSchema = z.object({
   tag: tagSchema,

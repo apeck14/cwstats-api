@@ -20,7 +20,7 @@
       "@/services/*": ["services/*"],
       "@/static/*": ["static/*"],
       "@/types/*": ["types/*"],
-      "@/zod/*": ["zod/*"]
+      "@/schemas/*": ["schemas/*"]
     }
   },
   "include": ["src/**/*.ts"]

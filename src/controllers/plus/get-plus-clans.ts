@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
+import { plusClansSchema } from '@/schemas/mongo'
 import { getAllPlusClans } from '@/services/mongo'
-import { plusClansSchema } from '@/zod/mongo'
 
 /**
  * Get all plus clans

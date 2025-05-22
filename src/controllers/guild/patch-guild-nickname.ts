@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
 import { DiscordApiError } from '@/lib/errors'
+import { guildUserNicknameSchema } from '@/schemas/mongo'
 import { updateDiscordUserNickname } from '@/services/discord'
-import { guildUserNicknameSchema } from '@/zod/mongo'
 
 /**
  * Set a user's nickname within a specific guild

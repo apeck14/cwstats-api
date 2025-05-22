@@ -6,7 +6,7 @@ import getGuildLimitedController from '@/controllers/guild/get-guild-limited'
 import patchGuildCommandCooldown from '@/controllers/guild/patch-guild-command-cooldown'
 import patchGuildUserNickname from '@/controllers/guild/patch-guild-nickname'
 import validation from '@/middleware/validation'
-import { guildSchema } from '@/zod/mongo'
+import { guildSchema } from '@/schemas/mongo'
 
 const router: Router = Router()
 

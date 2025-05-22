@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
+import { leaderboardDailySchema } from '@/schemas/supercell'
 import { getDailyLeaderboard, getStatistics } from '@/services/mongo'
 import locations from '@/static/locations.json'
-import { leaderboardDailySchema } from '@/zod/supercell'
 
 /**
  * Get clan

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
+import { playerDocumentSchema } from '@/schemas/mongo'
 import { addPlayer } from '@/services/mongo'
 import { getPlayer } from '@/services/supercell'
-import { playerDocumentSchema } from '@/zod/mongo'
 
 /**
  * Get player
