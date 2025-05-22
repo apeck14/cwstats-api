@@ -16,9 +16,9 @@ export const plusClansController = async (req: Request, res: Response) => {
 
     const { tagsOnly } = parsed.query
 
-    const data = await getAllPlusClans(tagsOnly === 'true')
+    const plusClans = await getAllPlusClans(tagsOnly === 'true')
 
-    res.status(200).json(data)
+    res.status(200).json({ data: plusClans })
   } catch (err) {
     if (err instanceof ZodError) {
       res.status(400).json({
