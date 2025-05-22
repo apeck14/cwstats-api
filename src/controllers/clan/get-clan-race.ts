@@ -79,7 +79,6 @@ export const clanRaceController = async (req: Request, res: Response) => {
     const currentPlacements = getPlacements({ clans, fameAccessor: 'fame' })
     const projPlacements = getPlacements({ clans, fameAccessor: 'projFame' })
 
-    // add placements
     for (const c of clans) {
       const currentPlace = currentPlacements.find((cl) => cl.tag === c.tag)?.place
       const projPlace = projPlacements.find((cl) => cl.tag === c.tag)?.place
