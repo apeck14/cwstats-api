@@ -4,7 +4,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node -r tsconfig-paths/register dist/server.js",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
@@ -49,6 +49,7 @@
     "prettier": "^3.5.3",
     "supertest": "^7.1.0",
     "ts-jest": "^29.3.2",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16"
   }
 }
