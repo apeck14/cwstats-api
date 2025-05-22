@@ -42,5 +42,5 @@ jobs:
             cd $VPS_PATH &&
             npm ci &&
             npm run build &&
-            pm2 reload cwstats-api
+            pm2 reload cwstats-api|| pm2 start dist/server.js --name cwstats-api --interpreter node --interpreter-args '-r tsconfig-paths/register'
           "
