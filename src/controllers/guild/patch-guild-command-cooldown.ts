@@ -18,7 +18,16 @@ export const patchGuildCommandCooldown = async (req: Request, res: Response) => 
     const { id } = parsed.params
     const { commandName, delay } = parsed.body
 
-    await setCommandCooldown({ commandName, delay, id })
+    const { matchedCount, modifiedCount } = await setCommandCooldown({ commandName, delay, id })
+
+    if (!matchedCount) {
+      res.status(404).json({ error: 'Guild not found', status: 404 })
+      return
+    }
+
+    if (!modifiedCount) {
+      throw new Error()
+    }
 
     res.status(200).json({ commandName, delay, id, success: true })
   } catch (err) {

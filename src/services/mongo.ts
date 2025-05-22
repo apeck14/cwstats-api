@@ -79,7 +79,7 @@ export const setCommandCooldown = async ({ commandName, delay, id }: CommandCool
   const now = new Date()
   now.setMilliseconds(now.getMilliseconds() + delay)
 
-  await GuildModel.updateOne(
+  const query = await GuildModel.updateOne(
     { guildID: id },
     {
       $set: {
@@ -87,6 +87,8 @@ export const setCommandCooldown = async ({ commandName, delay, id }: CommandCool
       },
     },
   )
+
+  return query
 }
 
 export const getDailyLeaderboard = async ({
