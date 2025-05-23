@@ -26,9 +26,9 @@ export const playerLinkController = async (req: Request, res: Response) => {
 
     addPlayer(data)
 
-    await linkPlayer({ name: player.name, tag: player.tag, userId })
+    const result = await linkPlayer({ name: player.name, tag: player.tag, userId })
 
-    res.status(200).json({ name: player.name, success: true, tag: player.tag, userId })
+    res.status(200).json({ name: player.name, result, success: true, tag: player.tag, userId })
   } catch (err) {
     if (err instanceof ZodError) {
       res.status(400).json({

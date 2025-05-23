@@ -53,16 +53,13 @@ export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
 export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
   await connectDB()
 
-  const account = await LinkedAccountModel.findOneAndUpdate(
+  const account = await LinkedAccountModel.updateOne(
     { discordID: userId },
     {
-      $set: { tag }, // update tag every time
-      $setOnInsert: { savedPlayers: [{ name, tag }] }, // only if inserting new document
+      $set: { tag },
+      $setOnInsert: { savedPlayers: [{ name, tag }] },
     },
-    {
-      new: true, // return the updated (or created) document
-      upsert: true, // create if not found
-    },
+    { upsert: true },
   )
 
   return account
