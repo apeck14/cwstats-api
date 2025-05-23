@@ -6,7 +6,7 @@ import { addPlayer } from '@/services/mongo'
 import { getPlayer } from '@/services/supercell'
 
 /**
- * Get player
+ * Add player to collection
  * @route PUT /player
  */
 export const playerAddController = async (req: Request, res: Response) => {
