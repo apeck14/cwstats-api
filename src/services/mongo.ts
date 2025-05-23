@@ -3,6 +3,7 @@ import { FilterQuery } from 'mongoose'
 import { connectDB } from '@/config/db'
 import { DailyLeaderboard, DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
 import { GuildModel } from '@/models/guild.model'
+import { LinkedAccountModel } from '@/models/linked-account.model'
 import { LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
 import { PlusClanModel } from '@/models/plus-clan.model'
@@ -12,6 +13,12 @@ interface PlayerInput {
   tag: string
   name: string
   clanName?: string
+}
+
+interface LinkPlayerInput {
+  tag: string
+  userId: string
+  name: string
 }
 
 interface CommandCooldownInput {
@@ -41,6 +48,24 @@ export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
   }
 
   return updatedPlayer
+}
+
+export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
+  await connectDB()
+
+  const account = await LinkedAccountModel.findOneAndUpdate(
+    { discordID: userId },
+    {
+      $set: { tag }, // update tag every time
+      $setOnInsert: { savedPlayers: [{ name, tag }] }, // only if inserting new document
+    },
+    {
+      new: true, // return the updated (or created) document
+      upsert: true, // create if not found
+    },
+  )
+
+  return account
 }
 
 export const getAllPlusClans = async (tagsOnly: boolean) => {

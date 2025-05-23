@@ -9,7 +9,8 @@ export const tagSchema = z
   .regex(/^[a-zA-Z0-9]+$/, { message: 'tag must be alphanumeric' })
   .min(3, { message: 'tag must be at least 3 characters long' })
 
-export const guildIdSchema = z
+// can be used for users, guilds, channels, etc
+export const discordIdSchema = z
   .string({
     invalid_type_error: 'id must be a string',
     required_error: 'id is required',

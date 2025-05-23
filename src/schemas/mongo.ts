@@ -1,9 +1,14 @@
 import { z } from 'zod'
 
-import { guildIdSchema, tagSchema } from '@/schemas/utils'
+import { discordIdSchema, tagSchema } from '@/schemas/utils'
 
 export const playerDocumentSchema = z.object({
   tag: tagSchema,
+})
+
+export const playerLinkSchema = z.object({
+  tag: tagSchema,
+  userId: discordIdSchema,
 })
 
 export const plusClansSchema = z.object({
@@ -17,7 +22,7 @@ export const plusClansSchema = z.object({
 
 export const guildSchema = z.object({
   params: z.object({
-    id: guildIdSchema,
+    id: discordIdSchema,
   }),
 })
 
@@ -31,7 +36,7 @@ export const guildCommandCooldownSchema = z.object({
       .min(0, { message: 'delay must be a non-negative number' }),
   }),
   params: z.object({
-    id: guildIdSchema,
+    id: discordIdSchema,
   }),
 })
 
@@ -43,6 +48,6 @@ export const guildUserNicknameSchema = z.object({
     userId: z.string({ message: 'userId must be a string' }).min(1, { message: 'userId cannot be empty' }),
   }),
   params: z.object({
-    id: guildIdSchema,
+    id: discordIdSchema,
   }),
 })
