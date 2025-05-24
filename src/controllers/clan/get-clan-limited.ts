@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { omit } from 'lodash'
 
+import { getClanBadge } from '@/lib/utils'
 import { getClan } from '@/services/supercell'
 
 /**
@@ -13,14 +14,15 @@ export const clanLimitedController = async (req: Request, res: Response) => {
 
     const { data: clan, error, status } = await getClan(tag)
 
-    if (error) {
-      res.status(status).json({ error, status })
+    if (error || !clan) {
+      res.status(status || 404).json({ error: error || 'Clan not found.', status: status || 404 })
       return
     }
 
+    const badge = getClanBadge(clan.badgeId, clan.clanScore)
     const limitedClan = omit(clan, ['memberList'])
 
-    res.status(200).json({ data: limitedClan })
+    res.status(200).json({ data: { ...limitedClan, badge } })
   } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
