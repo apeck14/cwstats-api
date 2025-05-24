@@ -51,3 +51,13 @@ export const guildUserNicknameSchema = z.object({
     id: discordIdSchema,
   }),
 })
+
+export const putGuildNudgeLinkSchema = z.object({
+  body: z.object({
+    tag: tagSchema,
+    userId: discordIdSchema,
+  }),
+  params: z.object({
+    id: discordIdSchema,
+  }),
+})

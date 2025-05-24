@@ -5,6 +5,7 @@ import getGuildClansController from '@/controllers/guild/get-guild-clans'
 import getGuildLimitedController from '@/controllers/guild/get-guild-limited'
 import patchGuildCommandCooldown from '@/controllers/guild/patch-guild-command-cooldown'
 import patchGuildUserNickname from '@/controllers/guild/patch-guild-nickname'
+import putGuildNudgeLinkController from '@/controllers/guild/put-nudge-link'
 import validation from '@/middleware/validation'
 import { guildSchema } from '@/schemas/mongo'
 
@@ -15,6 +16,7 @@ router.get('/:id/limited', validation(guildSchema), getGuildLimitedController)
 router.get('/:id/clans', validation(guildSchema), getGuildClansController)
 router.patch('/:id/command-cooldown', patchGuildCommandCooldown)
 router.patch('/:id/user-nickname', patchGuildUserNickname)
+router.put('/:id/nudge-link', putGuildNudgeLinkController)
 
 // Export router with all routes
 export default router

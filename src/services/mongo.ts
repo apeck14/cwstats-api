@@ -34,6 +34,13 @@ interface DailyLeaderboardInput {
   minTrophies: number
 }
 
+interface NudgeLinkInput {
+  name: string
+  tag: string
+  userId: string
+  guildId: string
+}
+
 export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
   await connectDB()
 
@@ -157,4 +164,26 @@ export const getLinkedAccount = async (userId: string) => {
   const linkedAccount = await LinkedAccountModel.findOne({ discordID: userId }, { __v: 0, _id: 0 }).lean()
 
   return linkedAccount
+}
+
+export const addNudgeLink = async ({ guildId, name, tag, userId }: NudgeLinkInput) => {
+  await connectDB()
+
+  const updatedLinks = await GuildModel.updateOne(
+    {
+      guildID: guildId,
+      'nudges.links.tag': { $ne: tag }, // Only update if no existing link with this tag
+    },
+    {
+      $push: {
+        'nudges.links': {
+          discordID: userId,
+          name,
+          tag,
+        },
+      },
+    },
+  )
+
+  return updatedLinks
 }

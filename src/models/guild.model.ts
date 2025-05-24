@@ -66,11 +66,14 @@ const defaultClanSchema = new Schema({
   tag: { required: true, type: String },
 })
 
-const linkedPlayerSchema = new Schema({
-  discordID: { required: true, type: String },
-  name: { required: true, type: String },
-  tag: { required: true, type: String },
-})
+const linkedPlayerSchema = new Schema(
+  {
+    discordID: { required: true, type: String },
+    name: { required: true, type: String },
+    tag: { required: true, type: String },
+  },
+  { _id: false },
+)
 
 const scheduledNudgeSchema = new Schema({
   channelID: { required: true, type: String },
