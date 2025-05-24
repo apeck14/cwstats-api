@@ -87,6 +87,23 @@ export const clanRaceController = async (req: Request, res: Response) => {
       if (projPlace) c.projPlace = projPlace
     }
 
+    // sort clans by crossedFinishLine, currentPlace, no placement (currentPlace === -1)
+    clans.sort((a, b) => {
+      // First, prioritize crossedFinishLine
+      if (a.crossedFinishLine !== b.crossedFinishLine) {
+        return a.crossedFinishLine ? -1 : 1
+      }
+
+      // Then sort by currentPlace
+      if (a.currentPlace === -1 && b.currentPlace !== -1) return 1
+      if (a.currentPlace !== -1 && b.currentPlace === -1) return -1
+      if (a.currentPlace !== -1 && b.currentPlace !== -1) {
+        return a.currentPlace - b.currentPlace
+      }
+
+      return 0
+    })
+
     const fullRace: ApiRace = {
       ...omit(race, ['clan']),
       clanIndex: clans.findIndex((c) => c.tag === clanTag),
