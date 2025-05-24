@@ -9,6 +9,7 @@ import guildRouter from '@/routes/guild.routes'
 import leaderboardRouter from '@/routes/leaderboard.routes'
 import playerRouter from '@/routes/player.routes'
 import plusRouter from '@/routes/plus.routes'
+import userRouter from '@/routes/user.routes'
 
 // Initialize express app
 const app: Application = express()
@@ -46,6 +47,7 @@ app.use('/clan', clanRouter)
 app.use('/leaderboard', leaderboardRouter)
 app.use('/plus', plusRouter)
 app.use('/guild', guildRouter)
+app.use('/user', userRouter)
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {

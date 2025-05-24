@@ -150,3 +150,11 @@ export const getStatistics = async () => {
 
   return stats
 }
+
+export const getLinkedAccount = async (userId: string) => {
+  await connectDB()
+
+  const linkedAccount = await LinkedAccountModel.findOne({ discordID: userId }, { __v: 0, _id: 0 }).lean()
+
+  return linkedAccount
+}

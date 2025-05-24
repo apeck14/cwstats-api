@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { tagSchema } from '@/schemas/utils'
+import { discordIdSchema, tagSchema } from '@/schemas/utils'
 
 export const playerSchema = z.object({
   params: z.object({
@@ -11,6 +11,12 @@ export const playerSchema = z.object({
 export const clanSchema = z.object({
   params: z.object({
     tag: tagSchema,
+  }),
+})
+
+export const linkedAccountSchema = z.object({
+  params: z.object({
+    userId: discordIdSchema,
   }),
 })
 
