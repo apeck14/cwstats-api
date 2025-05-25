@@ -4,9 +4,9 @@ import { connectDB } from '@/config/db'
 import { DailyLeaderboard, DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
 import { GuildModel } from '@/models/guild.model'
 import { LinkedAccountModel } from '@/models/linked-account.model'
-import { LinkedClanModel } from '@/models/linked-clan.model'
+import { LinkedClan, LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
-import { PlusClanModel } from '@/models/plus-clan.model'
+import { PlusClan, PlusClanModel } from '@/models/plus-clan.model'
 import { StatisticsModel } from '@/models/statistics.model'
 
 interface PlayerInput {
@@ -72,7 +72,11 @@ export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
   return account
 }
 
-export const getAllPlusClans = async (tagsOnly: boolean) => {
+// set function overloading for typescript
+export function getAllPlusClans(tagsOnly: true): Promise<string[]>
+export function getAllPlusClans(tagsOnly: false): Promise<PlusClan[]>
+export function getAllPlusClans(tagsOnly: boolean): Promise<string[] | PlusClan[]>
+export async function getAllPlusClans(tagsOnly: boolean): Promise<string[] | PlusClan[]> {
   await connectDB()
 
   const plusClans = await PlusClanModel.find({}, { _id: 0 }).lean()
@@ -94,7 +98,7 @@ export const getGuild = async (id: string, limited?: boolean) => {
   return guild
 }
 
-export const getLinkedClansByGuild = async (id: string) => {
+export const getLinkedClansByGuild = async (id: string): Promise<LinkedClan[]> => {
   await connectDB()
 
   const linkedClans = await LinkedClanModel.find({ guildID: id }, { _id: 0 }).lean()

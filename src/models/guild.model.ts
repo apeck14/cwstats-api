@@ -36,6 +36,7 @@ export interface Nudges {
   links: LinkedPlayer[]
   message: string
   scheduled: ScheduledNudge[]
+  updateNicknameUponLinking?: boolean
 }
 
 export interface Guild extends Document {

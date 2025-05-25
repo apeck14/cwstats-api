@@ -174,3 +174,7 @@ export const getPlacements = ({
 
   return placements
 }
+
+export const generateDiscordNickname = (linkedIGNs: string[]) => linkedIGNs.join(' | ')
+
+export const calcLinkedPlayerLimit = (linkedPlusClansCount: number) => 100 + linkedPlusClansCount * 75
