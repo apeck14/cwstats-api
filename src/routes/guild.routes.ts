@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import deleteGuildNudgeLinkController from '@/controllers/guild/delete-nudge-link'
 import getGuildController from '@/controllers/guild/get-guild'
 import getGuildClansController from '@/controllers/guild/get-guild-clans'
 import getGuildLimitedController from '@/controllers/guild/get-guild-limited'
@@ -17,6 +18,7 @@ router.get('/:id/clans', validation(guildSchema), getGuildClansController)
 router.patch('/:id/command-cooldown', patchGuildCommandCooldown)
 router.patch('/:id/user-nickname', patchGuildUserNickname)
 router.put('/:id/nudge-link', putGuildNudgeLinkController)
+router.delete('/:id/nudge-link', deleteGuildNudgeLinkController)
 
 // Export router with all routes
 export default router

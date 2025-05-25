@@ -41,6 +41,11 @@ interface NudgeLinkInput {
   guildId: string
 }
 
+interface DeleteNudgeLinkInput {
+  guildId: string
+  tag: string
+}
+
 export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
   await connectDB()
 
@@ -173,7 +178,7 @@ export const getLinkedAccount = async (userId: string) => {
 export const addNudgeLink = async ({ guildId, name, tag, userId }: NudgeLinkInput) => {
   await connectDB()
 
-  const updatedLinks = await GuildModel.updateOne(
+  const result = await GuildModel.updateOne(
     {
       guildID: guildId,
       'nudges.links.tag': { $ne: tag }, // Only update if no existing link with this tag
@@ -189,5 +194,20 @@ export const addNudgeLink = async ({ guildId, name, tag, userId }: NudgeLinkInpu
     },
   )
 
-  return updatedLinks
+  return result
+}
+
+export const deleteNudgeLink = async ({ guildId, tag }: DeleteNudgeLinkInput) => {
+  await connectDB()
+
+  const result = await GuildModel.updateOne(
+    { guildID: guildId },
+    {
+      $pull: {
+        'nudges.links': { tag },
+      },
+    },
+  )
+
+  return result
 }

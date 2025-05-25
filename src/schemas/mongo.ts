@@ -61,3 +61,12 @@ export const putGuildNudgeLinkSchema = z.object({
     id: discordIdSchema,
   }),
 })
+
+export const deleteGuildNudgeLinkSchema = z.object({
+  body: z.object({
+    tag: tagSchema,
+  }),
+  params: z.object({
+    id: discordIdSchema,
+  }),
+})
