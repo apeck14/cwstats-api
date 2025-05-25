@@ -211,3 +211,15 @@ export const deleteNudgeLink = async ({ guildId, tag }: DeleteNudgeLinkInput) =>
 
   return result
 }
+
+export const createGuild = async (guildId: string) => {
+  await connectDB()
+
+  const result = await GuildModel.updateOne(
+    { guildID: guildId },
+    { $setOnInsert: { guildID: guildId } },
+    { upsert: true },
+  )
+
+  return result
+}

@@ -6,12 +6,14 @@ import getGuildClansController from '@/controllers/guild/get-guild-clans'
 import getGuildLimitedController from '@/controllers/guild/get-guild-limited'
 import patchGuildCommandCooldown from '@/controllers/guild/patch-guild-command-cooldown'
 import patchGuildUserNickname from '@/controllers/guild/patch-guild-nickname'
+import postGuildController from '@/controllers/guild/post-guild'
 import putGuildNudgeLinkController from '@/controllers/guild/put-nudge-link'
 import validation from '@/middleware/validation'
 import { deleteGuildNudgeLinkSchema, guildSchema } from '@/schemas/mongo'
 
 const router: Router = Router()
 
+router.post('/:id', validation(guildSchema), postGuildController)
 router.get('/:id', validation(guildSchema), getGuildController)
 router.get('/:id/limited', validation(guildSchema), getGuildLimitedController)
 router.get('/:id/clans', validation(guildSchema), getGuildClansController)
