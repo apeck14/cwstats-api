@@ -46,7 +46,7 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
       const linkedPlayerLimit = calcLinkedPlayerLimit(linkedPlusClans.length)
 
       if (links.length >= linkedPlayerLimit) {
-        res.status(403).json({ error: 'Max nudge link limit reached.', status: 403 })
+        res.status(403).json({ error: 'Link limit reached.', status: 403 })
         return
       }
     }
@@ -54,12 +54,12 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
     const { modifiedCount } = await addNudgeLink({
       guildId: id,
       name: player.name,
-      tag,
+      tag: player.tag,
       userId,
     })
 
     if (!modifiedCount) {
-      res.status(409).json({ error: 'Tag already linked.', status: 409 })
+      res.status(409).json({ error: 'Tag already linked to another user.', status: 409 })
       return
     }
 
