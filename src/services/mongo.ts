@@ -223,3 +223,17 @@ export const createGuild = async (guildId: string) => {
 
   return result
 }
+
+export const deleteGuild = async (id: string) => {
+  await connectDB()
+
+  const result = await GuildModel.deleteOne({ guildID: id })
+  return result
+}
+
+export const deleteLinkedClans = async (id: string) => {
+  await connectDB()
+
+  const result = await LinkedClanModel.deleteMany({ guildID: id })
+  return result
+}
