@@ -17,11 +17,11 @@ export const deleteGuildNudgeLinkController = async (req: Request, res: Response
     })
 
     const { id } = parsed.params
-    const { tag } = parsed.body
+    const { tag, userId } = parsed.body
 
     const formattedTag = formatTag(tag, true)
 
-    const { matchedCount, modifiedCount } = await deleteNudgeLink({ guildId: id, tag: formattedTag })
+    const { matchedCount, modifiedCount } = await deleteNudgeLink({ guildId: id, tag: formattedTag, userId })
 
     if (!modifiedCount) {
       res.status(404).json({ error: 'Link not found.', status: 404 })

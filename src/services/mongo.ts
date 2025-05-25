@@ -44,6 +44,7 @@ interface NudgeLinkInput {
 interface DeleteNudgeLinkInput {
   guildId: string
   tag: string
+  userId: string
 }
 
 export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
@@ -197,14 +198,14 @@ export const addNudgeLink = async ({ guildId, name, tag, userId }: NudgeLinkInpu
   return result
 }
 
-export const deleteNudgeLink = async ({ guildId, tag }: DeleteNudgeLinkInput) => {
+export const deleteNudgeLink = async ({ guildId, tag, userId }: DeleteNudgeLinkInput) => {
   await connectDB()
 
   const result = await GuildModel.updateOne(
     { guildID: guildId },
     {
       $pull: {
-        'nudges.links': { tag },
+        'nudges.links': { discordID: userId, tag },
       },
     },
   )
