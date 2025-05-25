@@ -56,11 +56,14 @@ const abbrSchema = new Schema({
   tag: { required: true, type: String },
 })
 
-const channelSchema = new Schema({
-  applicationsChannelID: { default: '', type: String },
-  applyChannelID: { default: '', type: String },
-  commandChannelIDs: { default: [], type: [String] },
-})
+const channelSchema = new Schema(
+  {
+    applicationsChannelID: { default: '', type: String },
+    applyChannelID: { default: '', type: String },
+    commandChannelIDs: { default: [], type: [String] },
+  },
+  { _id: false },
+)
 
 const defaultClanSchema = new Schema({
   name: { required: true, type: String },
@@ -95,7 +98,7 @@ const guildSchema = new Schema<Guild>(
   {
     abbreviations: { default: [], type: [abbrSchema] },
     adminRoleID: { type: String },
-    channels: { required: true, type: channelSchema },
+    channels: { default: {}, required: true, type: channelSchema },
     cooldowns: { of: Date, type: Map },
     defaultClan: { type: defaultClanSchema },
     discordInviteCode: { type: String },
