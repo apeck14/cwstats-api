@@ -8,7 +8,7 @@ import patchGuildCommandCooldown from '@/controllers/guild/patch-guild-command-c
 import patchGuildUserNickname from '@/controllers/guild/patch-guild-nickname'
 import putGuildNudgeLinkController from '@/controllers/guild/put-nudge-link'
 import validation from '@/middleware/validation'
-import { guildSchema } from '@/schemas/mongo'
+import { deleteGuildNudgeLinkSchema, guildSchema } from '@/schemas/mongo'
 
 const router: Router = Router()
 
@@ -18,7 +18,7 @@ router.get('/:id/clans', validation(guildSchema), getGuildClansController)
 router.patch('/:id/command-cooldown', patchGuildCommandCooldown)
 router.patch('/:id/user-nickname', patchGuildUserNickname)
 router.put('/:id/nudge-link', putGuildNudgeLinkController)
-router.delete('/:id/nudge-link', deleteGuildNudgeLinkController)
+router.delete('/:id/nudge-link/:tag', validation(deleteGuildNudgeLinkSchema), deleteGuildNudgeLinkController)
 
 // Export router with all routes
 export default router
