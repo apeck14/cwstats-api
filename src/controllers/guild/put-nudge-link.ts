@@ -36,6 +36,7 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
     const { nudges } = guild
     const { links, updateNicknameUponLinking } = nudges || {}
 
+    // check if limit exceeded
     if (links) {
       const [linkedClans, plusTags] = await Promise.all([getLinkedClansByGuild(id), getAllPlusClans(true)])
 
