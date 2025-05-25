@@ -5,6 +5,7 @@ import helmet from 'helmet'
 import verifyInternalToken from '@/middleware/auth'
 import { errorHandler, notFound } from '@/middleware/errors'
 import clanRouter from '@/routes/clan.routes'
+import emojiRouter from '@/routes/emoji.routes'
 import guildRouter from '@/routes/guild.routes'
 import leaderboardRouter from '@/routes/leaderboard.routes'
 import playerRouter from '@/routes/player.routes'
@@ -29,8 +30,8 @@ app.use(
 )
 
 // JSON and URL-encoded body parsing
-app.use(json())
-app.use(urlencoded({ extended: true }))
+app.use(json({ limit: '250kb' }))
+app.use(urlencoded({ extended: true, limit: '250kb' }))
 
 // Set default response headers
 app.use((req: Request, res: Response, next) => {
@@ -48,6 +49,7 @@ app.use('/leaderboard', leaderboardRouter)
 app.use('/plus', plusRouter)
 app.use('/guild', guildRouter)
 app.use('/user', userRouter)
+app.use('/emoji', emojiRouter)
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {

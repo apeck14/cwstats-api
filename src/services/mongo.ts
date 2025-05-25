@@ -2,6 +2,7 @@ import { FilterQuery } from 'mongoose'
 
 import { connectDB } from '@/config/db'
 import { DailyLeaderboard, DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
+import { EmojiModel } from '@/models/emoji.model'
 import { GuildModel } from '@/models/guild.model'
 import { LinkedAccountModel } from '@/models/linked-account.model'
 import { LinkedClan, LinkedClanModel } from '@/models/linked-clan.model'
@@ -44,6 +45,11 @@ interface NudgeLinkInput {
 interface DeleteNudgeLinkInput {
   guildId: string
   tag: string
+}
+
+interface Emoji {
+  name: string
+  emoji: string
 }
 
 export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
@@ -235,5 +241,22 @@ export const deleteLinkedClans = async (id: string) => {
   await connectDB()
 
   const result = await LinkedClanModel.deleteMany({ guildID: id })
+  return result
+}
+
+export const bulkWriteEmojis = async (emojis: Emoji[]) => {
+  await connectDB()
+
+  if (!emojis.length) return { modifiedCount: 0, upsertedCount: 0 }
+
+  const operations = emojis.map((e) => ({
+    updateOne: {
+      filter: { name: e.name },
+      update: { $set: { emoji: e.emoji, name: e.name } },
+      upsert: true,
+    },
+  }))
+
+  const result = await EmojiModel.bulkWrite(operations)
   return result
 }

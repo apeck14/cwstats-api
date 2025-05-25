@@ -68,3 +68,17 @@ export const deleteGuildNudgeLinkSchema = z.object({
     tag: tagSchema,
   }),
 })
+
+export const emojiBulkAddSchema = z.object({
+  body: z.object({
+    emojis: z
+      .array(
+        z.object({
+          emoji: z.string(),
+          name: z.string(),
+        }),
+        { required_error: 'emojis must be an array of objects' },
+      )
+      .min(1, { message: 'emojis array cannot be empty' }),
+  }),
+})
