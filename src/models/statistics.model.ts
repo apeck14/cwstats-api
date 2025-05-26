@@ -24,23 +24,29 @@ interface Statistics extends Document {
   risers: ClanMovement[]
 }
 
-const locationSchema = new Schema({
-  countryCode: { required: true, type: String },
-  id: { required: true, type: Number },
-  isCountry: { required: true, type: Boolean },
-  name: { required: true, type: String },
-})
+const locationSchema = new Schema(
+  {
+    countryCode: { required: true, type: String },
+    id: { required: true, type: Number },
+    isCountry: { required: true, type: Boolean },
+    name: { required: true, type: String },
+  },
+  { _id: false },
+)
 
-const clanMovementSchema = new Schema({
-  badgeId: { required: true, type: Number },
-  clanScore: { required: true, type: Number },
-  location: { required: true, type: locationSchema },
-  members: { required: true, type: Number },
-  name: { required: true, type: String },
-  previousRank: { required: true, type: Number },
-  rank: { required: true, type: Number },
-  tag: { required: true, type: String },
-})
+const clanMovementSchema = new Schema(
+  {
+    badgeId: { required: true, type: Number },
+    clanScore: { required: true, type: Number },
+    location: { required: true, type: locationSchema },
+    members: { required: true, type: Number },
+    name: { required: true, type: String },
+    previousRank: { required: true, type: Number },
+    rank: { required: true, type: Number },
+    tag: { required: true, type: String },
+  },
+  { _id: false },
+)
 
 const StatisticsSchema = new Schema<Statistics>(
   {

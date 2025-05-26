@@ -25,7 +25,7 @@ const dailyLeaderboardSchema = new Schema<DailyLeaderboard>(
     decksRemaining: { required: true, type: Number },
     fameAvg: { required: true, type: Number },
     isTraining: { required: true, type: Boolean },
-    location: { required: true, type: Object },
+    location: { _id: false, required: true, type: Object },
     name: { required: true, type: String },
     notRanked: { required: true, type: Boolean },
     projPlacement: { default: null, required: false, type: Number },

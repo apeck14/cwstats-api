@@ -32,31 +32,40 @@ export interface PlusClan extends Document {
   hourlyAverages: HourlyAverage[]
 }
 
-const dailyTrackingEntrySchema = new Schema({
-  attacks: { required: true, type: Number },
-  fame: { required: true, type: Number },
-  missed: { required: true, type: Boolean },
-  name: { required: true, type: String },
-  tag: { required: true, trim: true, type: String },
-})
+const dailyTrackingEntrySchema = new Schema(
+  {
+    attacks: { required: true, type: Number },
+    fame: { required: true, type: Number },
+    missed: { required: true, type: Boolean },
+    name: { required: true, type: String },
+    tag: { required: true, trim: true, type: String },
+  },
+  { _id: false },
+)
 
-const dailyTrackingSchema = new Schema({
-  day: { max: 4, min: 1, required: true, type: Number },
-  scores: { required: true, type: [dailyTrackingEntrySchema] },
-  season: { required: true, type: Number },
-  timestamp: { required: true, type: Date },
-  week: { max: 5, min: 1, required: true, type: Number },
-})
+const dailyTrackingSchema = new Schema(
+  {
+    day: { max: 4, min: 1, required: true, type: Number },
+    scores: { required: true, type: [dailyTrackingEntrySchema] },
+    season: { required: true, type: Number },
+    timestamp: { required: true, type: Date },
+    week: { max: 5, min: 1, required: true, type: Number },
+  },
+  { _id: false },
+)
 
-const hourlyAverageSchema = new Schema({
-  attacksCompleted: { required: true, type: Number },
-  avg: { required: true, type: Number },
-  day: { max: 4, min: 1, required: true, type: Number },
-  lastHourAvg: { required: true, type: Number },
-  season: { required: true, type: Number },
-  timestamp: { required: true, type: Date },
-  week: { max: 5, min: 1, required: true, type: Number },
-})
+const hourlyAverageSchema = new Schema(
+  {
+    attacksCompleted: { required: true, type: Number },
+    avg: { required: true, type: Number },
+    day: { max: 4, min: 1, required: true, type: Number },
+    lastHourAvg: { required: true, type: Number },
+    season: { required: true, type: Number },
+    timestamp: { required: true, type: Date },
+    week: { max: 5, min: 1, required: true, type: Number },
+  },
+  { _id: false },
+)
 
 const plusClanSchema = new Schema<PlusClan>(
   {

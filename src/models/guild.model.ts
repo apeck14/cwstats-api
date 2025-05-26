@@ -50,11 +50,14 @@ export interface Guild extends Document {
   nudges?: Nudges
 }
 
-const abbrSchema = new Schema({
-  abbr: { required: true, type: String },
-  name: { required: true, type: String },
-  tag: { required: true, type: String },
-})
+const abbrSchema = new Schema(
+  {
+    abbr: { required: true, type: String },
+    name: { required: true, type: String },
+    tag: { required: true, type: String },
+  },
+  { _id: false },
+)
 
 const channelSchema = new Schema(
   {
@@ -65,10 +68,13 @@ const channelSchema = new Schema(
   { _id: false },
 )
 
-const defaultClanSchema = new Schema({
-  name: { required: true, type: String },
-  tag: { required: true, type: String },
-})
+const defaultClanSchema = new Schema(
+  {
+    name: { required: true, type: String },
+    tag: { required: true, type: String },
+  },
+  { _id: false },
+)
 
 const linkedPlayerSchema = new Schema(
   {
@@ -79,20 +85,26 @@ const linkedPlayerSchema = new Schema(
   { _id: false },
 )
 
-const scheduledNudgeSchema = new Schema({
-  channelID: { required: true, type: String },
-  clanName: { required: true, type: String },
-  clanTag: { required: true, type: String },
-  scheduledHourUTC: { required: true, type: Number },
-})
+const scheduledNudgeSchema = new Schema(
+  {
+    channelID: { required: true, type: String },
+    clanName: { required: true, type: String },
+    clanTag: { required: true, type: String },
+    scheduledHourUTC: { required: true, type: Number },
+  },
+  { _id: false },
+)
 
-const nudgesSchema = new Schema({
-  ignoreLeaders: { default: false, type: Boolean },
-  ignoreWhenCrossedFinishLine: { default: false, type: Boolean },
-  links: { default: [], type: [linkedPlayerSchema] },
-  message: { default: '', type: String },
-  scheduled: { default: [], type: [scheduledNudgeSchema] },
-})
+const nudgesSchema = new Schema(
+  {
+    ignoreLeaders: { default: false, type: Boolean },
+    ignoreWhenCrossedFinishLine: { default: false, type: Boolean },
+    links: { default: [], type: [linkedPlayerSchema] },
+    message: { default: '', type: String },
+    scheduled: { default: [], type: [scheduledNudgeSchema] },
+  },
+  { _id: false },
+)
 
 const guildSchema = new Schema<Guild>(
   {
