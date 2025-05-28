@@ -18,7 +18,7 @@ export const clanController = async (req: Request, res: Response) => {
       return
     }
 
-    const badge = getClanBadge(clan.badgeId, clan.clanScore)
+    const badge = getClanBadge(clan.badgeId, clan.clanWarTrophies)
 
     res.status(200).json({ data: { badge, ...clan } })
   } catch {

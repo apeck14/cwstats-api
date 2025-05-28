@@ -19,7 +19,7 @@ export const clanLimitedController = async (req: Request, res: Response) => {
       return
     }
 
-    const badge = getClanBadge(clan.badgeId, clan.clanScore)
+    const badge = getClanBadge(clan.badgeId, clan.clanWarTrophies)
     const limitedClan = omit(clan, ['memberList'])
 
     res.status(200).json({ data: { ...limitedClan, badge } })
