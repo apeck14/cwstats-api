@@ -4,6 +4,7 @@ import helmet from 'helmet'
 
 import verifyInternalToken from '@/middleware/auth'
 import { errorHandler, notFound } from '@/middleware/errors'
+import requestLogger from '@/middleware/logtail'
 import clanRouter from '@/routes/clan.routes'
 import emojiRouter from '@/routes/emoji.routes'
 import guildRouter from '@/routes/guild.routes'
@@ -32,6 +33,9 @@ app.use(
 // JSON and URL-encoded body parsing
 app.use(json({ limit: '250kb' }))
 app.use(urlencoded({ extended: true, limit: '250kb' }))
+
+// Logging middleware
+app.use(requestLogger)
 
 // Set default response headers
 app.use((req: Request, res: Response, next) => {

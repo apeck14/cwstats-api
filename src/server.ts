@@ -1,11 +1,12 @@
+/* eslint-disable import/first */
+/* eslint-disable import/newline-after-import */
 /* eslint-disable no-console */
 import { config } from 'dotenv'
+config()
 
 import { connectDB } from '@/config/db'
 
 import app from './app'
-
-config()
 
 const HOST = process.env.NODE_ENV === 'production' ? '127.0.0.1' : '0.0.0.0'
 const PORT = Number(process.env.PORT) || 5000
