@@ -9,6 +9,7 @@ import { LinkedClan, LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
 import { PlusClan, PlusClanModel } from '@/models/plus-clan.model'
 import { StatisticsModel } from '@/models/statistics.model'
+import { getRaceLog, getRiverRace } from '@/services/supercell'
 
 interface PlayerInput {
   tag: string
@@ -51,6 +52,25 @@ interface Emoji {
   name: string
   emoji: string
 }
+
+// list of randomly selected tags to check river race logs of to determine current season
+const TAGS = [
+  '#PJQRLQPQ',
+  '#Y9202P9U',
+  '#YGL9RC9C',
+  '#PY0Y2CGQ',
+  '#L9VRJ',
+  '#Y2VCUC92',
+  '#LGL99QP9',
+  '#PPLCV9G2',
+  '#PQGYPCV0',
+  '#2QRCQVPR',
+  '#9RLJ8V2J',
+  '#20LUQGRQ',
+  '#YPJLQ999',
+  '#9CRYRJ',
+  '#98RVLCUY',
+]
 
 export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
   await connectDB()
@@ -267,4 +287,35 @@ export const bulkWriteEmojis = async (emojis: Emoji[]) => {
 
   const result = await EmojiModel.bulkWrite(operations)
   return result
+}
+
+// loop through random tags until 2 of the same season are found
+export const getCurrentSeason = async (): Promise<number> => {
+  const seasons: Record<number, number> = {}
+
+  for (const tag of TAGS) {
+    const [{ data: log, error: logError }, { data: race, error: raceError }] = await Promise.all([
+      getRaceLog(tag),
+      getRiverRace(tag),
+    ])
+
+    if (logError || !log || !log.length || !race || raceError) continue
+
+    const { seasonId } = log[0]
+    const { sectionIndex } = race
+
+    const season = sectionIndex === 0 ? seasonId + 1 : seasonId
+
+    if (season in seasons) {
+      return season
+    } else {
+      seasons[season] = 1
+    }
+  }
+
+  const seasonsAdded = Object.keys(seasons)
+
+  if (!seasonsAdded.length) return -1
+
+  return Number(seasonsAdded[0])
 }
