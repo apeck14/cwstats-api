@@ -5,6 +5,7 @@ import { SupercellClan, SupercellClansSearch } from '@/types/supercell/clan'
 import { SupercellWarLeaderboard } from '@/types/supercell/leaderboard'
 import { SupercellBattleLog, SupercellPlayer } from '@/types/supercell/player'
 import { SupercellRace } from '@/types/supercell/race'
+import { SupercellRaceLog } from '@/types/supercell/race-log'
 
 const BASE_URL = 'https://api.clashroyale.com/v1'
 
@@ -71,4 +72,9 @@ export const getRiverRace = (tag: string) => {
 export const getWarLeaderboard = (locationId: string | number, limit?: number) => {
   const url = `${BASE_URL}/locations/${locationId}/rankings/clanwars?limit=${limit || 100}`
   return handleSupercellRequest<SupercellWarLeaderboard>(url)
+}
+
+export const getRaceLog = (tag: string) => {
+  const url = `${BASE_URL}/clans/%23${formatTag(tag, false)}/riverracelog`
+  return handleSupercellRequest<SupercellRaceLog>(url)
 }
