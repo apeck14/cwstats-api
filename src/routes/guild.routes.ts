@@ -2,6 +2,7 @@ import { Router } from 'express'
 
 import deleteGuildController from '@/controllers/guild/delete-guild'
 import deleteGuildNudgeLinkController from '@/controllers/guild/delete-nudge-link'
+import getLinkedClans from '@/controllers/guild/get-all-linked-clans'
 import getGuildController from '@/controllers/guild/get-guild'
 import getGuildClansController from '@/controllers/guild/get-guild-clans'
 import getGuildLimitedController from '@/controllers/guild/get-guild-limited'
@@ -14,6 +15,7 @@ import { deleteGuildNudgeLinkSchema, guildSchema } from '@/schemas/mongo'
 
 const router: Router = Router()
 
+router.get('/clans', getLinkedClans)
 router.post('/:id', validation(guildSchema), postGuildController)
 router.get('/:id', validation(guildSchema), getGuildController)
 router.delete('/:id', validation(guildSchema), deleteGuildController)

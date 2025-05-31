@@ -117,6 +117,14 @@ export const getLinkedClansByGuild = async (id: string): Promise<LinkedClan[]> =
   return linkedClans
 }
 
+export const getAllLinkedClans = async (): Promise<LinkedClan[]> => {
+  await connectDB()
+
+  const linkedClans = await LinkedClanModel.find({}, { _id: 0 }).lean()
+
+  return linkedClans
+}
+
 export const setCommandCooldown = async ({ commandName, delay, id }: CommandCooldownInput) => {
   await connectDB()
 
