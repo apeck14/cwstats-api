@@ -56,7 +56,6 @@ app.use('/guild', guildRouter)
 app.use('/user', userRouter)
 app.use('/emoji', emojiRouter)
 
-// Individual routes
 app.get('/current-season', getCurrentSeasonController)
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is running', status: 200 })
