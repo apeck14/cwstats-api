@@ -82,3 +82,9 @@ export const emojiBulkAddSchema = z.object({
       .min(1, { message: 'emojis array cannot be empty' }),
   }),
 })
+
+export const getEmojiSchema = z.object({
+  params: z.object({
+    name: z.string({ message: 'name must be a string' }).min(1, { message: 'name cannot be empty' }),
+  }),
+})

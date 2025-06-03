@@ -339,3 +339,11 @@ export const getCurrentSeason = async (): Promise<number> => {
 
   return Number(seasonsAdded[0])
 }
+
+export const getEmoji = async (name: string) => {
+  await connectDB()
+
+  const emoji = await EmojiModel.findOne({ name }, { _id: 0 })
+
+  return emoji
+}
