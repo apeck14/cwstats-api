@@ -16,7 +16,7 @@ export const deleteWebhookController = async (req: Request, res: Response) => {
     const linkedClan = await deleteWebhook({ tag })
 
     if (!linkedClan) {
-      res.status(404).json({ error: 'Linked  not found.', status: 404 })
+      res.status(404).json({ error: 'Linked clan not found.', status: 404 })
       return
     } else if (linkedClan.webhookUrl) {
       // remove webhook from guild
