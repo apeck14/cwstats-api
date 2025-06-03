@@ -1,6 +1,7 @@
 import { FilterQuery } from 'mongoose'
 
 import { connectDB } from '@/config/db'
+import { formatTag } from '@/lib/format'
 import { DailyLeaderboard, DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
 import { EmojiModel } from '@/models/emoji.model'
 import { GuildModel } from '@/models/guild.model'
@@ -45,6 +46,10 @@ interface NudgeLinkInput {
 
 interface DeleteNudgeLinkInput {
   guildId: string
+  tag: string
+}
+
+interface DeleteWebhookInput {
   tag: string
 }
 
@@ -244,6 +249,21 @@ export const deleteNudgeLink = async ({ guildId, tag }: DeleteNudgeLinkInput) =>
   )
 
   return result
+}
+
+export const deleteWebhook = async ({ tag }: DeleteWebhookInput) => {
+  await connectDB()
+
+  const linkedClan = await LinkedClanModel.findOneAndUpdate(
+    { tag: formatTag(tag, true) },
+    {
+      $unset: {
+        webhookUrl: 1,
+      },
+    },
+  )
+
+  return linkedClan
 }
 
 export const createGuild = async (guildId: string) => {

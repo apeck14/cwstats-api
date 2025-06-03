@@ -10,6 +10,21 @@ interface discordUserNicknameInput {
 
 const BASE_URL = 'https://discord.com/api/v10'
 
+const handleDiscordApiError = (err: unknown): never => {
+  const axiosErr = err as AxiosError
+  const status = axiosErr.response?.status || 500
+  const data = axiosErr.response?.data
+
+  const message =
+    data && typeof data === 'object' && 'message' in data
+      ? `Discord: ${data.message}`
+      : axiosErr.message
+        ? `Discord: ${axiosErr.message}`
+        : 'Unknown error from Discord API'
+
+  throw new DiscordApiError(message, status)
+}
+
 export const updateDiscordUserNickname = async ({
   guildId,
   nickname,
@@ -28,15 +43,14 @@ export const updateDiscordUserNickname = async ({
       },
     )
   } catch (err) {
-    const axiosErr = err as AxiosError
-    const status = axiosErr.response?.status || 500
-    const data = axiosErr.response?.data
+    handleDiscordApiError(err)
+  }
+}
 
-    const message =
-      data && typeof data === 'object' && 'message' in data
-        ? (data.message as string)
-        : axiosErr.message || 'Unknown error from Discord API'
-
-    throw new DiscordApiError(message, status)
+export const deleteDiscordWebhookByUrl = async (webhookUrl: string): Promise<void> => {
+  try {
+    await axios.delete(webhookUrl)
+  } catch (err) {
+    handleDiscordApiError(err)
   }
 }

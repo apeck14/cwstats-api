@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import deleteWebhookController from '@/controllers/clan/delete-webhook'
 import clanController from '@/controllers/clan/get-clan'
 import clanLimitedController from '@/controllers/clan/get-clan-limited'
 import clanRaceController from '@/controllers/clan/get-clan-race'
@@ -17,6 +18,7 @@ router.get('/:tag/limited', validation(clanSchema), clanLimitedController)
 router.get('/:tag/race', validation(clanSchema), clanRaceController)
 router.get('/:tag/race/limited', validation(clanSchema), clanRaceLimitedController)
 router.get('/:tag/log', validation(clanSchema), getClanRaceLogController)
+router.delete('/:tag/webhook', validation(clanSchema), deleteWebhookController)
 
 // Export router with all routes
 export default router
