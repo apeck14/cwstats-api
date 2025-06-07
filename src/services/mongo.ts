@@ -58,9 +58,26 @@ interface Emoji {
   emoji: string
 }
 
-interface DailyTrackingEntry {
+interface PartialDailyTrackingEntry {
   season: number
   timestamp: string
+}
+
+interface DailyTrackingEntryScore {
+  attacks: number
+  fame: number
+  name: string
+  tag: string
+  missed: boolean
+}
+
+interface FullDailyTrackingEntry {
+  tag: string
+  day: number
+  week: number
+  season: number
+  timestamp: string
+  scores: DailyTrackingEntryScore[]
 }
 
 // list of randomly selected tags to check river race logs of to determine current season
@@ -310,7 +327,7 @@ export const bulkWriteEmojis = async (emojis: Emoji[]) => {
     },
   }))
 
-  const result = await EmojiModel.bulkWrite(operations)
+  const result = await EmojiModel.bulkWrite(operations, { ordered: false })
   return result
 }
 
@@ -353,7 +370,10 @@ export const getEmoji = async (name: string) => {
   return emoji
 }
 
-export const deleteDailyTrackingEntries = async (tag: string, entriesToRemove: DailyTrackingEntry[]) => {
+export const deleteDailyTrackingEntries = async (
+  tag: string,
+  entriesToRemove: PartialDailyTrackingEntry[],
+) => {
   await connectDB()
 
   const entryPullConditions = entriesToRemove.map(({ season, timestamp }) => ({
@@ -371,5 +391,31 @@ export const deleteDailyTrackingEntries = async (tag: string, entriesToRemove: D
     },
   )
 
+  return result
+}
+
+export const bulkAddDailyTrackingEntries = async (entries: FullDailyTrackingEntry[]) => {
+  await connectDB()
+
+  if (!entries.length) return { modifiedCount: 0 }
+
+  const operations = entries.map((e) => ({
+    updateOne: {
+      filter: { tag: formatTag(e.tag, true) },
+      update: {
+        $push: {
+          dailyTracking: {
+            day: e.day,
+            scores: e.scores,
+            season: e.season,
+            timestamp: e.timestamp,
+            week: e.week,
+          },
+        },
+      },
+    },
+  }))
+
+  const result = await PlusClanModel.bulkWrite(operations, { ordered: false })
   return result
 }

@@ -103,3 +103,29 @@ export const deleteDailyTrackingEntriesSchema = z.object({
     tag: tagSchema,
   }),
 })
+
+export const addDailyTrackingEntriesSchema = z.object({
+  body: z.object({
+    entries: z
+      .array(
+        z.object({
+          day: z.number(),
+          scores: z.array(
+            z.object({
+              attacks: z.number(),
+              fame: z.number(),
+              missed: z.boolean(),
+              name: z.string(),
+              tag: z.string(),
+            }),
+          ),
+          season: z.number(),
+          tag: tagSchema,
+          timestamp: z.string(),
+          week: z.number(),
+        }),
+        { required_error: 'entries must be an array of objects' },
+      )
+      .min(1, { message: 'entries array cannot be empty' }),
+  }),
+})
