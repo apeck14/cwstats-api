@@ -9,9 +9,15 @@ export default (schema: AnyZodObject) => async (req: Request, res: Response, nex
       query: req.query,
     })
     next()
-  } catch (error) {
-    if (error instanceof ZodError) {
-      res.status(400).json({ error: error.issues[0].message, status: 400 })
+  } catch (err) {
+    if (err instanceof ZodError) {
+      const e = err.errors[0]
+      const formattedErr = `Field "${e.path.join('.')}" - ${e.message}`
+
+      res.status(400).json({
+        error: formattedErr,
+        status: 400,
+      })
     } else {
       // fallback for unexpected errors
       res.status(500).json({ error: 'Unexpected validation error', status: 500 })

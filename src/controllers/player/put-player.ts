@@ -29,8 +29,11 @@ export const playerAddController = async (req: Request, res: Response) => {
     res.status(200).json({ success: true, ...data })
   } catch (err) {
     if (err instanceof ZodError) {
+      const e = err.errors[0]
+      const formattedErr = `Field "${e.path.join('.')}" - ${e.message}`
+
       res.status(400).json({
-        error: err.errors[0].message,
+        error: formattedErr,
         status: 400,
       })
       return
