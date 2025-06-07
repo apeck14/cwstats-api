@@ -58,6 +58,11 @@ interface Emoji {
   emoji: string
 }
 
+interface DailyTrackingEntry {
+  season: number
+  timestamp: string
+}
+
 // list of randomly selected tags to check river race logs of to determine current season
 const TAGS = [
   '#PJQRLQPQ',
@@ -346,4 +351,25 @@ export const getEmoji = async (name: string) => {
   const emoji = await EmojiModel.findOne({ name }, { _id: 0 })
 
   return emoji
+}
+
+export const deleteDailyTrackingEntries = async (tag: string, entriesToRemove: DailyTrackingEntry[]) => {
+  await connectDB()
+
+  const entryPullConditions = entriesToRemove.map(({ season, timestamp }) => ({
+    $and: [{ season }, { timestamp }],
+  }))
+
+  const result = await PlusClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $pull: {
+        dailyTracking: {
+          $or: entryPullConditions,
+        },
+      },
+    },
+  )
+
+  return result
 }

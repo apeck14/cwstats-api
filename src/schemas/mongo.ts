@@ -88,3 +88,18 @@ export const getEmojiSchema = z.object({
     name: z.string({ message: 'name must be a string' }).min(1, { message: 'name cannot be empty' }),
   }),
 })
+
+export const deleteDailyTrackingEntriesSchema = z.object({
+  body: z.object({
+    entries: z
+      .array(
+        z.object({
+          season: z.number(),
+          timestamp: z.string(),
+        }),
+        { required_error: 'entries must be an array of objects' },
+      )
+      .min(1, { message: 'entries array cannot be empty' }),
+    tag: tagSchema,
+  }),
+})
