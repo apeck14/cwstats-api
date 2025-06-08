@@ -129,3 +129,10 @@ export const addDailyTrackingEntriesSchema = z.object({
       .min(1, { message: 'entries array cannot be empty' }),
   }),
 })
+
+export const patchSeasonalReportSentSchema = z.object({
+  body: z.object({
+    reportSent: z.boolean(),
+    tag: tagSchema,
+  }),
+})

@@ -419,3 +419,18 @@ export const bulkAddDailyTrackingEntries = async (entries: FullDailyTrackingEntr
   const result = await PlusClanModel.bulkWrite(operations, { ordered: false })
   return result
 }
+
+export const setSeasonalReportSent = async (tag: string, reportSent: boolean) => {
+  await connectDB()
+
+  const result = await LinkedClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        seasonalReportSent: reportSent,
+      },
+    },
+  )
+
+  return result
+}

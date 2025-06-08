@@ -10,6 +10,7 @@ import clanRouter from '@/routes/clan.routes'
 import emojiRouter from '@/routes/emoji.routes'
 import guildRouter from '@/routes/guild.routes'
 import leaderboardRouter from '@/routes/leaderboard.routes'
+import linkedClanRouter from '@/routes/linked-clan.routes'
 import playerRouter from '@/routes/player.routes'
 import plusRouter from '@/routes/plus.routes'
 import userRouter from '@/routes/user.routes'
@@ -55,8 +56,10 @@ app.use('/plus', plusRouter)
 app.use('/guild', guildRouter)
 app.use('/user', userRouter)
 app.use('/emoji', emojiRouter)
+app.use('/linked-clan', linkedClanRouter)
 
 app.get('/current-season', getCurrentSeasonController)
+
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is running', status: 200 })
 })
