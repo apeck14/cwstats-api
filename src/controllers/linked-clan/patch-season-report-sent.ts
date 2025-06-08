@@ -7,7 +7,7 @@ import { setSeasonalReportSent } from '@/services/mongo'
 
 /**
  * Set seasonal report sent
- * @route PATCH /linked-clan/seasonal-report-sent
+ * @route PATCH /linked-clan/season-report-sent
  */
 export const patchSeasonalReportSentController = async (req: Request, res: Response) => {
   try {

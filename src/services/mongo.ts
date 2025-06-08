@@ -434,3 +434,18 @@ export const setSeasonalReportSent = async (tag: string, reportSent: boolean) =>
 
   return result
 }
+
+export const resetSeasonalReportsSent = async () => {
+  await connectDB()
+
+  const result = await LinkedClanModel.updateMany(
+    { seasonalReportSent: true },
+    {
+      $set: {
+        seasonalReportSent: false,
+      },
+    },
+  )
+
+  return result
+}
