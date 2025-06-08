@@ -5,7 +5,7 @@ import { resetSeasonalReportsSent } from '@/services/mongo'
 
 /**
  * Set all seasonal reports sent to false
- * @route PATCH /linked-clan/season-report-sent
+ * @route PATCH /linked-clan/reset-season-reports
  */
 export const patchResetSeasonalReportsController = async (req: Request, res: Response) => {
   try {
