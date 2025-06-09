@@ -3,6 +3,7 @@ import express, { Application, json, Request, Response, urlencoded } from 'expre
 import helmet from 'helmet'
 
 import getCurrentSeasonController from '@/controllers/get-current-season'
+import patchRisersAndFallersController from '@/controllers/patch-risers-fallers'
 import verifyInternalToken from '@/middleware/auth'
 import { errorHandler, notFound } from '@/middleware/errors'
 import requestLogger from '@/middleware/logtail'
@@ -59,6 +60,7 @@ app.use('/emoji', emojiRouter)
 app.use('/linked-clan', linkedClanRouter)
 
 app.get('/current-season', getCurrentSeasonController)
+app.patch('/risers-fallers', patchRisersAndFallersController)
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is running', status: 200 })

@@ -1,3 +1,5 @@
+import { Location } from '@/models/statistics.model'
+
 export interface SupercellClan {
   tag: string
   name: string
@@ -6,12 +8,7 @@ export interface SupercellClan {
   badgeId: number
   clanScore: number
   clanWarTrophies: number
-  location: {
-    id: number
-    name: string
-    isCountry: boolean
-    countryCode?: string
-  }
+  location: Location
   requiredTrophies: number
   donationsPerWeek: number
   clanChestStatus: string
@@ -58,12 +55,7 @@ export interface SupercellClansSearchItem {
   badgeId: number
   clanScore: number
   clanWarTrophies: number
-  location: {
-    id: number
-    name: string
-    isCountry: boolean
-    countryCode?: string
-  }
+  location: Location
   requiredTrophies: number
   donationsPerWeek: number
   clanChestLevel: number

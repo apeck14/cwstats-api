@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { discordIdSchema, tagSchema } from '@/schemas/utils'
+import { discordIdSchema, riserFallerEntrySchema, tagSchema } from '@/schemas/utils'
 
 export const playerDocumentSchema = z.object({
   tag: tagSchema,
@@ -134,5 +134,12 @@ export const patchSeasonalReportSentSchema = z.object({
   body: z.object({
     reportSent: z.boolean(),
     tag: tagSchema,
+  }),
+})
+
+export const patchRisersFallersSchema = z.object({
+  body: z.object({
+    fallers: z.array(riserFallerEntrySchema),
+    risers: z.array(riserFallerEntrySchema),
   }),
 })

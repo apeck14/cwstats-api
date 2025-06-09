@@ -1,10 +1,10 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
-interface Location {
+export interface Location {
   id: number
   name: string
   isCountry: boolean
-  countryCode: string
+  countryCode?: string
 }
 
 interface ClanMovement {

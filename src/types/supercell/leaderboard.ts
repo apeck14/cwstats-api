@@ -1,3 +1,5 @@
+import { Location } from '@/models/statistics.model'
+
 export interface SupercellWarLeaderboard extends Array<SupercellWarLeaderboardItem> {}
 
 export interface SupercellWarLeaderboardItem {
@@ -5,12 +7,7 @@ export interface SupercellWarLeaderboardItem {
   name: string
   rank: number
   previousRank: number
-  location: {
-    id: number
-    name: string
-    isCountry: boolean
-    countryCode: string
-  }
+  location: Location
   clanScore: number
   members: number
   badgeId: number

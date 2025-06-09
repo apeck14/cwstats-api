@@ -9,7 +9,7 @@ import { LinkedAccountModel } from '@/models/linked-account.model'
 import { LinkedClan, LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
 import { PlusClan, PlusClanModel } from '@/models/plus-clan.model'
-import { StatisticsModel } from '@/models/statistics.model'
+import { Location, StatisticsModel } from '@/models/statistics.model'
 import { getRaceLog, getRiverRace } from '@/services/supercell'
 
 interface PlayerInput {
@@ -78,6 +78,17 @@ interface FullDailyTrackingEntry {
   season: number
   timestamp: string
   scores: DailyTrackingEntryScore[]
+}
+
+interface RiserFallerEntry {
+  badgeId: number
+  clanScore: number
+  location: Location
+  members: number
+  name: string
+  previousRank: number
+  rank: number
+  tag: string
 }
 
 // list of randomly selected tags to check river race logs of to determine current season
@@ -443,6 +454,22 @@ export const resetSeasonalReportsSent = async () => {
     {
       $set: {
         seasonalReportSent: false,
+      },
+    },
+  )
+
+  return result
+}
+
+export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: RiserFallerEntry[]) => {
+  await connectDB()
+
+  const result = await StatisticsModel.updateOne(
+    {},
+    {
+      $set: {
+        fallers,
+        risers,
       },
     },
   )

@@ -17,3 +17,19 @@ export const discordIdSchema = z
   })
   .nonempty({ message: 'id is required' })
   .regex(/^\d{17,19}$/, { message: 'id must be a valid Discord ID (17–19 digits)' })
+
+export const riserFallerEntrySchema = z.object({
+  badgeId: z.number(),
+  clanScore: z.number(),
+  location: z.object({
+    countryCode: z.string().optional(),
+    id: z.number(),
+    isCountry: z.boolean(),
+    name: z.string(),
+  }),
+  members: z.number(),
+  name: z.string(),
+  previousRank: z.number(),
+  rank: z.number(),
+  tag: z.string(),
+})
