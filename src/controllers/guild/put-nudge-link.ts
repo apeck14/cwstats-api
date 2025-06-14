@@ -4,7 +4,7 @@ import { ZodError } from 'zod'
 import { calcLinkedPlayerLimit, generateDiscordNickname } from '@/lib/utils'
 import { putGuildNudgeLinkSchema } from '@/schemas/mongo'
 import { updateDiscordUserNickname } from '@/services/discord'
-import { addNudgeLink, getAllPlusClans, getGuild, getLinkedClansByGuild } from '@/services/mongo'
+import { addNudgeLink, getGuild, getLinkedClansByGuild, getPlusClans } from '@/services/mongo'
 import { getPlayer } from '@/services/supercell'
 
 /**
@@ -38,7 +38,7 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
 
     // check if limit exceeded
     if (links) {
-      const [linkedClans, plusTags] = await Promise.all([getLinkedClansByGuild(id), getAllPlusClans(true)])
+      const [linkedClans, plusTags] = await Promise.all([getLinkedClansByGuild(id), getPlusClans(true, {})])
 
       if (!linkedClans || !plusTags) throw new Error()
 

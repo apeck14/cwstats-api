@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
 import { plusClansSchema } from '@/schemas/mongo'
-import { getAllPlusClans } from '@/services/mongo'
+import { getPlusClans } from '@/services/mongo'
 
 /**
  * Get all plus clans
@@ -16,7 +16,7 @@ export const plusClansController = async (req: Request, res: Response) => {
 
     const { tagsOnly } = parsed.query
 
-    const plusClans = await getAllPlusClans(tagsOnly === 'true')
+    const plusClans = await getPlusClans(tagsOnly === 'true', {})
 
     res.status(200).json({ data: plusClans })
   } catch (err) {

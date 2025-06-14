@@ -142,13 +142,13 @@ export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
 }
 
 // set function overloading for typescript
-export function getAllPlusClans(tagsOnly: true): Promise<string[]>
-export function getAllPlusClans(tagsOnly: false): Promise<PlusClan[]>
-export function getAllPlusClans(tagsOnly: boolean): Promise<string[] | PlusClan[]>
-export async function getAllPlusClans(tagsOnly: boolean): Promise<string[] | PlusClan[]> {
+export function getPlusClans(tagsOnly: true, query: object): Promise<string[]>
+export function getPlusClans(tagsOnly: false, query: object): Promise<PlusClan[]>
+export function getPlusClans(tagsOnly: boolean, query: object): Promise<string[] | PlusClan[]>
+export async function getPlusClans(tagsOnly: boolean, query: object): Promise<string[] | PlusClan[]> {
   await connectDB()
 
-  const plusClans = await PlusClanModel.find({}, { _id: 0 }).lean()
+  const plusClans = await PlusClanModel.find({ ...query }, { _id: 0 }).lean()
 
   if (tagsOnly) {
     return plusClans.map((doc) => doc.tag)
