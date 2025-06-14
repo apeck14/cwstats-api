@@ -46,7 +46,7 @@ export const getPlayerScoresController = async (req: Request, res: Response) => 
     const sortedScores = Object.fromEntries(
       Object.entries(scores)
         .map(([key, entries]) => [key, entries.sort((a, b) => a.day - b.day)] as const)
-        .sort(([a], [b]) => a.localeCompare(b)),
+        .sort(([a], [b]) => b.localeCompare(a)),
     )
 
     res.status(200).json({ data: sortedScores })
