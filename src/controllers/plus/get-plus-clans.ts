@@ -16,7 +16,7 @@ export const plusClansController = async (req: Request, res: Response) => {
 
     const { tagsOnly } = parsed.query
 
-    const plusClans = await getPlusClans(tagsOnly === 'true', {})
+    const plusClans = await getPlusClans(tagsOnly === 'true', {}, {})
 
     res.status(200).json({ data: plusClans })
   } catch (err) {

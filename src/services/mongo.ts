@@ -69,6 +69,7 @@ interface DailyTrackingEntryScore {
   name: string
   tag: string
   missed: boolean
+  notInClan: boolean
 }
 
 interface FullDailyTrackingEntry {
@@ -142,13 +143,21 @@ export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
 }
 
 // set function overloading for typescript
-export function getPlusClans(tagsOnly: true, query: object): Promise<string[]>
-export function getPlusClans(tagsOnly: false, query: object): Promise<PlusClan[]>
-export function getPlusClans(tagsOnly: boolean, query: object): Promise<string[] | PlusClan[]>
-export async function getPlusClans(tagsOnly: boolean, query: object): Promise<string[] | PlusClan[]> {
+export function getPlusClans(tagsOnly: true, query: object, projection: object): Promise<string[]>
+export function getPlusClans(tagsOnly: false, query: object, projection: object): Promise<PlusClan[]>
+export function getPlusClans(
+  tagsOnly: boolean,
+  query: object,
+  projection: object,
+): Promise<string[] | PlusClan[]>
+export async function getPlusClans(
+  tagsOnly: boolean,
+  query: object,
+  projection: object,
+): Promise<string[] | PlusClan[]> {
   await connectDB()
 
-  const plusClans = await PlusClanModel.find({ ...query }, { _id: 0 }).lean()
+  const plusClans = await PlusClanModel.find({ ...query }, { _id: 0, ...projection }).lean()
 
   if (tagsOnly) {
     return plusClans.map((doc) => doc.tag)

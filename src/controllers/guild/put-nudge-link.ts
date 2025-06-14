@@ -38,7 +38,10 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
 
     // check if limit exceeded
     if (links) {
-      const [linkedClans, plusTags] = await Promise.all([getLinkedClansByGuild(id), getPlusClans(true, {})])
+      const [linkedClans, plusTags] = await Promise.all([
+        getLinkedClansByGuild(id),
+        getPlusClans(true, {}, {}),
+      ])
 
       if (!linkedClans || !plusTags) throw new Error()
 
