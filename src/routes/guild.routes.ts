@@ -1,6 +1,7 @@
 import { Router } from 'express'
 
 import deleteGuildController from '@/controllers/guild/delete-guild'
+import deleteGuildNudgeController from '@/controllers/guild/delete-nudge'
 import deleteGuildNudgeLinkController from '@/controllers/guild/delete-nudge-link'
 import getLinkedClans from '@/controllers/guild/get-all-linked-clans'
 import getGuildController from '@/controllers/guild/get-guild'
@@ -20,6 +21,7 @@ router.get('/clans', getLinkedClans)
 router.post('/guilds', postGuildsController)
 router.post('/:id', validation(guildSchema), postGuildController)
 router.get('/:id', validation(guildSchema), getGuildController)
+router.delete('/nudge', deleteGuildNudgeController)
 router.delete('/:id', validation(guildSchema), deleteGuildController)
 router.get('/:id/limited', validation(guildSchema), getGuildLimitedController)
 router.get('/:id/clans', validation(guildSchema), getGuildClansController)

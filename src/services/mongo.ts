@@ -49,6 +49,12 @@ interface DeleteNudgeLinkInput {
   tag: string
 }
 
+interface DeleteNudgeInput {
+  guildId: string
+  tag: string
+  scheduledHourUTC: number
+}
+
 interface DeleteWebhookInput {
   tag: string
 }
@@ -294,6 +300,21 @@ export const deleteNudgeLink = async ({ guildId, tag }: DeleteNudgeLinkInput) =>
     {
       $pull: {
         'nudges.links': { tag },
+      },
+    },
+  )
+
+  return result
+}
+
+export const deleteNudge = async ({ guildId, scheduledHourUTC, tag }: DeleteNudgeInput) => {
+  await connectDB()
+
+  const result = await GuildModel.updateOne(
+    { guildID: guildId },
+    {
+      $pull: {
+        'nudges.scheduled': { clanTag: tag, scheduledHourUTC },
       },
     },
   )

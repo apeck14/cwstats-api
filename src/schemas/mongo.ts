@@ -75,6 +75,14 @@ export const deleteGuildNudgeLinkSchema = z.object({
   }),
 })
 
+export const deleteGuildNudgeSchema = z.object({
+  body: z.object({
+    guildId: discordIdSchema,
+    scheduledHourUTC: z.number(),
+    tag: tagSchema,
+  }),
+})
+
 export const emojiBulkAddSchema = z.object({
   body: z.object({
     emojis: z
