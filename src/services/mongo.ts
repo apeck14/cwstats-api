@@ -529,3 +529,22 @@ export const setLbLastUpdated = async (timestamp: number) => {
 
   return result
 }
+
+export const resetDailyLeaderboardClans = async () => {
+  await connectDB()
+
+  const result = await DailyLeaderboardModel.updateMany(
+    {},
+    {
+      $set: {
+        crossedFinishLine: false,
+        decksRemaining: 200,
+        fameAvg: 0,
+        isTraining: true,
+        notRanked: false,
+      },
+    },
+  )
+
+  return result
+}
