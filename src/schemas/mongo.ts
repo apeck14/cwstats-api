@@ -26,6 +26,12 @@ export const guildSchema = z.object({
   }),
 })
 
+export const guildsSchema = z.object({
+  body: z.object({
+    query: z.object({}).passthrough(),
+  }),
+})
+
 export const guildCommandCooldownSchema = z.object({
   body: z.object({
     commandName: z

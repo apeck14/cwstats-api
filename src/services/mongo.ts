@@ -176,6 +176,14 @@ export const getGuild = async (id: string, limited?: boolean) => {
   return guild
 }
 
+export const getGuilds = async (query: object) => {
+  await connectDB()
+
+  const guilds = await GuildModel.find({ ...query }, { _id: 0 }).lean()
+
+  return guilds
+}
+
 export const getLinkedClansByGuild = async (id: string): Promise<LinkedClan[]> => {
   await connectDB()
 
