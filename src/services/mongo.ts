@@ -514,3 +514,18 @@ export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: R
 
   return result
 }
+
+export const setLbLastUpdated = async (timestamp: number) => {
+  await connectDB()
+
+  const result = await StatisticsModel.updateOne(
+    {},
+    {
+      $set: {
+        lbLastUpdated: timestamp,
+      },
+    },
+  )
+
+  return result
+}

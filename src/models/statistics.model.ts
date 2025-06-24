@@ -51,7 +51,7 @@ const clanMovementSchema = new Schema(
 const StatisticsSchema = new Schema<Statistics>(
   {
     fallers: { required: true, type: [clanMovementSchema] },
-    lbLastUpdated: { required: true, type: Number },
+    lbLastUpdated: { required: true, type: Number }, // TODO: change this to a Date type (?)
     risers: { required: true, type: [clanMovementSchema] },
   },
   { collection: 'Statistics' },
