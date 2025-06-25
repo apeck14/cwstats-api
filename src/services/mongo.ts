@@ -2,6 +2,7 @@ import { FilterQuery } from 'mongoose'
 
 import { connectDB } from '@/config/db'
 import { formatTag } from '@/lib/format'
+import { calcLinkedPlayerLimit, calcNudgeLimit } from '@/lib/utils'
 import { DailyLeaderboard, DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
 import { EmojiModel } from '@/models/emoji.model'
 import { GuildModel } from '@/models/guild.model'
@@ -53,10 +54,6 @@ interface DeleteNudgeInput {
   guildId: string
   tag: string
   scheduledHourUTC: number
-}
-
-interface DeleteWebhookInput {
-  tag: string
 }
 
 interface Emoji {
@@ -198,6 +195,14 @@ export const getLinkedClansByGuild = async (id: string): Promise<LinkedClan[]> =
   return linkedClans
 }
 
+export const getLinkedClan = async (tag: string): Promise<LinkedClan | null> => {
+  await connectDB()
+
+  const linkedClan = await LinkedClanModel.findOne({ tag: formatTag(tag, true) }, { _id: 0 }).lean()
+
+  return linkedClan
+}
+
 export const getAllLinkedClans = async (): Promise<LinkedClan[]> => {
   await connectDB()
 
@@ -322,7 +327,7 @@ export const deleteNudge = async ({ guildId, scheduledHourUTC, tag }: DeleteNudg
   return result
 }
 
-export const deleteWebhook = async ({ tag }: DeleteWebhookInput) => {
+export const deleteWebhook = async (tag: string) => {
   await connectDB()
 
   const linkedClan = await LinkedClanModel.findOneAndUpdate(
@@ -547,4 +552,33 @@ export const resetDailyLeaderboardClans = async () => {
   )
 
   return result
+}
+
+export const deletePlusClan = async (tag: string) => {
+  await connectDB()
+
+  const result = PlusClanModel.deleteOne({ tag: formatTag(tag, true) })
+
+  return result
+}
+
+export const sliceGuildPlusFeatures = async (id: string) => {
+  await connectDB()
+
+  const linkedGuildClans = await getLinkedClansByGuild(id)
+
+  const playerLimit = calcLinkedPlayerLimit(linkedGuildClans.length)
+  const nudgeLimit = calcNudgeLimit(linkedGuildClans.length)
+
+  const result = await GuildModel.updateOne(
+    { guildID: id },
+    {
+      $push: {
+        'nudges.links': { $each: [], $slice: playerLimit },
+        'nudges.scheduled': { $each: [], $slice: nudgeLimit },
+      },
+    },
+  )
+
+  return { ...result, nudgeLimit, playerLimit }
 }

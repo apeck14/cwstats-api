@@ -158,3 +158,9 @@ export const patchRisersFallersSchema = z.object({
     risers: z.array(riserFallerEntrySchema),
   }),
 })
+
+export const deletePlusClanSchema = z.object({
+  params: z.object({
+    tag: tagSchema,
+  }),
+})

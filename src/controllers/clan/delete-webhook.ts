@@ -13,7 +13,7 @@ export const deleteWebhookController = async (req: Request, res: Response) => {
   try {
     const { tag } = req.params
 
-    const linkedClan = await deleteWebhook({ tag })
+    const linkedClan = await deleteWebhook(tag)
 
     if (!linkedClan) {
       res.status(404).json({ error: 'Linked clan not found.', status: 404 })
