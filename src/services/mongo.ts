@@ -1,4 +1,4 @@
-import { FilterQuery } from 'mongoose'
+import { FilterQuery, ProjectionType } from 'mongoose'
 
 import { connectDB } from '@/config/db'
 import { formatTag } from '@/lib/format'
@@ -9,7 +9,7 @@ import {
   DailyLeaderboardModel,
 } from '@/models/daily-leaderboard.model'
 import { EmojiModel } from '@/models/emoji.model'
-import { GuildModel } from '@/models/guild.model'
+import { Guild, GuildModel } from '@/models/guild.model'
 import { LinkedAccountModel } from '@/models/linked-account.model'
 import { LinkedClan, LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
@@ -187,7 +187,7 @@ export async function getPlusClans(
 export const getGuild = async (id: string, limited?: boolean) => {
   await connectDB()
 
-  const projection = limited ? { _id: 0, nudges: 0 } : { _id: 0 }
+  const projection: ProjectionType<Guild> = limited ? { _id: 0, nudges: 0 } : { _id: 0 }
 
   const guild = await GuildModel.findOne({ guildID: id }, { ...projection }).lean()
 
