@@ -84,6 +84,17 @@ interface FullDailyTrackingEntry {
   scores: DailyTrackingEntryScore[]
 }
 
+interface HourlyTrackingEntry {
+  tag: string
+  attacksCompleted: number
+  avg: number
+  day: number
+  season: number
+  week: number
+  timestamp: string
+  lastHourAvg: number
+}
+
 interface RiserFallerEntry {
   badgeId: number
   clanScore: number
@@ -464,6 +475,39 @@ export const bulkAddDailyTrackingEntries = async (entries: FullDailyTrackingEntr
             season: e.season,
             timestamp: e.timestamp,
             week: e.week,
+          },
+        },
+      },
+    },
+  }))
+
+  const result = await PlusClanModel.bulkWrite(operations, { ordered: false })
+  return result
+}
+
+export const bulkAddHourlyTrackingEntries = async (entries: HourlyTrackingEntry[]) => {
+  await connectDB()
+
+  if (!entries.length) return { modifiedCount: 0 }
+
+  const operations = entries.map((e) => ({
+    updateOne: {
+      filter: { tag: formatTag(e.tag, true) },
+      update: {
+        $push: {
+          hourlyAverages: {
+            $each: [
+              {
+                attacksCompleted: e.attacksCompleted,
+                avg: e.avg,
+                day: e.day,
+                lastHourAvg: e.lastHourAvg,
+                season: e.season,
+                timestamp: e.timestamp,
+                week: e.week,
+              },
+            ],
+            $slice: -300,
           },
         },
       },

@@ -145,6 +145,26 @@ export const addDailyTrackingEntriesSchema = z.object({
   }),
 })
 
+export const addHourlyTrackingEntriesSchema = z.object({
+  body: z.object({
+    entries: z
+      .array(
+        z.object({
+          attacksCompleted: z.number(),
+          avg: z.number(),
+          day: z.number(),
+          lastHourAvg: z.number(),
+          season: z.number(),
+          tag: z.string(),
+          timestamp: z.string(),
+          week: z.number(),
+        }),
+        { required_error: 'entries must be an array of objects' },
+      )
+      .min(1, { message: 'entries array cannot be empty' }),
+  }),
+})
+
 export const patchSeasonalReportSentSchema = z.object({
   body: z.object({
     reportSent: z.boolean(),
