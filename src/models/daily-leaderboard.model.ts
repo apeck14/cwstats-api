@@ -1,6 +1,8 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
-export interface DailyLeaderboard extends Document {
+export interface DailyLeaderboard extends Document, DailyLeaderboardEntry {}
+
+export interface DailyLeaderboardEntry {
   badgeId: number
   clanScore: number
   location: object

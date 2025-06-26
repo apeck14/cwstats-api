@@ -165,6 +165,38 @@ export const addHourlyTrackingEntriesSchema = z.object({
   }),
 })
 
+export const updateDailyLeaderboardSchema = z.object({
+  body: z.object({
+    entries: z
+      .array(
+        z.object({
+          badgeId: z.number(),
+          boatPoints: z.number(),
+          clanScore: z.number(),
+          crossedFinishLine: z.boolean(),
+          decksRemaining: z.number(),
+          fameAvg: z.number(),
+          isTraining: z.boolean(),
+          location: z.object({
+            countryCode: z.string(),
+            id: z.number(),
+            isCountry: z.boolean(),
+            name: z.string(),
+          }),
+          members: z.number(),
+          name: z.string(),
+          notRanked: z.boolean(),
+          previousRank: z.number(),
+          projPlacement: z.number().nullable(),
+          rank: z.number(),
+          tag: z.string(),
+        }),
+        { required_error: 'entries must be an array of objects' },
+      )
+      .min(1, { message: 'entries array cannot be empty' }),
+  }),
+})
+
 export const patchSeasonalReportSentSchema = z.object({
   body: z.object({
     reportSent: z.boolean(),

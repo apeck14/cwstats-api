@@ -3,7 +3,11 @@ import { FilterQuery } from 'mongoose'
 import { connectDB } from '@/config/db'
 import { formatTag } from '@/lib/format'
 import { calcLinkedPlayerLimit, calcNudgeLimit } from '@/lib/utils'
-import { DailyLeaderboard, DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
+import {
+  DailyLeaderboard,
+  DailyLeaderboardEntry,
+  DailyLeaderboardModel,
+} from '@/models/daily-leaderboard.model'
 import { EmojiModel } from '@/models/emoji.model'
 import { GuildModel } from '@/models/guild.model'
 import { LinkedAccountModel } from '@/models/linked-account.model'
@@ -625,4 +629,20 @@ export const sliceGuildPlusFeatures = async (id: string) => {
   )
 
   return { ...result, nudgeLimit, playerLimit }
+}
+
+export const deleteDailyLeaderboard = async () => {
+  await connectDB()
+
+  const result = await DailyLeaderboardModel.deleteMany({})
+
+  return result
+}
+
+export const updateDailyLeaderboard = async (entries: DailyLeaderboardEntry[]) => {
+  await connectDB()
+
+  const result = await DailyLeaderboardModel.insertMany(entries)
+
+  return result
 }
