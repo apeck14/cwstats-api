@@ -216,3 +216,10 @@ export const deletePlusClanSchema = z.object({
     tag: tagSchema,
   }),
 })
+
+export const getPlayerSearchSchema = z.object({
+  query: z.object({
+    limit: z.string().optional(),
+    name: z.string().min(1, { message: 'name cannot be empty' }),
+  }),
+})
