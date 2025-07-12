@@ -1,5 +1,4 @@
 import { FilterQuery, ProjectionType } from 'mongoose'
-import * as Realm from 'realm-web'
 
 import { connectDB } from '@/config/db'
 import { formatTag } from '@/lib/format'
@@ -648,14 +647,27 @@ export const updateDailyLeaderboard = async (entries: DailyLeaderboardEntry[]) =
   return result
 }
 
-export const searchPlayersByName = async (name: string, limit?: number) => {
+export const searchPlayersByName = async (name: string, limit = 10) => {
   await connectDB()
 
-  const realmApp = new Realm.App({ id: process.env.REALM_APP_ID! })
-  const realmCredentials = Realm.Credentials.anonymous()
-  const realm = await realmApp.logIn(realmCredentials)
-
-  const players = await realm.functions.searchPlayerNames(name, limit || 10)
+  const players = await PlayerModel.aggregate([
+    {
+      $search: {
+        autocomplete: {
+          path: 'name',
+          query: name,
+        },
+        index: `${process.env.NODE_ENV === 'development' ? 'dev-' : ''}searchPlayerNames`,
+      },
+    },
+    { $limit: limit },
+    {
+      $project: {
+        __v: 0,
+        _id: 0,
+      },
+    },
+  ])
 
   return players
 }

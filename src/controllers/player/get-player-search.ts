@@ -18,7 +18,7 @@ export const playerSearchController = async (req: Request, res: Response) => {
 
     const players = await searchPlayersByName(name, Number(limit))
 
-    res.status(200).json({ data: players ?? [], name })
+    res.status(200).json({ data: players ?? [], search: name })
   } catch (err) {
     if (err instanceof ZodError) {
       const e = err.errors[0]
