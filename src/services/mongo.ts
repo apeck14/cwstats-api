@@ -653,9 +653,23 @@ export const searchPlayersByName = async (name: string, limit = 10) => {
   const players = await PlayerModel.aggregate([
     {
       $search: {
-        autocomplete: {
-          path: 'name',
-          query: name,
+        compound: {
+          should: [
+            {
+              autocomplete: {
+                path: 'name',
+                query: name,
+                score: { boost: { value: 5 } }, // boost exact matches
+              },
+            },
+            {
+              phrase: {
+                path: 'name',
+                query: name,
+                score: { boost: { value: 10 } }, // even higher boost for exact phrase
+              },
+            },
+          ],
         },
         index: `${process.env.NODE_ENV === 'development' ? 'dev-' : ''}searchPlayerNames`,
       },
