@@ -656,22 +656,31 @@ export const searchPlayersByName = async (name: string, limit = 10) => {
         compound: {
           should: [
             {
+              // 1️⃣ Prioritize in-order prefix matches
               autocomplete: {
                 path: 'name',
                 query: name,
-                score: { boost: { value: 5 } }, // boost exact matches
+                score: { boost: { value: 5 } },
               },
             },
             {
+              // 2️⃣ Strongly boost exact/full phrase matches
               phrase: {
                 path: 'name',
                 query: name,
-                score: { boost: { value: 10 } }, // even higher boost for exact phrase
+                score: {
+                  boost: { value: 10 },
+                },
               },
             },
           ],
         },
         index: `${process.env.NODE_ENV === 'development' ? 'dev-' : ''}searchPlayerNames`,
+      },
+    },
+    {
+      $addFields: {
+        score: { $meta: 'searchScore' },
       },
     },
     { $limit: limit },
