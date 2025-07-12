@@ -130,7 +130,7 @@ export const addDailyTrackingEntriesSchema = z.object({
               fame: z.number(),
               missed: z.boolean(),
               name: z.string(),
-              notInClan: z.boolean(),
+              notInClan: z.boolean().optional(),
               tag: z.string(),
             }),
           ),

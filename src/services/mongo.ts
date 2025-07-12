@@ -76,7 +76,7 @@ interface DailyTrackingEntryScore {
   name: string
   tag: string
   missed: boolean
-  notInClan: boolean
+  notInClan?: boolean
 }
 
 interface FullDailyTrackingEntry {
