@@ -20,6 +20,7 @@ export const patchRisersAndFallersController = async (req: Request, res: Respons
 
     if (!modifiedCount) {
       res.status(404).json({ error: 'Statistics document not found.', status: 404 })
+      return
     }
 
     res.status(200).json({ success: true })

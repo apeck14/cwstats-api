@@ -206,8 +206,8 @@ export const patchSeasonalReportSentSchema = z.object({
 
 export const patchRisersFallersSchema = z.object({
   body: z.object({
-    fallers: z.array(riserFallerEntrySchema),
-    risers: z.array(riserFallerEntrySchema),
+    fallers: z.array(riserFallerEntrySchema).min(1, { message: 'fallers array cannot be empty' }),
+    risers: z.array(riserFallerEntrySchema).min(1, { message: 'risers array cannot be empty' }),
   }),
 })
 
