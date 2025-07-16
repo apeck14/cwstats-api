@@ -4,6 +4,7 @@ export interface DailyLeaderboard extends Document, DailyLeaderboardEntry {}
 
 export interface DailyLeaderboardEntry {
   badgeId: number
+  badge: string
   clanScore: number
   location: object
   name: string
@@ -20,6 +21,7 @@ export interface DailyLeaderboardEntry {
 
 const dailyLeaderboardSchema = new Schema<DailyLeaderboard>(
   {
+    badge: { required: true, type: String },
     badgeId: { required: true, type: Number },
     boatPoints: { required: true, type: Number },
     clanScore: { required: true, type: Number },

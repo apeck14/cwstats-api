@@ -170,6 +170,7 @@ export const updateDailyLeaderboardSchema = z.object({
     entries: z
       .array(
         z.object({
+          badge: z.string(),
           badgeId: z.number(),
           boatPoints: z.number(),
           clanScore: z.number(),
