@@ -179,7 +179,7 @@ export const updateDailyLeaderboardSchema = z.object({
           fameAvg: z.number(),
           isTraining: z.boolean(),
           location: z.object({
-            countryCode: z.string(),
+            countryCode: z.string().optional(),
             id: z.number(),
             isCountry: z.boolean(),
             name: z.string(),

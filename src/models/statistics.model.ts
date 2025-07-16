@@ -26,7 +26,7 @@ interface Statistics extends Document {
 
 const locationSchema = new Schema(
   {
-    countryCode: { required: true, type: String },
+    countryCode: { required: false, type: String },
     id: { required: true, type: Number },
     isCountry: { required: true, type: Boolean },
     name: { required: true, type: String },
