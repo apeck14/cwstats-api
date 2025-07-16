@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { discordIdSchema, riserFallerEntrySchema, tagSchema } from '@/schemas/utils'
+import { discordIdSchema, locationSchema, riserFallerEntrySchema, tagSchema } from '@/schemas/utils'
 
 export const playerDocumentSchema = z.object({
   tag: tagSchema,
@@ -178,12 +178,7 @@ export const updateDailyLeaderboardSchema = z.object({
           decksRemaining: z.number(),
           fameAvg: z.number(),
           isTraining: z.boolean(),
-          location: z.object({
-            countryCode: z.string().optional(),
-            id: z.number(),
-            isCountry: z.boolean(),
-            name: z.string(),
-          }),
+          location: locationSchema,
           name: z.string(),
           notRanked: z.boolean(),
           projPlacement: z.number().nullable(),
