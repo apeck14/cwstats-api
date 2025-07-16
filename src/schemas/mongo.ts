@@ -187,7 +187,7 @@ export const updateDailyLeaderboardSchema = z.object({
           name: z.string(),
           notRanked: z.boolean(),
           projPlacement: z.number().nullable(),
-          rank: z.number(),
+          rank: z.number().nullable(),
           tag: z.string(),
         }),
         { required_error: 'entries must be an array of objects' },

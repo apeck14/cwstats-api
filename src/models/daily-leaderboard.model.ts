@@ -16,7 +16,7 @@ export interface DailyLeaderboardEntry {
   isTraining: boolean
   notRanked: boolean
   projPlacement: number | null
-  rank: number
+  rank: number | null
 }
 
 const dailyLeaderboardSchema = new Schema<DailyLeaderboard>(
@@ -33,7 +33,7 @@ const dailyLeaderboardSchema = new Schema<DailyLeaderboard>(
     name: { required: true, type: String },
     notRanked: { required: true, type: Boolean },
     projPlacement: { default: null, required: false, type: Number },
-    rank: { required: true, type: Number },
+    rank: { default: null, required: false, type: Number },
     tag: { required: true, type: String },
   },
   { collection: 'Daily Clan Leaderboard' },
