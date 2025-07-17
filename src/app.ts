@@ -34,8 +34,8 @@ app.use(
 )
 
 // JSON and URL-encoded body parsing
-app.use(json({ limit: '250kb' }))
-app.use(urlencoded({ extended: true, limit: '250kb' }))
+app.use(json({ limit: '550kb' }))
+app.use(urlencoded({ extended: true, limit: '550kb' }))
 
 // Logging middleware
 app.use(requestLogger)
