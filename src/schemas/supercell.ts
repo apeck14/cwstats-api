@@ -45,7 +45,7 @@ export const leaderboardWarSchema = z.object({
 export const leaderboardDailySchema = z.object({
   query: z
     .object({
-      key: z.string().max(5, { message: 'invalid location key' }).optional(),
+      key: z.string().max(6, { message: 'invalid location key' }).optional(),
       limit: z
         .string()
         .regex(/^\d+$/)
