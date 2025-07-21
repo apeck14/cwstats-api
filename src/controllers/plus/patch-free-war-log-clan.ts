@@ -48,7 +48,7 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
 
     await setFreeWarLogClan({ channelId, guildId, tag, webhookUrl })
 
-    res.status(200).json({ channelId, guildId, success: true, tag: formattedTag })
+    res.status(200).json({ channelId, guildId, success: true, tag: formattedTag, webhookUrl })
   } catch (err) {
     if (err instanceof ZodError) {
       const e = err.errors[0]
