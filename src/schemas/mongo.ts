@@ -198,6 +198,14 @@ export const patchSeasonalReportSentSchema = z.object({
   }),
 })
 
+export const patchFreeWarLogClanSchema = z.object({
+  body: z.object({
+    channelId: discordIdSchema.nullable(),
+    guildId: discordIdSchema.nullable(),
+    tag: tagSchema,
+  }),
+})
+
 export const patchRisersFallersSchema = z.object({
   body: z.object({
     fallers: z.array(riserFallerEntrySchema).min(1, { message: 'fallers array cannot be empty' }),
