@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import fs from 'fs'
 
 import { DiscordApiError } from '@/lib/errors'
 
@@ -52,5 +53,33 @@ export const deleteDiscordWebhookByUrl = async (webhookUrl: string): Promise<voi
     await axios.delete(webhookUrl)
   } catch (err) {
     handleDiscordApiError(err)
+  }
+}
+
+export const createWebhook = async (channelId: string, title: string) => {
+  try {
+    const base64Image = fs.readFileSync('src/static/icons/bot-logo.png', { encoding: 'base64' })
+
+    const webhook = {
+      avatar: `data:image/png;base64,${base64Image}`,
+      name: title,
+    }
+
+    const res = await axios.post(`https://discord.com/api/v10/channels/${channelId}/webhooks`, webhook, {
+      headers: {
+        Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = res.data
+
+    return { url: data.url }
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.data?.message === 'Missing Permissions') {
+      return { error: 'Missing Permission: Manage Webhooks' }
+    }
+
+    return { error: 'Unexpected error while creating webhook. Please try again.' }
   }
 }

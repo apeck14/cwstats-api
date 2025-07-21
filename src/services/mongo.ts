@@ -114,6 +114,7 @@ interface FreeWarLogClanInput {
   channelId: string | null
   guildId: string | null
   tag: string
+  webhookUrl: string
 }
 
 // list of randomly selected tags to check river race logs of to determine current season
@@ -574,10 +575,10 @@ export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: R
   return result
 }
 
-export const setFreeWarLogClan = async ({ channelId, guildId, tag }: FreeWarLogClanInput) => {
+export const setFreeWarLogClan = async ({ channelId, guildId, tag, webhookUrl }: FreeWarLogClanInput) => {
   await connectDB()
 
-  const result = await PlusClanModel.updateOne(
+  const updatedDoc = await PlusClanModel.findOneAndUpdate(
     { tag: formatTag(tag, true) },
     {
       $set: {
@@ -585,12 +586,17 @@ export const setFreeWarLogClan = async ({ channelId, guildId, tag }: FreeWarLogC
           channelID: channelId,
           guildID: guildId,
           timestamp: Date.now(),
+          webhookUrl,
         },
       },
     },
+    {
+      new: true, // Return the updated document
+      upsert: false, // Only update if it exists
+    },
   )
 
-  return result
+  return updatedDoc
 }
 
 export const setLbLastUpdated = async (timestamp: number) => {

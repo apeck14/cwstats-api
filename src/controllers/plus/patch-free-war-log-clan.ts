@@ -3,6 +3,7 @@ import { ZodError } from 'zod'
 
 import { formatTag } from '@/lib/format'
 import { patchFreeWarLogClanSchema } from '@/schemas/mongo'
+import { createWebhook } from '@/services/discord'
 import { getLinkedClan, getPlusClans, setFreeWarLogClan } from '@/services/mongo'
 
 /**
@@ -33,7 +34,19 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
       return
     }
 
-    await setFreeWarLogClan({ channelId, guildId, tag })
+    let webhookUrl
+    if (channelId && guildId) {
+      const { error, url } = await createWebhook(channelId, `CWStats War Logs - ${formattedTag}`)
+
+      if (error) {
+        res.status(400).json({ error, status: 400 })
+        return
+      }
+
+      webhookUrl = url
+    }
+
+    await setFreeWarLogClan({ channelId, guildId, tag, webhookUrl })
 
     res.status(200).json({ channelId, guildId, success: true, tag: formattedTag })
   } catch (err) {
