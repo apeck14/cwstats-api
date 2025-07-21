@@ -76,8 +76,6 @@ const hourlyAverageSchema = new Schema(
 
 const freeWarLogClanSchema = new Schema(
   {
-    channelID: { default: null, required: false, type: String },
-    guildID: { default: null, required: false, type: String },
     timestamp: { required: true, type: Date },
     webhookUrl: { default: '', required: false, type: String },
   },
