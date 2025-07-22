@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { getWarLogClans } from '@/services/mongo'
+import { getPlusClans } from '@/services/mongo'
 
 /**
  * Get all war log clans
@@ -8,7 +8,11 @@ import { getWarLogClans } from '@/services/mongo'
  */
 export const getWarLogClansController = async (req: Request, res: Response) => {
   try {
-    const warLogClans = await getWarLogClans()
+    const warLogClans = await getPlusClans(
+      false,
+      { 'freeWarLogClan.webhookUrl': { $exists: true } },
+      { _id: 0, dailyTracking: 0, hourlyAverages: 0 },
+    )
 
     res.status(200).json({ data: warLogClans })
   } catch (err) {
