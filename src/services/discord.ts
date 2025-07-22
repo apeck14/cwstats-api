@@ -80,6 +80,6 @@ export const createWebhook = async (channelId: string, title: string) => {
       return { error: 'Missing Permission: Manage Webhooks' }
     }
 
-    return { error: 'Unexpected error while creating webhook. Please try again.' }
+    return { error: 'Unexpected error while creating webhook.' }
   }
 }

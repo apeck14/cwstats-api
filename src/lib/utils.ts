@@ -180,3 +180,13 @@ export const generateDiscordNickname = (linkedIGNs: string[]) => linkedIGNs.join
 export const calcLinkedPlayerLimit = (linkedPlusClansCount: number) => 100 + linkedPlusClansCount * 75
 
 export const calcNudgeLimit = (linkedPlusClansCount: number) => 3 + linkedPlusClansCount * 2
+
+export const getDaysDiff = (input: Date | string | number): number => {
+  const now = Date.now()
+  const target = input instanceof Date ? input.getTime() : new Date(input).getTime()
+
+  const diffMs = Math.abs(now - target)
+  const diffDays = diffMs / (1000 * 60 * 60 * 24)
+
+  return diffDays
+}

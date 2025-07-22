@@ -113,6 +113,7 @@ interface RiserFallerEntry {
 interface FreeWarLogClanInput {
   tag: string
   webhookUrl: string | undefined
+  updateTimestamp: boolean
 }
 
 // list of randomly selected tags to check river race logs of to determine current season
@@ -573,17 +574,22 @@ export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: R
   return result
 }
 
-export const setFreeWarLogClan = async ({ tag, webhookUrl }: FreeWarLogClanInput) => {
+export const setFreeWarLogClan = async ({ tag, updateTimestamp, webhookUrl }: FreeWarLogClanInput) => {
   await connectDB()
+
+  const query: Record<string, number | string | undefined> = {
+    'freeWarLogClan.webhookUrl': webhookUrl,
+  }
+
+  if (updateTimestamp) {
+    query['freeWarLogClan.timestamp'] = Date.now()
+  }
 
   const updatedDoc = await PlusClanModel.findOneAndUpdate(
     { tag: formatTag(tag, true) },
     {
       $set: {
-        freeWarLogClan: {
-          timestamp: Date.now(),
-          webhookUrl,
-        },
+        ...query,
       },
     },
     {

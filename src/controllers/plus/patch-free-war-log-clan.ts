@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
 import { formatTag } from '@/lib/format'
+import { getDaysDiff } from '@/lib/utils'
 import { patchFreeWarLogClanSchema } from '@/schemas/mongo'
 import { createWebhook } from '@/services/discord'
 import { getLinkedClan, getPlusClans, setFreeWarLogClan } from '@/services/mongo'
@@ -19,11 +20,16 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
 
     const { channelId, guildId, tag } = parsed.body
 
-    const [linkedClan, plusClanTags] = await Promise.all([getLinkedClan(tag), getPlusClans(true, {}, {})])
-
     const formattedTag = formatTag(tag, true)
 
-    if (!plusClanTags.includes(formattedTag)) {
+    const [linkedClan, plusClans] = await Promise.all([
+      getLinkedClan(tag),
+      getPlusClans(false, { tag: formattedTag }, { dailyTracking: 0, hourlyAverages: 0 }),
+    ])
+
+    const plusClan = plusClans[0]
+
+    if (!plusClan) {
       res.status(409).json({ error: 'Clan does not have plus activated.', status: 409 })
       return
     }
@@ -34,8 +40,18 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
       return
     }
 
+    const updateTimestamp = !!channelId && !!guildId
+    const daysSinceLastChange = plusClan?.freeWarLogClan?.timestamp
+      ? getDaysDiff(plusClan.freeWarLogClan.timestamp)
+      : 0
+
+    if (updateTimestamp && daysSinceLastChange <= 7) {
+      res.status(409).json({ error: 'War log clan update allowed every 7 days.', status: 409 })
+      return
+    }
+
     let webhookUrl
-    if (channelId && guildId) {
+    if (updateTimestamp) {
       const { error, url } = await createWebhook(channelId, `CWStats War Logs - ${formattedTag}`)
 
       if (error) {
@@ -46,7 +62,7 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
       webhookUrl = url
     }
 
-    await setFreeWarLogClan({ tag, webhookUrl })
+    await setFreeWarLogClan({ tag, updateTimestamp, webhookUrl })
 
     res.status(200).json({ success: true, tag: formattedTag, webhookUrl })
   } catch (err) {
