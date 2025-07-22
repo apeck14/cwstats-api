@@ -727,3 +727,14 @@ export const searchPlayersByName = async (name: string, limit = 10) => {
 
   return players
 }
+
+export const getWarLogClans = async () => {
+  await connectDB()
+
+  const warLogClans = await PlusClanModel.find(
+    { 'freeWarLogClan.webhookUrl': { $exists: true } },
+    { _id: 0, dailyTracking: 0, hourlyAverages: 0 },
+  )
+
+  return warLogClans
+}
