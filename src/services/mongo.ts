@@ -811,3 +811,18 @@ export const bulkUpdateWarLogClanAttacks = async (entries: WarLogClanAttacksInpu
   const result = await WarLogClanAttacksModel.bulkWrite(operations, { ordered: false })
   return result
 }
+
+export const deleteGuildFreeWarLogClan = async (tag: string) => {
+  await connectDB()
+
+  const result = await GuildModel.updateOne(
+    { 'freeWarLogClan.tag': formatTag(tag, true) },
+    {
+      $unset: {
+        freeWarLogClan: 1,
+      },
+    },
+  )
+
+  return result
+}

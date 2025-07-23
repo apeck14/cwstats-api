@@ -1,7 +1,13 @@
 import { Request, Response } from 'express'
 
 import { formatTag } from '@/lib/format'
-import { deletePlusClan, deleteWebhook, getLinkedClan, sliceGuildPlusFeatures } from '@/services/mongo'
+import {
+  deleteGuildFreeWarLogClan,
+  deletePlusClan,
+  deleteWebhook,
+  getLinkedClan,
+  sliceGuildPlusFeatures,
+} from '@/services/mongo'
 
 /**
  * Delete plus clan
@@ -11,7 +17,12 @@ export const deletePlusClanController = async (req: Request, res: Response) => {
   try {
     const { tag } = req.params
 
-    const [linkedClan] = await Promise.all([getLinkedClan(tag), deletePlusClan(tag), deleteWebhook(tag)])
+    const [linkedClan] = await Promise.all([
+      getLinkedClan(tag),
+      deletePlusClan(tag),
+      deleteWebhook(tag),
+      deleteGuildFreeWarLogClan(tag),
+    ])
 
     const { nudgeLimit, playerLimit } = await sliceGuildPlusFeatures(linkedClan?.guildID || '')
 
