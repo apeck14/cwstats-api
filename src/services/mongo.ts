@@ -115,7 +115,7 @@ interface RiserFallerEntry {
 interface FreeWarLogClanInput {
   tag: string
   webhookUrl: string | undefined
-  updateTimestamp: boolean
+  isCreation: boolean
   guildId: string
 }
 
@@ -587,23 +587,15 @@ export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: R
   return result
 }
 
-export const setFreeWarLogClan = async ({
-  guildId,
-  tag,
-  updateTimestamp,
-  webhookUrl,
-}: FreeWarLogClanInput) => {
+export const setFreeWarLogClan = async ({ guildId, tag, webhookUrl }: FreeWarLogClanInput) => {
   await connectDB()
 
   const formattedTag = formatTag(tag, true)
 
   const query: Record<string, number | string | undefined> = {
     'freeWarLogClan.tag': formattedTag,
+    'freeWarLogClan.timestamp': Date.now(),
     'freeWarLogClan.webhookUrl': webhookUrl,
-  }
-
-  if (updateTimestamp) {
-    query['freeWarLogClan.timestamp'] = Date.now()
   }
 
   const result = await GuildModel.updateOne(

@@ -5,7 +5,13 @@ import { formatTag } from '@/lib/format'
 import { getDaysDiff } from '@/lib/utils'
 import { patchFreeWarLogClanSchema } from '@/schemas/mongo'
 import { createWebhook } from '@/services/discord'
-import { getGuild, getLinkedClan, getPlusClans, setFreeWarLogClan } from '@/services/mongo'
+import {
+  deleteGuildFreeWarLogClan,
+  getGuild,
+  getLinkedClan,
+  getPlusClans,
+  setFreeWarLogClan,
+} from '@/services/mongo'
 
 /**
  * Set war logs enabled for a specific linked pro clan
@@ -23,7 +29,6 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
     const formattedTag = formatTag(tag, true)
 
     const isCreation = !!channelId
-    let webhookUrl
 
     // * do various checks + create webhook (if not deleting current webhook)
     if (isCreation) {
@@ -66,12 +71,12 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
         return
       }
 
-      webhookUrl = url
+      await setFreeWarLogClan({ guildId, isCreation, tag, webhookUrl: url })
+    } else {
+      await deleteGuildFreeWarLogClan(tag)
     }
 
-    await setFreeWarLogClan({ guildId, tag, updateTimestamp: isCreation, webhookUrl })
-
-    res.status(200).json({ success: true, tag: formattedTag, webhookUrl })
+    res.status(200).json({ isCreation, success: true, tag: formattedTag })
   } catch (err) {
     if (err instanceof ZodError) {
       const e = err.errors[0]
