@@ -115,9 +115,9 @@ const nudgesSchema = new Schema(
 
 const freeWarLogClanSchema = new Schema(
   {
-    tag: { required: true, type: String },
+    tag: { required: false, type: String },
     timestamp: { required: true, type: Date },
-    webhookUrl: { required: true, type: String },
+    webhookUrl: { required: false, type: String },
   },
   { _id: false },
 )

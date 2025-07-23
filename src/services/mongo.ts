@@ -811,7 +811,8 @@ export const deleteGuildFreeWarLogClan = async (tag: string) => {
     { 'freeWarLogClan.tag': formatTag(tag, true) },
     {
       $unset: {
-        freeWarLogClan: 1,
+        'freeWarLogClan.tag': 1,
+        'freeWarLogClan.webhookUrl': 1,
       },
     },
   )
