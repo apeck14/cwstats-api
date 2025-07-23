@@ -17,7 +17,7 @@ const WarLogClanAttacksSchema = new Schema<WarLogClanAttacks>(
     lastUpdated: { required: true, type: Date },
     tag: { required: true, trim: true, type: String },
   },
-  { collection: 'War Log Clan Attacks' },
+  { collection: 'War Log Clan Attacks', versionKey: false },
 )
 
 export const WarLogClanAttacksModel: Model<WarLogClanAttacks> =

@@ -1,20 +1,18 @@
 import { Request, Response } from 'express'
 
-import { getPlusClans } from '@/services/mongo'
+import { getGuilds } from '@/services/mongo'
 
 /**
  * Get all war log clans
- * @route GET /plus/war-log-clans
+ * @route GET /war-logs/clans
  */
 export const getWarLogClansController = async (req: Request, res: Response) => {
   try {
-    const warLogClans = await getPlusClans(
-      false,
-      { 'freeWarLogClan.webhookUrl': { $exists: true } },
-      { _id: 0, dailyTracking: 0, hourlyAverages: 0 },
-    )
+    const guildsWithWarLogs = await getGuilds({ 'freeWarLogClan.webhookUrl': { $exists: true } })
 
-    res.status(200).json({ data: warLogClans })
+    const mappedGuilds = guildsWithWarLogs.map((g) => g.freeWarLogClan)
+
+    res.status(200).json({ data: mappedGuilds })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }

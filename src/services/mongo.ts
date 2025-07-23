@@ -15,6 +15,8 @@ import { LinkedClan, LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
 import { PlusClan, PlusClanModel } from '@/models/plus-clan.model'
 import { Location, StatisticsModel } from '@/models/statistics.model'
+import { WarLogModel } from '@/models/war-log.model'
+import { WarLogClanAttacksModel } from '@/models/war-log-clan-attacks.model'
 import { getRaceLog, getRiverRace } from '@/services/supercell'
 
 interface PlayerInput {
@@ -114,6 +116,17 @@ interface FreeWarLogClanInput {
   tag: string
   webhookUrl: string | undefined
   updateTimestamp: boolean
+  guildId: string
+}
+
+interface WarLogInput {
+  timestamp: Date
+  tag: string
+}
+
+interface WarLogClanAttacksInput {
+  tag: string
+  attacks: Record<string, number>
 }
 
 // list of randomly selected tags to check river race logs of to determine current season
@@ -574,10 +587,18 @@ export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: R
   return result
 }
 
-export const setFreeWarLogClan = async ({ tag, updateTimestamp, webhookUrl }: FreeWarLogClanInput) => {
+export const setFreeWarLogClan = async ({
+  guildId,
+  tag,
+  updateTimestamp,
+  webhookUrl,
+}: FreeWarLogClanInput) => {
   await connectDB()
 
+  const formattedTag = formatTag(tag, true)
+
   const query: Record<string, number | string | undefined> = {
+    'freeWarLogClan.tag': formattedTag,
     'freeWarLogClan.webhookUrl': webhookUrl,
   }
 
@@ -585,20 +606,16 @@ export const setFreeWarLogClan = async ({ tag, updateTimestamp, webhookUrl }: Fr
     query['freeWarLogClan.timestamp'] = Date.now()
   }
 
-  const updatedDoc = await PlusClanModel.findOneAndUpdate(
-    { tag: formatTag(tag, true) },
+  const result = await GuildModel.updateOne(
+    { guildID: guildId },
     {
       $set: {
         ...query,
       },
     },
-    {
-      new: true, // Return the updated document
-      upsert: false, // Only update if it exists
-    },
   )
 
-  return updatedDoc
+  return result
 }
 
 export const setLbLastUpdated = async (timestamp: number) => {
@@ -726,4 +743,71 @@ export const searchPlayersByName = async (name: string, limit = 10) => {
   ])
 
   return players
+}
+
+export const getAllWarLogClanAttacks = async () => {
+  await connectDB()
+
+  const clanAttacks = await WarLogClanAttacksModel.find({}, { __v: 0, _id: 0 })
+
+  return clanAttacks
+}
+
+export const deleteWarLogClanAttacks = async (tag: string) => {
+  await connectDB()
+
+  const result = WarLogClanAttacksModel.deleteOne({ tag: formatTag(tag, true) })
+
+  return result
+}
+
+export const addWarLogClanAttacks = async (tag: string, attacks: Record<string, number>) => {
+  await connectDB()
+
+  const result = WarLogClanAttacksModel.insertOne({
+    attacks,
+    lastUpdated: Date.now(),
+    tag: formatTag(tag, true),
+  })
+
+  return result
+}
+
+export const addWarLogs = async (logs: WarLogInput[]) => {
+  await connectDB()
+
+  const result = WarLogModel.insertMany(logs, { ordered: false })
+
+  return result
+}
+
+export const getWarLogExists = async (key: string) => {
+  await connectDB()
+
+  const logExists = await WarLogModel.exists({ key })
+
+  return !!logExists
+}
+
+export const bulkUpdateWarLogClanAttacks = async (entries: WarLogClanAttacksInput[]) => {
+  await connectDB()
+
+  if (!entries.length) return { modifiedCount: 0 }
+
+  const now = new Date()
+
+  const operations = entries.map((e) => ({
+    updateOne: {
+      filter: { tag: formatTag(e.tag, true) },
+      update: {
+        $set: {
+          attacks: e.attacks,
+          lastUpdated: now,
+        },
+      },
+    },
+  }))
+
+  const result = await WarLogClanAttacksModel.bulkWrite(operations, { ordered: false })
+  return result
 }

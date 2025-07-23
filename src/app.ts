@@ -15,6 +15,7 @@ import linkedClanRouter from '@/routes/linked-clan.routes'
 import playerRouter from '@/routes/player.routes'
 import plusRouter from '@/routes/plus.routes'
 import userRouter from '@/routes/user.routes'
+import warLogsRouter from '@/routes/war-logs.routes'
 
 // Initialize express app
 const app: Application = express()
@@ -58,6 +59,7 @@ app.use('/guild', guildRouter)
 app.use('/user', userRouter)
 app.use('/emoji', emojiRouter)
 app.use('/linked-clan', linkedClanRouter)
+app.use('/war-logs', warLogsRouter)
 
 app.get('/current-season', getCurrentSeasonController)
 app.patch('/risers-fallers', patchRisersAndFallersController)

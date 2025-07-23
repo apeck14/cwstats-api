@@ -190,3 +190,16 @@ export const getDaysDiff = (input: Date | string | number): number => {
 
   return diffDays
 }
+
+export const parseDate = (date: string) => {
+  return new Date(
+    Date.UTC(
+      +date.slice(0, 4), // year
+      +date.slice(4, 6) - 1, // month (0-based)
+      +date.slice(6, 8), // day
+      +date.slice(9, 11), // hour
+      +date.slice(11, 13), // minute
+      +date.slice(13, 15), // second
+    ),
+  )
+}

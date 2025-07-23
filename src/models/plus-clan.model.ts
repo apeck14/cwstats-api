@@ -26,17 +26,10 @@ export interface HourlyAverage {
   week: number
 }
 
-export interface FreeWarLogClan {
-  guildID: string | null
-  channelID: string | null
-  timestamp: Date
-}
-
 export interface PlusClan extends Document {
   tag: string
   dailyTracking: DailyTracking[]
   hourlyAverages: HourlyAverage[]
-  freeWarLogClan?: FreeWarLogClan
 }
 
 const dailyTrackingEntrySchema = new Schema(
@@ -74,18 +67,9 @@ const hourlyAverageSchema = new Schema(
   { _id: false },
 )
 
-const freeWarLogClanSchema = new Schema(
-  {
-    timestamp: { required: true, type: Date },
-    webhookUrl: { default: '', required: false, type: String },
-  },
-  { _id: false },
-)
-
 const plusClanSchema = new Schema<PlusClan>(
   {
     dailyTracking: { default: [], required: true, type: [dailyTrackingSchema] },
-    freeWarLogClan: { default: {}, required: false, type: freeWarLogClanSchema },
     hourlyAverages: { default: [], required: true, type: [hourlyAverageSchema] },
     tag: { required: true, trim: true, type: String, unique: true },
   },

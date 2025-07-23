@@ -201,7 +201,7 @@ export const patchSeasonalReportSentSchema = z.object({
 export const patchFreeWarLogClanSchema = z.object({
   body: z.object({
     channelId: discordIdSchema.nullable(),
-    guildId: discordIdSchema.nullable(),
+    guildId: discordIdSchema,
     tag: tagSchema,
   }),
 })
@@ -223,5 +223,46 @@ export const getPlayerSearchSchema = z.object({
   query: z.object({
     limit: z.string().optional(),
     name: z.string().min(1, { message: 'name cannot be empty' }),
+  }),
+})
+
+export const putWarLogClanAttacksSchema = z.object({
+  body: z.object({
+    attacks: z.record(z.number().int()),
+    tag: tagSchema,
+  }),
+})
+
+export const postWarLogsBulkAddSchema = z.object({
+  body: z.object({
+    entries: z
+      .array(
+        z.object({
+          battleTime: z.string(),
+          tag: z.string(),
+        }),
+        { required_error: 'entries must be an array of objects' },
+      )
+      .min(1, { message: 'entries array cannot be empty' }),
+  }),
+})
+
+export const getWarLogSchema = z.object({
+  params: z.object({
+    key: z.string().endsWith('.000Z'),
+  }),
+})
+
+export const postBulkUpdateWarLogClanAttacksSchema = z.object({
+  body: z.object({
+    entries: z
+      .array(
+        z.object({
+          attacks: z.record(z.number().int()),
+          tag: tagSchema,
+        }),
+        { required_error: 'entries must be an array of objects' },
+      )
+      .min(1, { message: 'entries array cannot be empty' }),
   }),
 })
