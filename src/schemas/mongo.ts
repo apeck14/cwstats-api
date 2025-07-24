@@ -259,7 +259,7 @@ export const postBulkUpdateWarLogClanAttacksSchema = z.object({
       .array(
         z.object({
           attacks: z.record(z.number().int()),
-          tag: tagSchema,
+          tag: z.string(),
         }),
         { required_error: 'entries must be an array of objects' },
       )
