@@ -131,7 +131,7 @@ interface WarLogClanAttacksInput {
 
 interface LastUpdatedInput {
   tag: string
-  timestamp: string
+  timestamp: number
 }
 
 // list of randomly selected tags to check river race logs of to determine current season

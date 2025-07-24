@@ -273,7 +273,7 @@ export const postWarLogsBulkUpdateLastUpdatedSchema = z.object({
       .array(
         z.object({
           tag: z.string(),
-          timestamp: z.string(),
+          timestamp: z.number(),
         }),
         { required_error: 'entries must be an array of objects' },
       )
