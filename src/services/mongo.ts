@@ -763,7 +763,6 @@ export const addWarLogClanAttacks = async (tag: string, attacks: Record<string, 
 
   const result = WarLogClanAttacksModel.insertOne({
     attacks,
-    lastUpdated: Date.now(),
     tag: formatTag(tag, true),
   })
 
@@ -791,15 +790,12 @@ export const bulkUpdateWarLogClanAttacks = async (entries: WarLogClanAttacksInpu
 
   if (!entries.length) return { modifiedCount: 0 }
 
-  const now = new Date()
-
   const operations = entries.map((e) => ({
     updateOne: {
       filter: { tag: formatTag(e.tag, true) },
       update: {
         $set: {
           attacks: e.attacks,
-          lastUpdated: now,
         },
       },
     },
