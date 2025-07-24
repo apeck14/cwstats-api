@@ -114,7 +114,8 @@ interface RiserFallerEntry {
 
 interface FreeWarLogClanInput {
   tag: string
-  webhookUrl: string | undefined
+  webhookUrl1: string | undefined
+  webhookUrl2: string | undefined
   isCreation: boolean
   guildId: string
 }
@@ -592,7 +593,7 @@ export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: R
   return result
 }
 
-export const setFreeWarLogClan = async ({ guildId, tag, webhookUrl }: FreeWarLogClanInput) => {
+export const setFreeWarLogClan = async ({ guildId, tag, webhookUrl1, webhookUrl2 }: FreeWarLogClanInput) => {
   await connectDB()
 
   const formattedTag = formatTag(tag, true)
@@ -600,7 +601,8 @@ export const setFreeWarLogClan = async ({ guildId, tag, webhookUrl }: FreeWarLog
   const query: Record<string, number | string | undefined> = {
     'freeWarLogClan.tag': formattedTag,
     'freeWarLogClan.timestamp': Date.now(),
-    'freeWarLogClan.webhookUrl': webhookUrl,
+    'freeWarLogClan.webhookUrl1': webhookUrl1,
+    'freeWarLogClan.webhookUrl2': webhookUrl2,
   }
 
   const result = await GuildModel.updateOne(
@@ -610,7 +612,7 @@ export const setFreeWarLogClan = async ({ guildId, tag, webhookUrl }: FreeWarLog
         ...query,
       },
       $unset: {
-        'freeWarLogClan.lastUpdated': 1,
+        'freeWarLogClan.lastUpdated': 1, // used in cron job
       },
     },
   )
@@ -815,8 +817,10 @@ export const deleteGuildFreeWarLogClan = async (tag: string) => {
     { 'freeWarLogClan.tag': formatTag(tag, true) },
     {
       $unset: {
+        'freeWarLogClan.lastUpdated': 1,
         'freeWarLogClan.tag': 1,
-        'freeWarLogClan.webhookUrl': 1,
+        'freeWarLogClan.webhookUrl1': 1,
+        'freeWarLogClan.webhookUrl2': 1,
       },
     },
   )

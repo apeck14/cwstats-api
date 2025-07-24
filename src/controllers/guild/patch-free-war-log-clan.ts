@@ -69,14 +69,17 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
         return
       }
 
-      const { error, url } = await createWebhook(channelId, `CWStats War Logs - ${formattedTag}`)
+      const [{ error: error1, url: url1 }, { error: error2, url: url2 }] = await Promise.all([
+        createWebhook(channelId, `CWStats War Logs - ${formattedTag} (1)`),
+        createWebhook(channelId, `CWStats War Logs - ${formattedTag} (2)`),
+      ])
 
-      if (error) {
-        res.status(400).json({ error, status: 400 })
+      if (error1 || error2) {
+        res.status(400).json({ error: error1 || error2, status: 400 })
         return
       }
 
-      await setFreeWarLogClan({ guildId, isCreation, tag, webhookUrl: url })
+      await setFreeWarLogClan({ guildId, isCreation, tag, webhookUrl1: url1, webhookUrl2: url2 })
     } else {
       await deleteGuildFreeWarLogClan(tag)
     }

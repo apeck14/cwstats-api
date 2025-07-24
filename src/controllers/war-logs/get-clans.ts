@@ -8,7 +8,10 @@ import { getGuilds } from '@/services/mongo'
  */
 export const getWarLogClansController = async (req: Request, res: Response) => {
   try {
-    const guildsWithWarLogs = await getGuilds({ 'freeWarLogClan.webhookUrl': { $exists: true } })
+    const guildsWithWarLogs = await getGuilds({
+      'freeWarLogClan.webhookUrl1': { $exists: true },
+      'freeWarLogClan.webhookUrl2': { $exists: true },
+    })
 
     const mappedGuilds = guildsWithWarLogs.map((g) => g.freeWarLogClan)
 
