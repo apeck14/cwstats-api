@@ -129,6 +129,11 @@ interface WarLogClanAttacksInput {
   attacks: Record<string, number>
 }
 
+interface LastUpdatedInput {
+  tag: string
+  timestamp: string
+}
+
 // list of randomly selected tags to check river race logs of to determine current season
 const TAGS = [
   '#PJQRLQPQ',
@@ -817,5 +822,25 @@ export const deleteGuildFreeWarLogClan = async (tag: string) => {
     },
   )
 
+  return result
+}
+
+export const bulkUpdateWarLogLastUpdated = async (entries: LastUpdatedInput[]) => {
+  await connectDB()
+
+  if (!entries.length) return { modifiedCount: 0 }
+
+  const operations = entries.map((e) => ({
+    updateOne: {
+      filter: { 'freeWarLogClan.tag': formatTag(e.tag, true) },
+      update: {
+        $set: {
+          'freeWarLogClan.lastUpdated': e.timestamp,
+        },
+      },
+    },
+  }))
+
+  const result = await GuildModel.bulkWrite(operations, { ordered: false })
   return result
 }

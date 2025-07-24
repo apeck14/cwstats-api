@@ -266,3 +266,17 @@ export const postBulkUpdateWarLogClanAttacksSchema = z.object({
       .min(1, { message: 'entries array cannot be empty' }),
   }),
 })
+
+export const postWarLogsBulkUpdateLastUpdatedSchema = z.object({
+  body: z.object({
+    entries: z
+      .array(
+        z.object({
+          tag: z.string(),
+          timestamp: z.string(),
+        }),
+        { required_error: 'entries must be an array of objects' },
+      )
+      .min(1, { message: 'entries array cannot be empty' }),
+  }),
+})
