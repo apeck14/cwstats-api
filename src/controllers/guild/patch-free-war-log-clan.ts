@@ -55,6 +55,11 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
         return
       }
 
+      if (guild?.freeWarLogClan?.tag === formattedTag) {
+        res.status(409).json({ error: 'Clan is already set.', status: 409 })
+        return
+      }
+
       const daysSinceLastChange = guild?.freeWarLogClan?.timestamp
         ? getDaysDiff(guild.freeWarLogClan.timestamp)
         : Infinity

@@ -609,6 +609,9 @@ export const setFreeWarLogClan = async ({ guildId, tag, webhookUrl }: FreeWarLog
       $set: {
         ...query,
       },
+      $unset: {
+        'freeWarLogClan.lastUpdated': 1,
+      },
     },
   )
 
