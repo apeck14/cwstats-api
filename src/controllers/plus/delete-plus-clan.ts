@@ -4,6 +4,7 @@ import { formatTag } from '@/lib/format'
 import {
   deleteGuildFreeWarLogClan,
   deletePlusClan,
+  deleteWarLogClanAttacks,
   deleteWebhook,
   getLinkedClan,
   sliceGuildPlusFeatures,
@@ -22,6 +23,7 @@ export const deletePlusClanController = async (req: Request, res: Response) => {
       deletePlusClan(tag),
       deleteWebhook(tag),
       deleteGuildFreeWarLogClan(tag),
+      deleteWarLogClanAttacks(tag),
     ])
 
     const { nudgeLimit, playerLimit } = await sliceGuildPlusFeatures(linkedClan?.guildID || '')

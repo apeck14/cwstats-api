@@ -7,6 +7,7 @@ import { patchFreeWarLogClanSchema } from '@/schemas/mongo'
 import { createWebhook } from '@/services/discord'
 import {
   deleteGuildFreeWarLogClan,
+  deleteWarLogClanAttacks,
   getGuild,
   getLinkedClan,
   getPlusClans,
@@ -81,7 +82,7 @@ export const patchFreeWarLogClanController = async (req: Request, res: Response)
 
       await setFreeWarLogClan({ guildId, isCreation, tag, webhookUrl1: url1, webhookUrl2: url2 })
     } else {
-      await deleteGuildFreeWarLogClan(tag)
+      await Promise.all([deleteGuildFreeWarLogClan(tag), deleteWarLogClanAttacks(tag)])
     }
 
     res.status(200).json({ isCreation, success: true, tag: formattedTag })
