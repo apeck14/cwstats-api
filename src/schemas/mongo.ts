@@ -229,6 +229,7 @@ export const getPlayerSearchSchema = z.object({
 export const putWarLogClanAttacksSchema = z.object({
   body: z.object({
     attacks: z.record(z.number().int()),
+    dayIndex: z.number(),
     tag: tagSchema,
   }),
 })
@@ -259,6 +260,7 @@ export const postBulkUpdateWarLogClanAttacksSchema = z.object({
       .array(
         z.object({
           attacks: z.record(z.number().int()),
+          dayIndex: z.number(),
           tag: z.string(),
         }),
         { required_error: 'entries must be an array of objects' },

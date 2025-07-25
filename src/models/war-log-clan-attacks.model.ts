@@ -3,6 +3,7 @@ import mongoose, { Document, Model, Schema } from 'mongoose'
 interface WarLogClanAttacks extends Document {
   tag: string
   attacks: Record<string, number>
+  dayIndex: number
 }
 
 const WarLogClanAttacksSchema = new Schema<WarLogClanAttacks>(
@@ -13,6 +14,7 @@ const WarLogClanAttacksSchema = new Schema<WarLogClanAttacks>(
       required: true,
       type: Map,
     },
+    dayIndex: { required: true, type: Number },
     tag: { required: true, trim: true, type: String },
   },
   { collection: 'War Log Clan Attacks', versionKey: false },

@@ -15,9 +15,9 @@ export const putWarLogClanAttacksController = async (req: Request, res: Response
       body: req.body,
     })
 
-    const { attacks, tag } = parsed.body
+    const { attacks, dayIndex, tag } = parsed.body
 
-    await addWarLogClanAttacks(tag, attacks)
+    await addWarLogClanAttacks({ attacks, dayIndex, tag })
 
     res.status(200).json({ success: true })
   } catch (err) {

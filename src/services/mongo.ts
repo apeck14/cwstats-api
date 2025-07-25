@@ -128,6 +128,7 @@ interface WarLogInput {
 interface WarLogClanAttacksInput {
   tag: string
   attacks: Record<string, number>
+  dayIndex: number
 }
 
 interface LastUpdatedInput {
@@ -763,11 +764,12 @@ export const deleteWarLogClanAttacks = async (tag: string) => {
   return result
 }
 
-export const addWarLogClanAttacks = async (tag: string, attacks: Record<string, number>) => {
+export const addWarLogClanAttacks = async ({ attacks, dayIndex, tag }: WarLogClanAttacksInput) => {
   await connectDB()
 
   const result = WarLogClanAttacksModel.insertOne({
     attacks,
+    dayIndex,
     tag: formatTag(tag, true),
   })
 
