@@ -803,6 +803,7 @@ export const bulkUpdateWarLogClanAttacks = async (entries: WarLogClanAttacksInpu
       update: {
         $set: {
           attacks: e.attacks,
+          dayIndex: e.dayIndex,
         },
       },
     },
