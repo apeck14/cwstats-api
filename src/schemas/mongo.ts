@@ -13,6 +13,14 @@ export const playerLinkSchema = z.object({
 
 export const plusClansSchema = z.object({
   query: z.object({
+    hideDailyTracking: z
+      .enum(['true', 'false'], { message: "hideDailyTracking must be 'true' or 'false'" })
+      .optional()
+      .default('false'),
+    hideHourlyAverages: z
+      .enum(['true', 'false'], { message: "hideHourlyAverages must be 'true' or 'false'" })
+      .optional()
+      .default('false'),
     tagsOnly: z
       .enum(['true', 'false'], { message: "tagsOnly must be 'true' or 'false'" })
       .optional()

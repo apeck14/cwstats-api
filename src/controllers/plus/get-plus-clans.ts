@@ -14,9 +14,16 @@ export const plusClansController = async (req: Request, res: Response) => {
       query: req.query,
     })
 
-    const { tagsOnly } = parsed.query
+    const { hideDailyTracking, hideHourlyAverages, tagsOnly } = parsed.query
 
-    const plusClans = await getPlusClans(tagsOnly === 'true', {}, {})
+    const plusClans = await getPlusClans(
+      tagsOnly === 'true',
+      {},
+      {
+        dailyTracking: hideDailyTracking === 'true' ? 0 : 1,
+        hourlyAverages: hideHourlyAverages === 'true' ? 0 : 1,
+      },
+    )
 
     res.status(200).json({ data: plusClans })
   } catch (err) {
