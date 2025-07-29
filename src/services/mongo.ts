@@ -288,14 +288,25 @@ export const getDailyLeaderboard = async ({
   // if no name provided, assume global (all clans)
   if (name) query['location.name'] = name
 
-  const dailyLb = await DailyLeaderboardModel.find(query)
-    .sort({
-      notRanked: 1,
-      // eslint-disable-next-line perfectionist/sort-objects
-      fameAvg: -1,
-      rank: 1,
-    })
-    .limit(limit || 0)
+  const dailyLb = await DailyLeaderboardModel.aggregate([
+    { $match: query },
+    {
+      $addFields: {
+        rankNull: { $cond: [{ $eq: ['$rank', null] }, 1, 0] },
+      },
+    },
+    {
+      $sort: {
+        notRanked: 1, // ranked first
+        // eslint-disable-next-line perfectionist/sort-objects
+        fameAvg: -1, // fame descending
+        rankNull: 1, // non-null ranks first
+        // eslint-disable-next-line perfectionist/sort-objects
+        rank: 1, // then sort by rank ascending
+      },
+    },
+    ...(limit ? [{ $limit: limit }] : []),
+  ])
 
   return dailyLb
 }
