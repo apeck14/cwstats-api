@@ -7,7 +7,8 @@ import { SupercellBattleLog, SupercellPlayer } from '@/types/supercell/player'
 import { SupercellRace } from '@/types/supercell/race'
 import { SupercellRaceLog } from '@/types/supercell/race-log'
 
-const BASE_URL = 'https://api.clashroyale.com/v1'
+const isDev = process.env.NODE_ENV === 'development'
+const BASE_URL = isDev ? 'https://proxy.royaleapi.dev/v1' : 'https://api.clashroyale.com/v1'
 
 interface SupercellResponse<T> {
   data?: T
@@ -18,7 +19,7 @@ interface SupercellResponse<T> {
 export const handleSupercellRequest = async <T>(url: string): Promise<SupercellResponse<T>> => {
   const response: AxiosResponse = await axios.get(url, {
     headers: {
-      Authorization: `Bearer ${process.env.CR_API_TOKEN}`,
+      Authorization: `Bearer ${isDev ? process.env.TEST_CR_API_TOKEN : process.env.CR_API_TOKEN}`,
     },
     validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
   })
