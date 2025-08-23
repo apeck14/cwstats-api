@@ -8,7 +8,7 @@ import { connectDB } from '@/config/db'
 
 import app from './app'
 
-const HOST = process.env.NODE_ENV === 'production' ? '127.0.0.1' : '0.0.0.0'
+const HOST = process.env.NODE_ENV === 'production' ? '127.0.0.1' : 'localhost'
 const PORT = Number(process.env.PORT) || 5000
 
 let server: ReturnType<typeof app.listen>

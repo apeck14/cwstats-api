@@ -1,3 +1,5 @@
+import { verify } from 'jsonwebtoken'
+
 import badges from '@/static/badges.json'
 import { RaceClan } from '@/types/api/race'
 
@@ -202,4 +204,13 @@ export const parseDate = (date: string) => {
       +date.slice(13, 15), // second
     ),
   )
+}
+
+export function verifyUserToken(token: string) {
+  try {
+    const decoded = verify(token, process.env.NEXTAUTH_SECRET as string)
+    return decoded // contains the session/user payload NextAuth put in
+  } catch (err) {
+    return null
+  }
 }

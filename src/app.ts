@@ -14,6 +14,7 @@ import leaderboardRouter from '@/routes/leaderboard.routes'
 import linkedClanRouter from '@/routes/linked-clan.routes'
 import playerRouter from '@/routes/player.routes'
 import plusRouter from '@/routes/plus.routes'
+import proRouter from '@/routes/pro.routes'
 import userRouter from '@/routes/user.routes'
 import warLogsRouter from '@/routes/war-logs.routes'
 
@@ -60,6 +61,7 @@ app.use('/user', userRouter)
 app.use('/emoji', emojiRouter)
 app.use('/linked-clan', linkedClanRouter)
 app.use('/war-logs', warLogsRouter)
+app.use('/pro', proRouter)
 
 app.get('/current-season', getCurrentSeasonController)
 app.patch('/risers-fallers', patchRisersAndFallersController)

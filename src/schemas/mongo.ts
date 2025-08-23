@@ -290,3 +290,15 @@ export const postWarLogsBulkUpdateLastUpdatedSchema = z.object({
       .min(1, { message: 'entries array cannot be empty' }),
   }),
 })
+
+export const postProCheckoutSchema = z.object({
+  body: z.object({
+    clanTag: tagSchema,
+  }),
+})
+
+export const getProStatusSchema = z.object({
+  body: z.object({
+    clanTag: tagSchema,
+  }),
+})

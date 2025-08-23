@@ -3,6 +3,7 @@ import { FilterQuery, ProjectionType } from 'mongoose'
 import { connectDB } from '@/config/db'
 import { formatTag } from '@/lib/format'
 import { calcLinkedPlayerLimit, calcNudgeLimit } from '@/lib/utils'
+import { AccountModel } from '@/models/accounts.model'
 import {
   DailyLeaderboard,
   DailyLeaderboardEntry,
@@ -325,6 +326,14 @@ export const getLinkedAccount = async (userId: string) => {
   const linkedAccount = await LinkedAccountModel.findOne({ discordID: userId }, { __v: 0, _id: 0 }).lean()
 
   return linkedAccount
+}
+
+export const addLinkedAccount = async (userId: string, tag: string) => {
+  await connectDB()
+
+  const result = await LinkedAccountModel.create({ discordID: userId, tag })
+
+  return result
 }
 
 export const addNudgeLink = async ({ guildId, name, tag, userId }: NudgeLinkInput) => {
@@ -859,5 +868,27 @@ export const bulkUpdateWarLogLastUpdated = async (entries: LastUpdatedInput[]) =
   }))
 
   const result = await GuildModel.bulkWrite(operations, { ordered: false })
+  return result
+}
+
+export const getAccount = async (userId: string) => {
+  await connectDB()
+
+  const account = await AccountModel.findOne({ providerAccountId: userId }, { __v: 0, _id: 0 }).lean()
+
+  return account
+}
+
+export const setStripeCustomerId = async (userId: string, customerId: string) => {
+  await connectDB()
+
+  const result = await AccountModel.updateOne(
+    { providerAccountId: userId },
+    {
+      $set: {
+        stripeCustomerId: customerId,
+      },
+    },
+  )
   return result
 }
