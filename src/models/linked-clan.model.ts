@@ -10,6 +10,7 @@ export interface LinkedClan extends Document {
   tag: string
   warReportEnabled: boolean
   webhookUrl?: string
+  isPro?: boolean
 }
 
 const linkedClanSchema = new Schema<LinkedClan>(
@@ -18,6 +19,7 @@ const linkedClanSchema = new Schema<LinkedClan>(
     clanName: { required: true, type: String },
     discordInviteCode: { type: String },
     guildID: { required: true, type: String },
+    isPro: { default: false, type: Boolean },
     seasonalReportEnabled: { required: true, type: Boolean },
     seasonalReportSent: { required: true, type: Boolean },
     tag: { required: true, trim: true, type: String, unique: true },
