@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import { formatTag } from '@/lib/format'
 import {
-  deleteGuildFreeWarLogClan,
   deletePlusClan,
   deleteWarLogClanAttacks,
   deleteWebhook,
@@ -22,7 +21,6 @@ export const deletePlusClanController = async (req: Request, res: Response) => {
       getLinkedClan(tag),
       deletePlusClan(tag),
       deleteWebhook(tag),
-      deleteGuildFreeWarLogClan(tag),
       deleteWarLogClanAttacks(tag),
     ])
 

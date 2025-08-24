@@ -113,14 +113,6 @@ interface RiserFallerEntry {
   tag: string
 }
 
-interface FreeWarLogClanInput {
-  tag: string
-  webhookUrl1: string | undefined
-  webhookUrl2: string | undefined
-  isCreation: boolean
-  guildId: string
-}
-
 interface WarLogInput {
   timestamp: Date
   tag: string
@@ -614,33 +606,6 @@ export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: R
   return result
 }
 
-export const setFreeWarLogClan = async ({ guildId, tag, webhookUrl1, webhookUrl2 }: FreeWarLogClanInput) => {
-  await connectDB()
-
-  const formattedTag = formatTag(tag, true)
-
-  const query: Record<string, number | string | undefined> = {
-    'freeWarLogClan.tag': formattedTag,
-    'freeWarLogClan.timestamp': Date.now(),
-    'freeWarLogClan.webhookUrl1': webhookUrl1,
-    'freeWarLogClan.webhookUrl2': webhookUrl2,
-  }
-
-  const result = await GuildModel.updateOne(
-    { guildID: guildId },
-    {
-      $set: {
-        ...query,
-      },
-      $unset: {
-        'freeWarLogClan.lastUpdated': 1, // used in cron job
-      },
-    },
-  )
-
-  return result
-}
-
 export const setLbLastUpdated = async (timestamp: number) => {
   await connectDB()
 
@@ -830,24 +795,6 @@ export const bulkUpdateWarLogClanAttacks = async (entries: WarLogClanAttacksInpu
   }))
 
   const result = await WarLogClanAttacksModel.bulkWrite(operations, { ordered: false })
-  return result
-}
-
-export const deleteGuildFreeWarLogClan = async (tag: string) => {
-  await connectDB()
-
-  const result = await GuildModel.updateOne(
-    { 'freeWarLogClan.tag': formatTag(tag, true) },
-    {
-      $unset: {
-        'freeWarLogClan.lastUpdated': 1,
-        'freeWarLogClan.tag': 1,
-        'freeWarLogClan.webhookUrl1': 1,
-        'freeWarLogClan.webhookUrl2': 1,
-      },
-    },
-  )
-
   return result
 }
 

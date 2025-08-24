@@ -30,12 +30,6 @@ export interface ScheduledNudge {
   scheduledHourUTC: number
 }
 
-export interface FreeWarLogClan {
-  tag: string
-  timestamp: Date
-  webhookUrl: string
-}
-
 export interface Nudges {
   ignoreLeaders: boolean
   ignoreWhenCrossedFinishLine: boolean
@@ -54,7 +48,6 @@ export interface Guild extends Document {
   discordInviteCode?: string
   guildID: string
   nudges?: Nudges
-  freeWarLogClan?: FreeWarLogClan
 }
 
 const abbrSchema = new Schema(
@@ -113,17 +106,6 @@ const nudgesSchema = new Schema(
   { _id: false },
 )
 
-const freeWarLogClanSchema = new Schema(
-  {
-    lastUpdated: { required: false, type: Date }, // set when clan logs are updated
-    tag: { required: false, type: String },
-    timestamp: { required: true, type: Date }, // when webhookUrl was set
-    webhookUrl1: { required: false, type: String },
-    webhookUrl2: { required: false, type: String },
-  },
-  { _id: false },
-)
-
 const guildSchema = new Schema<Guild>(
   {
     abbreviations: { default: [], type: [abbrSchema] },
@@ -132,7 +114,6 @@ const guildSchema = new Schema<Guild>(
     cooldowns: { of: Date, type: Map },
     defaultClan: { type: defaultClanSchema },
     discordInviteCode: { type: String },
-    freeWarLogClan: { default: {}, required: false, type: freeWarLogClanSchema },
     guildID: { required: true, type: String, unique: true },
     nudges: { type: nudgesSchema },
   },
