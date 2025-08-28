@@ -1,4 +1,5 @@
-import { verify } from 'jsonwebtoken'
+import hkdf from '@panva/hkdf'
+import { jwtDecrypt } from 'jose'
 
 import badges from '@/static/badges.json'
 import { RaceClan } from '@/types/api/race'
@@ -206,10 +207,26 @@ export const parseDate = (date: string) => {
   )
 }
 
-export function verifyUserToken(token: string) {
+async function getDerivedEncryptionKey(keyMaterial: string, salt: string) {
+  return await hkdf(
+    'sha256',
+    keyMaterial,
+    salt,
+    `NextAuth.js Generated Encryption Key${salt ? ` (${salt})` : ''}`,
+    32,
+  )
+}
+
+async function decryptToken(token: string, secret: string) {
+  const encryptionKey = await getDerivedEncryptionKey(secret, '')
+  const { payload } = await jwtDecrypt(token, encryptionKey)
+  return payload
+}
+
+export async function verifyUserToken(token: string) {
   try {
-    const decoded = verify(token, process.env.NEXTAUTH_SECRET as string)
-    return decoded // contains the session/user payload NextAuth put in
+    const decoded = await decryptToken(token, process.env.NEXTAUTH_SECRET!)
+    return decoded
   } catch (err) {
     return null
   }

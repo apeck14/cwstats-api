@@ -1,10 +1,12 @@
 import { Request, Response } from 'express'
-import { JwtPayload } from 'jsonwebtoken'
+import { JWTPayload } from 'jose'
 import { ZodError } from 'zod'
 
 import stripe from '@/lib/stripe'
 import { verifyUserToken } from '@/lib/utils'
 import { getAccount } from '@/services/mongo'
+
+const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:4400' : 'https://cwstats.com'
 
 /**
  * Create Stripe Customer Portal Session for managing subscriptions
@@ -19,7 +21,7 @@ const postProPortalController = async (req: Request, res: Response) => {
       return
     }
 
-    const userPayload = verifyUserToken(userToken) as JwtPayload | null
+    const userPayload = (await verifyUserToken(userToken)) as JWTPayload & { user?: { discord_id?: string } }
     const discordId = userPayload?.user?.discord_id
 
     if (!discordId) {
@@ -43,7 +45,7 @@ const postProPortalController = async (req: Request, res: Response) => {
     // Create Customer Portal session
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: `https://cwstats.com`,
+      return_url: BASE_URL,
     })
 
     res.status(201).json({ url: portalSession.url })

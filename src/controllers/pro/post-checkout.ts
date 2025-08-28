@@ -1,13 +1,15 @@
 import { Request, Response } from 'express'
-import { JwtPayload } from 'jsonwebtoken'
+import { JWTPayload } from 'jose'
 import { ZodError } from 'zod'
 
-import stripe from '@/lib/stripe'
+import stripe, { getOrCreateCustomer } from '@/lib/stripe'
 import { verifyUserToken } from '@/lib/utils'
 import { postProCheckoutSchema } from '@/schemas/mongo'
-import { getAccount, getLinkedClan, setStripeCustomerId } from '@/services/mongo'
+import { getAccount, getLinkedClan } from '@/services/mongo'
 import { hasActiveSubscription } from '@/services/stripe'
 import { getClan } from '@/services/supercell'
+
+const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:4400' : 'https://cwstats.com'
 
 /**
  * Create Stripe Checkout Session for Pro subscription
@@ -28,7 +30,7 @@ const postProCheckoutController = async (req: Request, res: Response) => {
       return
     }
 
-    const userPayload = verifyUserToken(userToken) as JwtPayload | null
+    const userPayload = (await verifyUserToken(userToken)) as JWTPayload & { user?: { discord_id?: string } }
     const discordId = userPayload?.user?.discord_id
 
     if (!discordId) {
@@ -43,7 +45,6 @@ const postProCheckoutController = async (req: Request, res: Response) => {
       getLinkedClan(clanTag),
       hasActiveSubscription(clanTag),
     ])
-    let customerId = user?.stripeCustomerId
 
     if (!user) {
       res.status(401).json({ error: 'Unauthorized', status: 401 })
@@ -66,22 +67,14 @@ const postProCheckoutController = async (req: Request, res: Response) => {
       return
     }
 
-    if (!customerId) {
-      // create new Stripe customer
-      const customer = await stripe.customers.create({
-        metadata: { name: '', userId: discordId },
-      })
-      customerId = customer.id
-
-      // Save customerId to user in DB
-      await setStripeCustomerId(discordId, customerId)
-    }
+    const name = (userPayload?.name || 'Unknown') as string
+    const customerId = user.stripeCustomerId
+    const customer = await getOrCreateCustomer(discordId, customerId, name)
 
     // Create Checkout Session
     const session = await stripe.checkout.sessions.create({
-      allow_promotion_codes: true,
-      cancel_url: `https://cwstats.com/checkout/cancel`,
-      customer: customerId,
+      cancel_url: `${BASE_URL}/checkout/cancel`,
+      customer: customer.id,
       line_items: [
         {
           price: process.env.STRIPE_PRO_PRICE_ID!,
@@ -95,7 +88,7 @@ const postProCheckoutController = async (req: Request, res: Response) => {
         userId: discordId,
       },
       mode: 'subscription',
-      success_url: `https://cwstats.com/checkout/success?sessionId={CHECKOUT_SESSION_ID}`,
+      success_url: `${BASE_URL}/checkout/success?sessionId={CHECKOUT_SESSION_ID}`,
     })
 
     res.status(201).json({ url: session.url })
