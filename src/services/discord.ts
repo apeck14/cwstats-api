@@ -9,6 +9,12 @@ interface discordUserNicknameInput {
   userId: string
 }
 
+interface SendWebhookInput {
+  title: string
+  description: string
+  color: number
+}
+
 const BASE_URL = 'https://discord.com/api/v10'
 
 const handleDiscordApiError = (err: unknown): never => {
@@ -81,5 +87,40 @@ export const createWebhook = async (channelId: string, title: string) => {
     }
 
     return { error: 'Unexpected error while creating webhook.' }
+  }
+}
+
+export const sendWebhookEmbed = async ({ color, description, title }: SendWebhookInput) => {
+  try {
+    if (!process.env.STRIPE_WEBHOOK_URL) {
+      return { error: 'Missing STRIPE_WEBHOOK_URL environment variable' }
+    }
+
+    const payload = {
+      embeds: [
+        {
+          color,
+          description,
+          title,
+        },
+      ],
+    }
+
+    await axios.post(process.env.STRIPE_WEBHOOK_URL, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    return { success: true }
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      return {
+        details: err.response?.data,
+        error: `Webhook request failed: ${err.response?.status} ${err.response?.statusText}`,
+      }
+    }
+
+    return { error: 'Unexpected error while sending webhook.' }
   }
 }

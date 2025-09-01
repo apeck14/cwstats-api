@@ -1,9 +1,10 @@
 import cors from 'cors'
-import express, { Application, json, Request, Response, urlencoded } from 'express'
+import express, { Application, json, raw, Request, Response, urlencoded } from 'express'
 import helmet from 'helmet'
 
 import getCurrentSeasonController from '@/controllers/get-current-season'
 import patchRisersAndFallersController from '@/controllers/patch-risers-fallers'
+import postStripeWebhookController from '@/controllers/pro/post-webhook'
 import verifyInternalToken from '@/middleware/auth'
 import { errorHandler, notFound } from '@/middleware/errors'
 import requestLogger from '@/middleware/logtail'
@@ -65,6 +66,7 @@ app.use('/pro', proRouter)
 
 app.get('/current-season', getCurrentSeasonController)
 app.patch('/risers-fallers', patchRisersAndFallersController)
+app.post('/pro/webhook', raw({ type: 'application/json' }), postStripeWebhookController)
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is running', status: 200 })

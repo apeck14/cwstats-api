@@ -15,6 +15,7 @@ import { LinkedAccountModel } from '@/models/linked-account.model'
 import { LinkedClan, LinkedClanModel } from '@/models/linked-clan.model'
 import { PlayerModel } from '@/models/player.model'
 import { PlusClan, PlusClanModel } from '@/models/plus-clan.model'
+import { ProClanModel } from '@/models/pro-clan.model'
 import { Location, StatisticsModel } from '@/models/statistics.model'
 import { WarLogModel } from '@/models/war-log.model'
 import { WarLogClanAttacksModel } from '@/models/war-log-clan-attacks.model'
@@ -127,6 +128,13 @@ interface WarLogClanAttacksInput {
 interface LastUpdatedInput {
   tag: string
   timestamp: number
+}
+
+interface ProClanInput {
+  clanName: string
+  tag: string
+  stripeId: string
+  active: boolean
 }
 
 // list of randomly selected tags to check river race logs of to determine current season
@@ -837,5 +845,36 @@ export const setStripeCustomerId = async (userId: string, customerId: string) =>
       },
     },
   )
+  return result
+}
+
+export const addProClan = async ({ active, clanName, stripeId, tag }: ProClanInput) => {
+  await connectDB()
+
+  const result = await ProClanModel.create({ active, clanName, stripeId, tag: formatTag(tag, true) })
+
+  return result
+}
+
+export const deleteProClan = async (tag: string) => {
+  await connectDB()
+
+  const result = await ProClanModel.findOneAndDelete({ tag: formatTag(tag, true) })
+
+  return result
+}
+
+export const setProClanStatus = async (tag: string, active: boolean) => {
+  await connectDB()
+
+  const result = await ProClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        active,
+      },
+    },
+  )
+
   return result
 }
