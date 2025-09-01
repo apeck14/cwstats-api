@@ -813,16 +813,16 @@ export const bulkUpdateWarLogLastUpdated = async (entries: LastUpdatedInput[]) =
 
   const operations = entries.map((e) => ({
     updateOne: {
-      filter: { 'freeWarLogClan.tag': formatTag(e.tag, true) },
+      filter: { tag: formatTag(e.tag, true) },
       update: {
         $set: {
-          'freeWarLogClan.lastUpdated': e.timestamp,
+          lastUpdated: e.timestamp,
         },
       },
     },
   }))
 
-  const result = await GuildModel.bulkWrite(operations, { ordered: false })
+  const result = await ProClanModel.bulkWrite(operations, { ordered: false })
   return result
 }
 
@@ -877,4 +877,12 @@ export const setProClanStatus = async (tag: string, active: boolean) => {
   )
 
   return result
+}
+
+export const getProClans = async () => {
+  await connectDB()
+
+  const proClans = await ProClanModel.find({ active: true }, { _id: 0 })
+
+  return proClans
 }

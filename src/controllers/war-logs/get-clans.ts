@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { getGuilds } from '@/services/mongo'
+import { getProClans } from '@/services/mongo'
 
 /**
  * Get all war log clans
@@ -8,9 +8,9 @@ import { getGuilds } from '@/services/mongo'
  */
 export const getWarLogClansController = async (req: Request, res: Response) => {
   try {
-    const guildsWithWarLogs = await getGuilds({})
+    const proClans = await getProClans()
 
-    res.status(200).json({ data: guildsWithWarLogs })
+    res.status(200).json({ data: proClans })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
