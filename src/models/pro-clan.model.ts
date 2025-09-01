@@ -9,6 +9,7 @@ export interface ProClan extends Document {
   stripeId: string
   lastUpdated?: Date
   timestamp?: Date
+  warLogsEnabled: boolean
 }
 
 const proClanSchema = new Schema<ProClan>(
@@ -19,6 +20,7 @@ const proClanSchema = new Schema<ProClan>(
     stripeId: { required: true, type: String },
     tag: { required: true, trim: true, type: String, unique: true },
     timestamp: { type: Date }, // when webhooks were created
+    warLogsEnabled: { default: false, required: true, type: Boolean },
     webhookUrl1: { default: '', required: true, type: String },
     webhookUrl2: { default: '', required: true, type: String },
   },

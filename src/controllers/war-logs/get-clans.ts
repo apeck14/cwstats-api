@@ -8,9 +8,9 @@ import { getProClans } from '@/services/mongo'
  */
 export const getWarLogClansController = async (req: Request, res: Response) => {
   try {
-    const proClans = await getProClans()
+    const activeProClans = await getProClans({ warLogsEnabled: true })
 
-    res.status(200).json({ data: proClans })
+    res.status(200).json({ data: activeProClans })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }

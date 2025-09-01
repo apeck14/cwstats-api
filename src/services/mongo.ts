@@ -879,10 +879,10 @@ export const setProClanStatus = async (tag: string, active: boolean) => {
   return result
 }
 
-export const getProClans = async () => {
+export const getProClans = async (query: object) => {
   await connectDB()
 
-  const proClans = await ProClanModel.find({ active: true }, { _id: 0 })
+  const proClans = await ProClanModel.find({ active: true, ...query }, { _id: 0 })
 
   return proClans
 }
