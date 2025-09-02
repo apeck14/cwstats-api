@@ -202,7 +202,13 @@ export async function getPlusClans(
 ): Promise<string[] | PlusClan[]> {
   await connectDB()
 
-  const plusClans = await PlusClanModel.find({ ...query }, { _id: 0, ...projection }).lean()
+  const plusClans = await PlusClanModel.find(
+    {
+      $or: [{ active: true }, { active: { $exists: false } }],
+      ...query,
+    },
+    { _id: 0, ...projection },
+  ).lean()
 
   if (tagsOnly) {
     return plusClans.map((doc) => doc.tag)
