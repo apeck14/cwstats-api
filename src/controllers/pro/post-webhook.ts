@@ -134,7 +134,6 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
 
     res.status(200).json({ received: true })
   } catch (err) {
-    console.log({ err })
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }
