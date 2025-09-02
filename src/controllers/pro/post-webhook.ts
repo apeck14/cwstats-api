@@ -129,7 +129,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`)
+        break
     }
 
     res.status(200).json({ received: true })
