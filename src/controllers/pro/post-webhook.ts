@@ -4,7 +4,15 @@ import Stripe from 'stripe'
 
 import stripe from '@/lib/stripe'
 import { sendWebhookEmbed } from '@/services/discord'
-import { addProClan, deleteProClan, setProClanStatus } from '@/services/mongo'
+import {
+  addPlusClan,
+  addProClan,
+  deletePlusClan,
+  deleteProClan,
+  setPlusClanStatus,
+  setProClanStatus,
+} from '@/services/mongo'
+import { getClan } from '@/services/supercell'
 import colors from '@/static/colors'
 
 /**
@@ -15,15 +23,20 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
   const sig = req.headers['stripe-signature']
 
   if (!sig) {
-    return res.status(400).json({ error: 'Missing Stripe signature', status: 400 })
+    res.status(400).json({ error: 'Missing Stripe signature', status: 400 })
+    return
   }
+
+  console.log(req.body)
 
   // * Important: use raw body, not parsed JSON!
   const event: Stripe.Event = stripe.webhooks.constructEvent(
-    req.body,
+    req.body as Buffer,
     sig,
     process.env.STRIPE_WEBHOOK_SECRET!,
   )
+
+  console.log(event)
 
   try {
     switch (event.type) {
@@ -33,7 +46,10 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         const { clanName, clanTag } = subscription.metadata
         const active = subscription.status === 'active' || subscription.status === 'trialing'
 
-        await addProClan({ active, clanName, stripeId: subscription.id, tag: clanTag })
+        await Promise.all([
+          addPlusClan(clanTag),
+          addProClan({ active, clanName, stripeId: subscription.id, tag: clanTag }),
+        ])
 
         const description =
           `**Clan**: [${clanName}](https://cwstats.com/${clanTag.substring(1)})\n` +
@@ -49,7 +65,14 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         const subscription = event.data.object as Stripe.Subscription
         const { clanName, clanTag } = subscription.metadata
 
-        await deleteProClan(clanTag)
+        const [{ data: clan }] = await Promise.all([getClan(clanTag), deleteProClan(clanTag)])
+
+        const lowercaseDesc = clan?.description.toLowerCase()
+        const hasUrlInDescription = lowercaseDesc?.includes('cwstats') || lowercaseDesc?.includes('cw-stats')
+
+        if (!hasUrlInDescription) {
+          deletePlusClan(clanTag)
+        }
 
         const description =
           `**Clan**: [${clanName}](https://cwstats.com/${clanTag.substring(1)})\n` +
@@ -65,7 +88,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         const invoice = event.data.object as Stripe.Invoice
         const { clanName, clanTag } = invoice.metadata || {}
 
-        await setProClanStatus(clanTag, true)
+        await Promise.all([setProClanStatus(clanTag, true), setPlusClanStatus(clanTag, true)])
 
         const description =
           `**Clan**: [${clanName}](https://cwstats.com/${clanTag.substring(1)})\n` +
@@ -86,7 +109,14 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         const invoice = event.data.object as Stripe.Invoice
         const { clanName, clanTag } = invoice.metadata || {}
 
-        await setProClanStatus(clanTag, false)
+        const [{ data: clan }] = await Promise.all([getClan(clanTag), setProClanStatus(clanTag, false)])
+
+        const lowercaseDesc = clan?.description.toLowerCase()
+        const hasUrlInDescription = lowercaseDesc?.includes('cwstats') || lowercaseDesc?.includes('cw-stats')
+
+        if (!hasUrlInDescription) {
+          setPlusClanStatus(clanTag, false)
+        }
 
         const description =
           `**Clan**: [${clanName}](https://cwstats.com/${clanTag.substring(1)})\n` +
@@ -94,7 +124,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
           `**Invoice**: [Details](https://dashboard.stripe.com/invoices/${invoice.id})\n`
 
         await sendWebhookEmbed({
-          color: colors.green,
+          color: colors.orange,
           description,
           title: 'Invoice Payment Failed!',
         })

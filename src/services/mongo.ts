@@ -886,3 +886,32 @@ export const getProClans = async (query: object) => {
 
   return proClans
 }
+
+export const addPlusClan = async (tag: string) => {
+  await connectDB()
+
+  const formattedTag = formatTag(tag, true)
+
+  const result = await PlusClanModel.findOneAndUpdate(
+    { tag: formattedTag },
+    { $set: { active: true, tag: formattedTag } },
+    { new: true, upsert: true }, // return the updated doc & create if not exists
+  )
+
+  return result
+}
+
+export const setPlusClanStatus = async (tag: string, active: boolean) => {
+  await connectDB()
+
+  const result = await PlusClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        active,
+      },
+    },
+  )
+
+  return result
+}

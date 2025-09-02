@@ -30,6 +30,7 @@ export interface PlusClan extends Document {
   tag: string
   dailyTracking: DailyTracking[]
   hourlyAverages: HourlyAverage[]
+  active: boolean
 }
 
 const dailyTrackingEntrySchema = new Schema(
@@ -69,6 +70,7 @@ const hourlyAverageSchema = new Schema(
 
 const plusClanSchema = new Schema<PlusClan>(
   {
+    active: { default: true, required: true, type: Boolean },
     dailyTracking: { default: [], required: true, type: [dailyTrackingSchema] },
     hourlyAverages: { default: [], required: true, type: [hourlyAverageSchema] },
     tag: { required: true, trim: true, type: String, unique: true },
