@@ -81,13 +81,15 @@ const postProCheckoutController = async (req: Request, res: Response) => {
           quantity: 1,
         },
       ],
-      metadata: {
-        clanName: clan.name,
-        clanTag: clan.tag,
-        guildId: linkedClan.guildID,
-        userId: discordId,
-      },
       mode: 'subscription',
+      subscription_data: {
+        metadata: {
+          clanName: clan.name,
+          clanTag: clan.tag,
+          guildId: linkedClan.guildID,
+          userId: discordId,
+        },
+      },
       success_url: `${BASE_URL}/checkout/success?sessionId={CHECKOUT_SESSION_ID}`,
     })
 

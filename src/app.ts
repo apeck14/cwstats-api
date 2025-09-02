@@ -36,6 +36,9 @@ app.use(
   }),
 )
 
+// route needs access to raw body
+app.post('/pro/webhook', raw({ type: 'application/json' }), postStripeWebhookController)
+
 // JSON and URL-encoded body parsing
 app.use(json({ limit: '550kb' }))
 app.use(urlencoded({ extended: true, limit: '550kb' }))
@@ -66,7 +69,6 @@ app.use('/pro', proRouter)
 
 app.get('/current-season', getCurrentSeasonController)
 app.patch('/risers-fallers', patchRisersAndFallersController)
-app.post('/pro/webhook', raw({ type: 'application/json' }), postStripeWebhookController)
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ message: 'Server is running', status: 200 })

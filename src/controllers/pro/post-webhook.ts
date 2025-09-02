@@ -27,16 +27,12 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
     return
   }
 
-  console.log(req.body)
-
   // * Important: use raw body, not parsed JSON!
   const event: Stripe.Event = stripe.webhooks.constructEvent(
     req.body as Buffer,
     sig,
     process.env.STRIPE_WEBHOOK_SECRET!,
   )
-
-  console.log(event)
 
   try {
     switch (event.type) {
@@ -86,7 +82,8 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
 
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice
-        const { clanName, clanTag } = invoice.metadata || {}
+
+        const { clanName, clanTag } = invoice.parent?.subscription_details?.metadata || {}
 
         await Promise.all([setProClanStatus(clanTag, true), setPlusClanStatus(clanTag, true)])
 
@@ -99,7 +96,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         await sendWebhookEmbed({
           color: colors.green,
           description,
-          title: 'Invoice Payment Succeeded!',
+          title: 'Payment Succeeded!',
         })
 
         break
@@ -107,7 +104,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice
-        const { clanName, clanTag } = invoice.metadata || {}
+        const { clanName, clanTag } = invoice.parent?.subscription_details?.metadata || {}
 
         const [{ data: clan }] = await Promise.all([getClan(clanTag), setProClanStatus(clanTag, false)])
 
@@ -126,7 +123,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         await sendWebhookEmbed({
           color: colors.orange,
           description,
-          title: 'Invoice Payment Failed!',
+          title: 'Payment Failed!',
         })
         break
       }
@@ -137,6 +134,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
 
     res.status(200).json({ received: true })
   } catch (err) {
+    console.log({ err })
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }
