@@ -12,7 +12,7 @@ const playerSchema = new Schema<Player>(
     name: { required: true, type: String },
     tag: { required: true, trim: true, type: String }, // don't add unique index, calls to add player are non-blocking (performance isn't priority)
   },
-  { collection: 'Players' },
+  { collection: 'Players', versionKey: false },
 )
 
 export const PlayerModel: Model<Player> =

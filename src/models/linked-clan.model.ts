@@ -32,7 +32,7 @@ const linkedClanSchema = new Schema<LinkedClan>(
       },
     },
   },
-  { collection: 'Linked Clans' },
+  { collection: 'Linked Clans', versionKey: false },
 )
 
 export const LinkedClanModel: Model<LinkedClan> =

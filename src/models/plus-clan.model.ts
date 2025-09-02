@@ -75,7 +75,7 @@ const plusClanSchema = new Schema<PlusClan>(
     hourlyAverages: { default: [], required: true, type: [hourlyAverageSchema] },
     tag: { required: true, trim: true, type: String, unique: true },
   },
-  { collection: 'CWStats+' },
+  { collection: 'CWStats+', versionKey: false },
 )
 
 export const PlusClanModel: Model<PlusClan> =

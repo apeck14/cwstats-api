@@ -60,7 +60,7 @@ const linkedAccountSchema = new Schema<LinkedAccount>(
     },
     tag: { required: true, type: String },
   },
-  { collection: 'Linked Accounts' },
+  { collection: 'Linked Accounts', versionKey: false },
 )
 
 export const LinkedAccountModel: Model<LinkedAccount> =

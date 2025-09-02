@@ -54,7 +54,7 @@ const StatisticsSchema = new Schema<Statistics>(
     lbLastUpdated: { required: true, type: Number }, // TODO: change this to a Date type (?)
     risers: { required: true, type: [clanMovementSchema] },
   },
-  { collection: 'Statistics' },
+  { collection: 'Statistics', versionKey: false },
 )
 
 export const StatisticsModel: Model<Statistics> =

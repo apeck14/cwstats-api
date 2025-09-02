@@ -117,7 +117,7 @@ const guildSchema = new Schema<Guild>(
     guildID: { required: true, type: String, unique: true },
     nudges: { type: nudgesSchema },
   },
-  { collection: 'Guilds' },
+  { collection: 'Guilds', versionKey: false },
 )
 
 export const GuildModel: Model<Guild> = mongoose.models.Guild || mongoose.model<Guild>('Guild', guildSchema)
