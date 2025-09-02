@@ -5,7 +5,7 @@ import { postWarLogsBulkUpdateLastUpdatedSchema } from '@/schemas/mongo'
 import { bulkUpdateWarLogLastUpdated } from '@/services/mongo'
 
 /**
- * Bulk update lastUpdated for free war log clans
+ * Bulk update last updated for war log clans
  * @route POST /war-logs/bulk-update-last-updated
  */
 export const postWarLogsBulkUpdateLastUpdatedController = async (req: Request, res: Response) => {

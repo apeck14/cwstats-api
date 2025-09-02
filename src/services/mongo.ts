@@ -137,6 +137,12 @@ interface ProClanInput {
   active: boolean
 }
 
+interface SetWarLogClanInput {
+  tag: string
+  webhookUrl1?: string
+  webhookUrl2?: string
+}
+
 // list of randomly selected tags to check river race logs of to determine current season
 const TAGS = [
   '#PJQRLQPQ',
@@ -822,7 +828,7 @@ export const bulkUpdateWarLogLastUpdated = async (entries: LastUpdatedInput[]) =
       filter: { tag: formatTag(e.tag, true) },
       update: {
         $set: {
-          lastUpdated: e.timestamp,
+          warLogsLastUpdated: e.timestamp,
         },
       },
     },
@@ -915,6 +921,54 @@ export const setPlusClanStatus = async (tag: string, active: boolean) => {
     {
       $set: {
         active,
+      },
+    },
+  )
+
+  return result
+}
+
+export const getProClan = async (tag: string) => {
+  await connectDB()
+
+  const proClan = await ProClanModel.findOne({ tag: formatTag(tag, true) }, { _id: 0 })
+
+  return proClan
+}
+
+export const setWarLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLogClanInput) => {
+  await connectDB()
+
+  const query: Record<string, string> = {}
+
+  if (webhookUrl1) query.webhookUrl1 = webhookUrl1
+  if (webhookUrl2) query.webhookUrl2 = webhookUrl2
+
+  const result = await ProClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        warLogsEnabled: true,
+        warLogsTimestamp: Date.now(),
+        ...query,
+      },
+      $unset: {
+        warLogsLastUpdated: 1,
+      },
+    },
+  )
+
+  return result
+}
+
+export const setWarLogClanStatus = async (tag: string, enabled: boolean) => {
+  await connectDB()
+
+  const result = await ProClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        warLogsEnabled: enabled,
       },
     },
   )

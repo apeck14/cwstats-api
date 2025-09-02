@@ -194,6 +194,16 @@ export const getDaysDiff = (input: Date | string | number): number => {
   return diffDays
 }
 
+export const getHoursDiff = (input: Date | string | number): number => {
+  const now = Date.now()
+  const target = input instanceof Date ? input.getTime() : new Date(input).getTime()
+
+  const diffMs = Math.abs(now - target)
+  const diffHours = diffMs / (1000 * 60 * 60) // convert milliseconds to hours
+
+  return diffHours
+}
+
 export const parseDate = (date: string) => {
   return new Date(
     Date.UTC(

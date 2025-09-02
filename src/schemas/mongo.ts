@@ -294,3 +294,11 @@ export const getProStatusSchema = z.object({
     clanTag: tagSchema,
   }),
 })
+
+export const patchProWarLogSchema = z.object({
+  body: z.object({
+    channelId: discordIdSchema.nullable(),
+    guildId: discordIdSchema,
+    tag: tagSchema,
+  }),
+})

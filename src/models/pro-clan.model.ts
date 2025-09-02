@@ -7,8 +7,8 @@ export interface ProClan extends Document {
   webhookUrl1?: string
   webhookUrl2?: string
   stripeId: string
-  lastUpdated?: Date
-  timestamp?: Date
+  warLogsLastUpdated?: Date
+  warLogsTimestamp?: Date
   warLogsEnabled: boolean
 }
 
@@ -16,11 +16,11 @@ const proClanSchema = new Schema<ProClan>(
   {
     active: { default: true, required: true, type: Boolean },
     clanName: { required: true, type: String },
-    lastUpdated: { type: Date }, // last time logs were udpated
     stripeId: { required: true, type: String },
     tag: { required: true, trim: true, type: String, unique: true },
-    timestamp: { type: Date }, // when webhooks were created
     warLogsEnabled: { default: false, required: true, type: Boolean },
+    warLogsLastUpdated: { type: Date }, // last time logs were udpated
+    warLogsTimestamp: { type: Date }, // when webhooks were created
     webhookUrl1: { default: '', type: String },
     webhookUrl2: { default: '', type: String },
   },
