@@ -48,7 +48,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         ])
 
         const description =
-          `**Clan**: [${clanName}](https://cwstats.com/${clanTag.substring(1)})\n` +
+          `**Clan**: [${clanName}](https://cwstats.com/clan/${clanTag.substring(1)})\n` +
           `**Status**: ${subscription.status}\n` +
           `**Stripe ID**: ${subscription.id}`
 
@@ -71,7 +71,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         }
 
         const description =
-          `**Clan**: [${clanName}](https://cwstats.com/${clanTag.substring(1)})\n` +
+          `**Clan**: [${clanName}](https://cwstats.com/clan/${clanTag.substring(1)})\n` +
           `**Status**: ${subscription.status}\n` +
           `**Stripe ID**: ${subscription.id}`
 
@@ -88,7 +88,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         await Promise.all([setProClanStatus(clanTag, true), setPlusClanStatus(clanTag, true)])
 
         const description =
-          `**Clan**: [${clanName}](https://cwstats.com/${clanTag.substring(1)})\n` +
+          `**Clan**: [${clanName}](https://cwstats.com/clan/${clanTag.substring(1)})\n` +
           `**Amount Paid**: ${(invoice.amount_paid / 100).toFixed(2)} ${invoice.currency.toUpperCase()}\n` +
           `**Status**: ${invoice.status}\n` +
           `**Invoice**: [Details](https://dashboard.stripe.com/invoices/${invoice.id})\n`
@@ -116,7 +116,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         }
 
         const description =
-          `**Clan**: [${clanName}](https://cwstats.com/${clanTag.substring(1)})\n` +
+          `**Clan**: [${clanName}](https://cwstats.com/clan/${clanTag.substring(1)})\n` +
           `**Status**: ${invoice.status}\n` +
           `**Invoice**: [Details](https://dashboard.stripe.com/invoices/${invoice.id})\n`
 
