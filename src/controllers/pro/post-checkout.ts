@@ -73,7 +73,6 @@ const postProCheckoutController = async (req: Request, res: Response) => {
 
     // Create Checkout Session
     const session = await stripe.checkout.sessions.create({
-      allow_promotion_codes: true,
       cancel_url: `${BASE_URL}/checkout/cancel`,
       customer: customer.id,
       line_items: [
@@ -90,6 +89,7 @@ const postProCheckoutController = async (req: Request, res: Response) => {
           guildId: linkedClan.guildID,
           userId: discordId,
         },
+        trial_period_days: 14,
       },
       success_url: `${BASE_URL}/checkout/success?sessionId={CHECKOUT_SESSION_ID}`,
     })
