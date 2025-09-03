@@ -302,3 +302,10 @@ export const patchProWarLogSchema = z.object({
     tag: tagSchema,
   }),
 })
+
+export const patchWarLogActiveSchema = z.object({
+  body: z.object({
+    active: z.boolean(),
+    tag: tagSchema,
+  }),
+})
