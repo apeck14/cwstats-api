@@ -8,6 +8,7 @@ import {
   getLinkedClan,
   sliceGuildPlusFeatures,
 } from '@/services/mongo'
+import { hasActiveSubscription } from '@/services/stripe'
 
 /**
  * Delete plus clan
@@ -16,6 +17,13 @@ import {
 export const deletePlusClanController = async (req: Request, res: Response) => {
   try {
     const { tag } = req.params
+
+    const isPro = await hasActiveSubscription(tag)
+
+    if (isPro) {
+      res.status(409).json({ error: 'Clan has pro enabled.', status: 409 })
+      return
+    }
 
     const [linkedClan] = await Promise.all([
       getLinkedClan(tag),
