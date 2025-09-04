@@ -36,7 +36,7 @@ app.use(
   }),
 )
 
-// route needs access to raw body
+// stripe route needs access to raw body
 app.post('/pro/webhook', raw({ type: 'application/json' }), postStripeWebhookController)
 
 // JSON and URL-encoded body parsing
