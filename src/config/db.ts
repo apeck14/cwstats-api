@@ -32,18 +32,3 @@ export const connectDB = async (): Promise<void> => {
     process.exit(1)
   }
 }
-
-/**
- * Disconnect from MongoDB database
- * @returns {Promise<void>}
- */
-export const disconnectDB = async (): Promise<void> => {
-  try {
-    await mongoose.disconnect()
-    console.log('MongoDB Disconnected')
-  } catch (error) {
-    console.error(
-      `Error disconnecting from MongoDB: ${error instanceof Error ? error.message : 'Unknown error'}`,
-    )
-  }
-}
