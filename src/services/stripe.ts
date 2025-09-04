@@ -3,11 +3,12 @@ import stripe from '@/lib/stripe'
 
 export const hasActiveSubscription = async (clanTag: string): Promise<boolean> => {
   try {
-    const subscriptions = await stripe.subscriptions.search({
-      query: `metadata['clanTag']:'${formatTag(clanTag, true)}' AND (status:'active' OR status:'trialing')`,
+    const subs = await stripe.subscriptions.search({
+      query: `metadata['clanTag']:'${formatTag(clanTag, true)}'`,
     })
-    return subscriptions.data.length > 0
-  } catch (error) {
+
+    return subs.data.some((sub) => ['active', 'trialing'].includes(sub.status))
+  } catch {
     return false
   }
 }
