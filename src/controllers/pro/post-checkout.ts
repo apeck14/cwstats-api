@@ -82,6 +82,7 @@ const postProCheckoutController = async (req: Request, res: Response) => {
         },
       ],
       mode: 'subscription',
+      payment_method_types: ['card', 'paypal'],
       subscription_data: {
         description: `PRO tier for ${clan.name} (${clan.tag})`,
         metadata: {
