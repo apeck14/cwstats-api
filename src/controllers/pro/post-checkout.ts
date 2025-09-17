@@ -90,7 +90,6 @@ const postProCheckoutController = async (req: Request, res: Response) => {
           guildId: linkedClan.guildID,
           userId: discordId,
         },
-        trial_period_days: 14,
       },
       success_url: `${BASE_URL}/checkout/success?sessionId={CHECKOUT_SESSION_ID}`,
     })
