@@ -1058,24 +1058,19 @@ export const deleteClanLogEntry = async (tag: string) => {
 export const setClanLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLogClanInput) => {
   await connectDB()
 
-  const query: Record<string, string> = {}
+  const setQuery: Record<string, unknown> = {
+    'clanLogs.enabled': true,
+    'clanLogs.timestamp': Date.now(),
+  }
 
-  if (webhookUrl1) query.webhookUrl1 = webhookUrl1
-  if (webhookUrl2) query.webhookUrl2 = webhookUrl2
+  if (webhookUrl1) setQuery['clanLogs.webhookUrl1'] = webhookUrl1
+  if (webhookUrl2) setQuery['clanLogs.webhookUrl2'] = webhookUrl2
 
   const result = await ProClanModel.updateOne(
     { tag: formatTag(tag, true) },
     {
-      $set: {
-        clanLogs: {
-          ...query,
-          enabled: true,
-          timestamp: Date.now(),
-        },
-      },
-      $unset: {
-        'clanLogs.lastUpdated': 1,
-      },
+      $set: setQuery,
+      $unset: { 'clanLogs.lastUpdated': 1 },
     },
   )
 
