@@ -67,6 +67,8 @@ const postProCheckoutController = async (req: Request, res: Response) => {
       return
     }
 
+    const isAdmin = user.providerAccountId === '493245767448789023'
+
     const name = (userPayload?.name || 'Unknown') as string
     const customerId = user.stripeCustomerId
     const customer = await getOrCreateCustomer(discordId, customerId, name)
@@ -77,7 +79,7 @@ const postProCheckoutController = async (req: Request, res: Response) => {
       customer: customer.id,
       line_items: [
         {
-          price: process.env.STRIPE_PRO_PRICE_ID!,
+          price: isAdmin ? process.env.STRIPE_ADMIN_PRICE_ID! : process.env.STRIPE_PRO_PRICE_ID!,
           quantity: 1,
         },
       ],
