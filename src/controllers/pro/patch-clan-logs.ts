@@ -99,7 +99,6 @@ export const patchProClanLogController = async (req: Request, res: Response) => 
 
     res.status(200).json({ isCreation, success: true, tag: formattedTag })
   } catch (err) {
-    console.log(err)
     if (err instanceof ZodError) {
       const e = err.errors[0]
       const formattedErr = `Field "${e.path.join('.')}" - ${e.message}`

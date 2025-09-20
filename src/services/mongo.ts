@@ -1066,8 +1066,6 @@ export const setClanLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLo
   if (webhookUrl1) setQuery['clanLogs.webhookUrl1'] = webhookUrl1
   if (webhookUrl2) setQuery['clanLogs.webhookUrl2'] = webhookUrl2
 
-  console.log(setQuery)
-
   const result = await ProClanModel.updateOne(
     { tag: formatTag(tag, true) },
     {

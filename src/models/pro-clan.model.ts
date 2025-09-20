@@ -26,8 +26,8 @@ const proClanSchema = new Schema<ProClan>(
       enabled: { default: false, required: true, type: Boolean },
       lastUpdated: { type: Date }, // last time log entry was updated
       timestamp: { type: Date }, // when webhook url was last changed
-      webhookUr1: { type: String },
-      webhookUr2: { type: String },
+      webhookUrl1: { type: String },
+      webhookUrl2: { type: String },
     },
     clanName: { required: true, type: String },
     stripeId: { required: true, type: String },
