@@ -4,6 +4,7 @@ import { connectDB } from '@/config/db'
 import { formatTag } from '@/lib/format'
 import { calcLinkedPlayerLimit, calcNudgeLimit } from '@/lib/utils'
 import { AccountModel } from '@/models/accounts.model'
+import { ClanLogMember, ClanLogModel } from '@/models/clan-log.model'
 import {
   DailyLeaderboard,
   DailyLeaderboardEntry,
@@ -141,6 +142,17 @@ interface SetWarLogClanInput {
   tag: string
   webhookUrl1?: string
   webhookUrl2?: string
+}
+
+interface ClanLogsInput {
+  tag: string
+  badge: string
+  type: string
+  description: string
+  clanWarTrophies: number
+  locationId: number
+  requiredTrophies: number
+  members: ClanLogMember[]
 }
 
 // list of randomly selected tags to check river race logs of to determine current season
@@ -969,6 +981,100 @@ export const setWarLogClanStatus = async (tag: string, enabled: boolean) => {
     {
       $set: {
         warLogsEnabled: enabled,
+      },
+    },
+  )
+
+  return result
+}
+
+export const bulkUpdateClanLogs = async (entries: ClanLogsInput[]) => {
+  await connectDB()
+
+  if (!entries.length) return { modifiedCount: 0 }
+
+  const operations = entries.map((e) => ({
+    replaceOne: {
+      filter: { tag: formatTag(e.tag, true) },
+      replacement: e,
+      upsert: true,
+    },
+  }))
+
+  const result = await ClanLogModel.bulkWrite(operations, { ordered: false })
+  return result
+}
+
+export const getAllClanLogs = async () => {
+  await connectDB()
+
+  const entries = await ClanLogModel.find({}).lean()
+  return entries
+}
+
+export const bulkUpdateClanLogLastUpdated = async (entries: LastUpdatedInput[]) => {
+  await connectDB()
+
+  if (!entries.length) return { modifiedCount: 0 }
+
+  const operations = entries.map((e) => ({
+    updateOne: {
+      filter: { tag: formatTag(e.tag, true) },
+      update: {
+        $set: {
+          'clanLogs.lastUpdated': e.timestamp,
+        },
+      },
+    },
+  }))
+
+  const result = await ProClanModel.bulkWrite(operations, { ordered: false })
+  return result
+}
+
+export const setClanLogClanStatus = async (tag: string, enabled: boolean) => {
+  await connectDB()
+
+  const result = await ProClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        'clanLogs.enabled': enabled,
+      },
+    },
+  )
+
+  return result
+}
+
+export const deleteClanLogEntry = async (tag: string) => {
+  await connectDB()
+
+  const result = ClanLogModel.deleteOne({ tag: formatTag(tag, true) })
+
+  return result
+}
+
+export const setClanLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLogClanInput) => {
+  await connectDB()
+
+  const query: Record<string, string> = {}
+
+  if (webhookUrl1) query.webhookUrl1 = webhookUrl1
+  if (webhookUrl2) query.webhookUrl2 = webhookUrl2
+
+  const result = await ProClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        clanLogs: {
+          ...query,
+          enabled: true,
+          timestamp: Date.now(),
+        },
+      },
+      $unset: {
+        'clanLogs.lastUpdated': 1,
       },
     },
   )

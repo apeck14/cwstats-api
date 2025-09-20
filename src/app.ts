@@ -9,6 +9,7 @@ import verifyInternalToken from '@/middleware/auth'
 import { errorHandler, notFound } from '@/middleware/errors'
 import requestLogger from '@/middleware/logtail'
 import clanRouter from '@/routes/clan.routes'
+import clanLogsRouter from '@/routes/clan-logs.routes'
 import emojiRouter from '@/routes/emoji.routes'
 import guildRouter from '@/routes/guild.routes'
 import leaderboardRouter from '@/routes/leaderboard.routes'
@@ -66,6 +67,7 @@ app.use('/emoji', emojiRouter)
 app.use('/linked-clan', linkedClanRouter)
 app.use('/war-logs', warLogsRouter)
 app.use('/pro', proRouter)
+app.use('/clan-logs', clanLogsRouter)
 
 app.get('/current-season', getCurrentSeasonController)
 app.patch('/risers-fallers', patchRisersAndFallersController)

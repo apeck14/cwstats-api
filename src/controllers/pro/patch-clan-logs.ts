@@ -6,19 +6,19 @@ import { getHoursDiff } from '@/lib/utils'
 import { patchProWarLogSchema } from '@/schemas/mongo'
 import { createWebhook } from '@/services/discord'
 import {
-  deleteWarLogClanAttacks,
+  deleteClanLogEntry,
   getGuild,
   getLinkedClan,
   getProClan,
-  setWarLogClan,
-  setWarLogClanStatus,
+  setClanLogClan,
+  setClanLogClanStatus,
 } from '@/services/mongo'
 
 /**
- * Set war logs enabled and create webhooks for a specific linked pro clan
- * @route PATCH /pro/war-logs
+ * Set clan logs enabled and create webhooks for a specific linked pro clan
+ * @route PATCH /pro/clan-logs
  */
-export const patchProWarLogController = async (req: Request, res: Response) => {
+export const patchProClanLogController = async (req: Request, res: Response) => {
   try {
     const parsed = patchProWarLogSchema.parse({
       body: req.body,
@@ -58,20 +58,20 @@ export const patchProWarLogController = async (req: Request, res: Response) => {
         return
       }
 
-      const hoursSinceLastChange = proClan.warLogsTimestamp
-        ? getHoursDiff(proClan.warLogsTimestamp)
+      const hoursSinceLastChange = proClan?.clanLogs?.timestamp
+        ? getHoursDiff(proClan.clanLogs.timestamp)
         : Infinity
 
       if (hoursSinceLastChange <= 0.25) {
-        res.status(409).json({ error: 'War logs update allowed every 15 mins.', status: 409 })
+        res.status(409).json({ error: 'Clan logs update allowed every 15 mins.', status: 409 })
         return
       }
 
-      const webhookTitle = `CWStats War Logs - ${formattedTag} (PRO)`
+      const webhookTitle = `CWStats Clan Logs - ${formattedTag} (PRO)`
 
       let webhooksMissing = 2
-      if (proClan.webhookUrl1) webhooksMissing--
-      if (proClan.webhookUrl2) webhooksMissing--
+      if (proClan?.clanLogs?.webhookUrl1) webhooksMissing--
+      if (proClan?.clanLogs?.webhookUrl2) webhooksMissing--
 
       const promises: Promise<{ error?: string; url?: string }>[] = []
 
@@ -88,12 +88,13 @@ export const patchProWarLogController = async (req: Request, res: Response) => {
         return
       }
 
-      const webhookUrl1 = proClan.webhookUrl1 || results[0]?.url
-      const webhookUrl2 = proClan.webhookUrl2 || results[1 - (proClan.webhookUrl1 ? 0 : 1)]?.url
+      const webhookUrl1 = proClan?.clanLogs?.webhookUrl1 || results[0]?.url
+      const webhookUrl2 =
+        proClan?.clanLogs?.webhookUrl2 || results[1 - (proClan?.clanLogs?.webhookUrl1 ? 0 : 1)]?.url
 
-      await setWarLogClan({ tag, webhookUrl1, webhookUrl2 })
+      await setClanLogClan({ tag, webhookUrl1, webhookUrl2 })
     } else {
-      await Promise.all([deleteWarLogClanAttacks(tag), setWarLogClanStatus(tag, false)])
+      await Promise.all([deleteClanLogEntry(tag), setClanLogClanStatus(tag, false)])
     }
 
     res.status(200).json({ isCreation, success: true, tag: formattedTag })
@@ -113,4 +114,4 @@ export const patchProWarLogController = async (req: Request, res: Response) => {
   }
 }
 
-export default patchProWarLogController
+export default patchProClanLogController

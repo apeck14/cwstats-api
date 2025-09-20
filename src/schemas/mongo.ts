@@ -283,6 +283,35 @@ export const postWarLogsBulkUpdateLastUpdatedSchema = z.object({
   }),
 })
 
+export const postBulkUpdateClanLogsSchema = z.object({
+  body: z.object({
+    entries: z
+      .array(
+        z.object({
+          badge: z.string(),
+          clanWarTrophies: z.number().int(),
+          description: z.string(),
+          locationId: z.number().int(),
+          members: z.array(
+            z.object({
+              level: z.number().int(),
+              name: z.string(),
+              role: z.string(),
+              tag: z.string(),
+            }),
+          ),
+          requiredTrophies: z.number().int(),
+          tag: z.string(),
+          type: z.string(),
+        }),
+        {
+          required_error: 'entries must be an array of objects',
+        },
+      )
+      .min(1, { message: 'entries array cannot be empty' }),
+  }),
+})
+
 export const postProCheckoutSchema = z.object({
   body: z.object({
     clanTag: tagSchema,
@@ -306,6 +335,13 @@ export const patchProWarLogSchema = z.object({
 export const patchWarLogActiveSchema = z.object({
   body: z.object({
     active: z.boolean(),
+    tag: tagSchema,
+  }),
+})
+
+export const patchClanLogEnabledSchema = z.object({
+  body: z.object({
+    enabled: z.boolean(),
     tag: tagSchema,
   }),
 })
