@@ -10,6 +10,7 @@ import {
   deleteClanLogEntry,
   deletePlusClan,
   deleteProClan,
+  deleteWarLogClanAttacks,
   setPlusClanStatus,
   setProClanStatus,
 } from '@/services/mongo'
@@ -66,6 +67,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
           getClan(clanTag),
           deleteProClan(clanTag),
           deleteClanLogEntry(clanTag),
+          deleteWarLogClanAttacks(clanTag),
         ])
 
         const lowercaseDesc = clan?.description.toLowerCase()
