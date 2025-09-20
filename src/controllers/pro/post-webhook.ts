@@ -7,6 +7,7 @@ import { sendWebhookEmbed } from '@/services/discord'
 import {
   addPlusClan,
   addProClan,
+  deleteClanLogEntry,
   deletePlusClan,
   deleteProClan,
   setPlusClanStatus,
@@ -61,7 +62,11 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         const subscription = event.data.object as Stripe.Subscription
         const { clanName, clanTag } = subscription.metadata
 
-        const [{ data: clan }] = await Promise.all([getClan(clanTag), deleteProClan(clanTag)])
+        const [{ data: clan }] = await Promise.all([
+          getClan(clanTag),
+          deleteProClan(clanTag),
+          deleteClanLogEntry(clanTag),
+        ])
 
         const lowercaseDesc = clan?.description.toLowerCase()
         const hasUrlInDescription = lowercaseDesc?.includes('cwstats') || lowercaseDesc?.includes('cw-stats')
