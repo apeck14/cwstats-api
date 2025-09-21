@@ -150,7 +150,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
               `If you believe this is a mistake, please contact ` +
               `[support](https://discord.com/invite/fFY3cnMmnH).`,
             title: 'Payment Failed',
-          }),
+          }), // TODO: remove after testing
         ])
         break
       }
