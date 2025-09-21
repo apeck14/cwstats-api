@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import Stripe from 'stripe'
 
 import stripe from '@/lib/stripe'
-import { sendWebhookEmbed } from '@/services/discord'
+import { sendDiscordDM, sendWebhookEmbed } from '@/services/discord'
 import {
   addPlusClan,
   addProClan,
@@ -111,7 +111,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice
-        const { clanName, clanTag } = invoice.parent?.subscription_details?.metadata || {}
+        const { clanName, clanTag, userId } = invoice.parent?.subscription_details?.metadata || {}
 
         const [{ data: clan }] = await Promise.all([getClan(clanTag), setProClanStatus(clanTag, false)])
 
@@ -127,11 +127,31 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
           `**Status**: ${invoice.status}\n` +
           `**Invoice**: [Details](https://dashboard.stripe.com/invoices/${invoice.id})\n`
 
-        await sendWebhookEmbed({
-          color: colors.orange,
-          description,
-          title: 'Payment Failed!',
-        })
+        await Promise.all([
+          sendWebhookEmbed({
+            color: colors.orange,
+            description,
+            title: 'Payment Failed!',
+          }),
+          sendDiscordDM(userId, {
+            color: colors.red,
+            description:
+              `Your payment for clan [**${clanName}**](https://cwstats.com/clan/${clanTag.substring(1)}) ` +
+              `has failed. Please update your payment information to avoid losing Pro status.\n\n` +
+              `If you believe this is a mistake, please contact ` +
+              `[support](https://discord.com/invite/fFY3cnMmnH).`,
+            title: 'Payment Failed',
+          }),
+          sendDiscordDM('493245767448789023', {
+            color: colors.red,
+            description:
+              `Your payment for clan [**${clanName}**](https://cwstats.com/clan/${clanTag.substring(1)}) ` +
+              `has failed. Please update your payment information to avoid losing Pro status.\n\n` +
+              `If you believe this is a mistake, please contact ` +
+              `[support](https://discord.com/invite/fFY3cnMmnH).`,
+            title: 'Payment Failed',
+          }),
+        ])
         break
       }
 

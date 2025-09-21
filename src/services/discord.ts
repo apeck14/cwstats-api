@@ -124,3 +124,33 @@ export const sendWebhookEmbed = async ({ color, description, title }: SendWebhoo
     return { error: 'Unexpected error while sending webhook.' }
   }
 }
+
+export const sendDiscordDM = async (userId: string, embed: object) => {
+  try {
+    // create DM channel with the user
+    const { data: dmChannel } = await axios.post(
+      'https://discord.com/api/v10/users/@me/channels',
+      { recipient_id: userId },
+      {
+        headers: {
+          Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    // send message to that DM channel
+    await axios.post(
+      `https://discord.com/api/v10/channels/${dmChannel.id}/messages`,
+      { embeds: [embed] },
+      {
+        headers: {
+          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+  } catch (err) {
+    return { error: 'Error sending Discord DM for failed payment', userId }
+  }
+}
