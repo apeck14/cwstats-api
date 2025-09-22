@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import Stripe from 'stripe'
 
 import stripe from '@/lib/stripe'
-import { sendDiscordDM, sendWebhookEmbed } from '@/services/discord'
+import { assignRoleToUser, sendDiscordDM, sendWebhookEmbed, unassignRoleFromUser } from '@/services/discord'
 import {
   addPlusClan,
   addProClan,
@@ -16,6 +16,9 @@ import {
 } from '@/services/mongo'
 import { getClan } from '@/services/supercell'
 import colors from '@/static/colors'
+
+const SUPPORT_SERVER_ID = '947602974367162449'
+const PRO_ROLE_ID = '1413016919635660860'
 
 /**
  * Stripe Webhook handler
@@ -41,12 +44,31 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
       case 'customer.subscription.created': {
         const subscription = event.data.object as Stripe.Subscription
 
-        const { clanName, clanTag } = subscription.metadata
+        const { clanName, clanTag, userId } = subscription.metadata
         const active = subscription.status === 'active' || subscription.status === 'trialing'
 
         await Promise.all([
           addPlusClan(clanTag),
           addProClan({ active, clanName, stripeId: subscription.id, tag: clanTag }),
+          assignRoleToUser(SUPPORT_SERVER_ID, userId, PRO_ROLE_ID),
+          sendDiscordDM(userId, {
+            color: colors.green,
+            description:
+              `We greatly appreciate your support and hope you enjoy the new features for ` +
+              `[**${clanName}**](https://cwstats.com/clan/${clanTag.substring(1)})!\n\n` +
+              `If you have any questions, suggestions or need assistance, feel free to reach out in our ` +
+              `[support server](https://discord.com/invite/fFY3cnMmnH).`,
+            title: 'CWStats Pro Activated! ✅',
+          }),
+          sendDiscordDM('493245767448789023', {
+            color: colors.green,
+            description:
+              `We greatly appreciate your support and hope you enjoy the new features for ` +
+              `[**${clanName}**](https://cwstats.com/clan/${clanTag.substring(1)})!\n\n` +
+              `If you have any questions, suggestions or need assistance, feel free to reach out in our ` +
+              `[support server](https://discord.com/invite/fFY3cnMmnH).`,
+            title: 'CWStats Pro Activated! ✅',
+          }), // TODO: remove after testing
         ])
 
         const description =
@@ -61,13 +83,14 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription
-        const { clanName, clanTag } = subscription.metadata
+        const { clanName, clanTag, userId } = subscription.metadata
 
         const [{ data: clan }] = await Promise.all([
           getClan(clanTag),
           deleteProClan(clanTag),
           deleteClanLogEntry(clanTag),
           deleteWarLogClanAttacks(clanTag),
+          unassignRoleFromUser(SUPPORT_SERVER_ID, userId, PRO_ROLE_ID),
         ])
 
         const lowercaseDesc = clan?.description.toLowerCase()

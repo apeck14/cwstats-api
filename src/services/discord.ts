@@ -71,7 +71,7 @@ export const createWebhook = async (channelId: string, title: string) => {
       name: title,
     }
 
-    const res = await axios.post(`https://discord.com/api/v10/channels/${channelId}/webhooks`, webhook, {
+    const res = await axios.post(`${BASE_URL}/channels/${channelId}/webhooks`, webhook, {
       headers: {
         Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
         'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ export const sendDiscordDM = async (userId: string, embed: object) => {
   try {
     // create DM channel with the user
     const { data: dmChannel } = await axios.post(
-      'https://discord.com/api/v10/users/@me/channels',
+      `${BASE_URL}/users/@me/channels`,
       { recipient_id: userId },
       {
         headers: {
@@ -141,7 +141,7 @@ export const sendDiscordDM = async (userId: string, embed: object) => {
 
     // send message to that DM channel
     await axios.post(
-      `https://discord.com/api/v10/channels/${dmChannel.id}/messages`,
+      `${BASE_URL}/channels/${dmChannel.id}/messages`,
       { embeds: [embed] },
       {
         headers: {
@@ -150,7 +150,35 @@ export const sendDiscordDM = async (userId: string, embed: object) => {
         },
       },
     )
-  } catch (err) {
+  } catch {
     return { error: 'Error sending Discord DM for failed payment', userId }
+  }
+}
+
+export async function assignRoleToUser(guildId: string, userId: string, roleId: string) {
+  try {
+    await axios.put(
+      `${BASE_URL}/guilds/${guildId}/members/${userId}/roles/${roleId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
+        },
+      },
+    )
+  } catch {
+    return { error: 'Error assigning role to user', guildId, roleId, userId }
+  }
+}
+
+export async function unassignRoleFromUser(guildId: string, userId: string, roleId: string) {
+  try {
+    await axios.delete(`${BASE_URL}/guilds/${guildId}/members/${userId}/roles/${roleId}`, {
+      headers: {
+        Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
+      },
+    })
+  } catch {
+    return { error: 'Error unassigning role to user', guildId, roleId, userId }
   }
 }
