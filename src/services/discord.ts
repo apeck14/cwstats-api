@@ -150,7 +150,8 @@ export const sendDiscordDM = async (userId: string, embed: object) => {
         },
       },
     )
-  } catch {
+  } catch (e) {
+    console.log(e)
     return { error: 'Error sending Discord DM for failed payment', userId }
   }
 }
