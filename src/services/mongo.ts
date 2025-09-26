@@ -988,6 +988,21 @@ export const setWarLogClanStatus = async (tag: string, enabled: boolean) => {
   return result
 }
 
+export const setWarLogClanTimezone = async (tag: string, timezone: string) => {
+  await connectDB()
+
+  const result = await ProClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        warLogsTimezone: timezone,
+      },
+    },
+  )
+
+  return result
+}
+
 export const bulkUpdateClanLogs = async (entries: ClanLogsInput[]) => {
   await connectDB()
 

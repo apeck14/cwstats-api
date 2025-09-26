@@ -9,6 +9,7 @@ export interface ProClan extends Document {
   stripeId: string
   warLogsLastUpdated?: Date
   warLogsTimestamp?: Date
+  warLogsTimezone?: string
   warLogsEnabled: boolean
   clanLogs: {
     enabled: boolean
@@ -35,6 +36,7 @@ const proClanSchema = new Schema<ProClan>(
     warLogsEnabled: { default: false, required: true, type: Boolean },
     warLogsLastUpdated: { type: Date }, // last time war logs were udpated
     warLogsTimestamp: { type: Date }, // when war log webhooks were last changed
+    warLogsTimezone: { type: String },
     webhookUrl1: { default: '', type: String },
     webhookUrl2: { default: '', type: String },
   },

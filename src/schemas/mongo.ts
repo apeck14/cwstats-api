@@ -345,3 +345,10 @@ export const patchClanLogEnabledSchema = z.object({
     tag: tagSchema,
   }),
 })
+
+export const patchWarLogTimezoneSchema = z.object({
+  body: z.object({
+    tag: tagSchema,
+    timezone: z.string(),
+  }),
+})
