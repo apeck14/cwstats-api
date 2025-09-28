@@ -988,14 +988,14 @@ export const setWarLogClanStatus = async (tag: string, enabled: boolean) => {
   return result
 }
 
-export const setWarLogClanTimezone = async (tag: string, timezone: string) => {
+export const setGuildTimezone = async (id: string, timezone: string) => {
   await connectDB()
 
-  const result = await ProClanModel.updateOne(
-    { tag: formatTag(tag, true) },
+  const result = await GuildModel.updateOne(
+    { guildID: id },
     {
       $set: {
-        warLogsTimezone: timezone,
+        timezone,
       },
     },
   )

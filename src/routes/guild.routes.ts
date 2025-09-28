@@ -9,6 +9,7 @@ import getGuildClansController from '@/controllers/guild/get-guild-clans'
 import getGuildLimitedController from '@/controllers/guild/get-guild-limited'
 import patchGuildCommandCooldown from '@/controllers/guild/patch-guild-command-cooldown'
 import patchGuildUserNickname from '@/controllers/guild/patch-guild-nickname'
+import patchGuildTimezoneController from '@/controllers/guild/patch-timezone'
 import postGuildController from '@/controllers/guild/post-guild'
 import postGuildsController from '@/controllers/guild/post-guilds'
 import putGuildNudgeLinkController from '@/controllers/guild/put-nudge-link'
@@ -31,6 +32,7 @@ router.delete('/:id/nudge-link/:tag', validation(deleteGuildNudgeLinkSchema), de
 
 router.patch('/:id/command-cooldown', patchGuildCommandCooldown)
 router.patch('/:id/user-nickname', patchGuildUserNickname)
+router.patch('/:id/timezone', patchGuildTimezoneController)
 
 router.put('/:id/nudge-link', putGuildNudgeLinkController)
 

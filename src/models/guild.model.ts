@@ -48,6 +48,7 @@ export interface Guild extends Document {
   discordInviteCode?: string
   guildID: string
   nudges?: Nudges
+  timezone?: string
 }
 
 const abbrSchema = new Schema(
@@ -116,6 +117,7 @@ const guildSchema = new Schema<Guild>(
     discordInviteCode: { type: String },
     guildID: { required: true, type: String, unique: true },
     nudges: { type: nudgesSchema },
+    timezone: { type: String },
   },
   { collection: 'Guilds', versionKey: false },
 )

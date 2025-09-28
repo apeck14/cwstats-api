@@ -15,6 +15,18 @@ interface SendWebhookInput {
   color: number
 }
 
+// For updating the webhook itself
+export interface WebhookUpdateInput {
+  webhookId: string // Webhook ID (from URL)
+  webhookToken: string // Webhook token (from URL)
+  botToken: string // Bot token (required for update)
+  updateData: {
+    name?: string // Webhook name
+    avatar?: string // Base64 encoded avatar
+    channel_id?: string // New channel ID to move webhook
+  }
+}
+
 const BASE_URL = 'https://discord.com/api/v10'
 
 const handleDiscordApiError = (err: unknown): never => {
@@ -181,5 +193,17 @@ export async function unassignRoleFromUser(guildId: string, userId: string, role
     })
   } catch {
     return { error: 'Error unassigning role to user', guildId, roleId, userId }
+  }
+}
+
+export async function updateWebhook({ botToken, updateData, webhookId, webhookToken }: WebhookUpdateInput) {
+  try {
+    await axios.patch(`${BASE_URL}/webhooks/${webhookId}/${webhookToken}`, updateData, {
+      headers: {
+        Authorization: `Bot ${botToken}`,
+      },
+    })
+  } catch (err) {
+    return { error: 'Error updating webhook', webhookId }
   }
 }

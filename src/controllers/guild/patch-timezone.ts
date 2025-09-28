@@ -1,9 +1,8 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
-import { formatTag } from '@/lib/format'
-import { patchWarLogTimezoneSchema } from '@/schemas/mongo'
-import { setWarLogClanTimezone } from '@/services/mongo'
+import { patchGuildTimezoneSchema } from '@/schemas/mongo'
+import { setGuildTimezone } from '@/services/mongo'
 
 function isSupportedTimezone(tz: string): boolean {
   try {
@@ -15,16 +14,18 @@ function isSupportedTimezone(tz: string): boolean {
 }
 
 /**
- * Set war logs timezone for a clan
- * @route PATCH /war-logs/timezone
+ * Set guild timezone
+ * @route PATCH /guild/timezone
  */
-export const patchWarLogsTimezoneController = async (req: Request, res: Response) => {
+export const patchGuildTimezoneController = async (req: Request, res: Response) => {
   try {
-    const parsed = patchWarLogTimezoneSchema.parse({
+    const parsed = patchGuildTimezoneSchema.parse({
       body: req.body,
+      params: req.params,
     })
 
-    const { tag, timezone } = parsed.body
+    const { id } = parsed.params
+    const { timezone } = parsed.body
 
     if (!isSupportedTimezone(timezone)) {
       res.status(400).json({
@@ -34,9 +35,9 @@ export const patchWarLogsTimezoneController = async (req: Request, res: Response
       return
     }
 
-    await setWarLogClanTimezone(tag, timezone)
+    await setGuildTimezone(id, timezone)
 
-    res.status(200).json({ success: true, tag: formatTag(tag, true) })
+    res.status(200).json({ id, success: true, timezone })
   } catch (err) {
     if (err instanceof ZodError) {
       const e = err.errors[0]
@@ -53,4 +54,4 @@ export const patchWarLogsTimezoneController = async (req: Request, res: Response
   }
 }
 
-export default patchWarLogsTimezoneController
+export default patchGuildTimezoneController

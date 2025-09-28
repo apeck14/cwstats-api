@@ -346,9 +346,11 @@ export const patchClanLogEnabledSchema = z.object({
   }),
 })
 
-export const patchWarLogTimezoneSchema = z.object({
+export const patchGuildTimezoneSchema = z.object({
   body: z.object({
-    tag: tagSchema,
     timezone: z.string(),
+  }),
+  params: z.object({
+    id: discordIdSchema,
   }),
 })
