@@ -354,3 +354,9 @@ export const patchGuildTimezoneSchema = z.object({
     id: discordIdSchema,
   }),
 })
+
+export const getProSubscriptionSchema = z.object({
+  body: z.object({
+    stripeId: z.string(),
+  }),
+})

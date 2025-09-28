@@ -12,3 +12,16 @@ export const hasActiveSubscription = async (clanTag: string): Promise<boolean> =
     return false
   }
 }
+
+export const getProSubscription = async (subscriptionId: string) => {
+  try {
+    // Fetch the subscription directly
+    const sub = await stripe.subscriptions.retrieve(subscriptionId, {
+      expand: ['plan.product'],
+    })
+
+    return sub
+  } catch {
+    return false
+  }
+}
