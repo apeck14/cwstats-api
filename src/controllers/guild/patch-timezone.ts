@@ -15,7 +15,7 @@ function isSupportedTimezone(tz: string): boolean {
 
 /**
  * Set guild timezone
- * @route PATCH /guild/timezone
+ * @route PATCH /guild/:id/timezone
  */
 export const patchGuildTimezoneController = async (req: Request, res: Response) => {
   try {
