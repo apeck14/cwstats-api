@@ -356,7 +356,7 @@ export const patchGuildTimezoneSchema = z.object({
 })
 
 export const getProSubscriptionSchema = z.object({
-  body: z.object({
+  query: z.object({
     stripeId: z.string(),
   }),
 })

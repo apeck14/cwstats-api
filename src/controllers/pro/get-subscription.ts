@@ -6,12 +6,12 @@ import { getProSubscription } from '@/services/stripe'
 
 /**
  * Get subscription data and metadata for a given stripe id
- * @route GET /pro/subscription
+ * @route GET /pro/subscription?stripeId
  */
 const getProSubscriptionController = async (req: Request, res: Response) => {
   try {
-    const parsed = getProSubscriptionSchema.parse({ body: req.body })
-    const { stripeId } = parsed.body
+    const parsed = getProSubscriptionSchema.parse({ query: req.query })
+    const { stripeId } = parsed.query
 
     // Fetch subscription info from Stripe service
     const subscriptionData = await getProSubscription(stripeId)
