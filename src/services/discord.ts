@@ -157,13 +157,12 @@ export const sendDiscordDM = async (userId: string, embed: object) => {
       { embeds: [embed] },
       {
         headers: {
-          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+          Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
           'Content-Type': 'application/json',
         },
       },
     )
   } catch (e) {
-    console.log(e)
     return { error: 'Error sending Discord DM for failed payment', userId }
   }
 }
