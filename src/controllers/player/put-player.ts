@@ -24,7 +24,7 @@ export const playerAddController = async (req: Request, res: Response) => {
 
     const data = { clanName: player?.clan?.name, name: player.name, tag: player.tag }
 
-    await addPlayer(data)
+    // await addPlayer(data)
 
     res.status(200).json({ success: true, ...data })
   } catch (err) {
