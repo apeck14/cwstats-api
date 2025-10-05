@@ -360,3 +360,12 @@ export const getProSubscriptionSchema = z.object({
     stripeId: z.string(),
   }),
 })
+
+export const postSeasonalReportSchema = z.object({
+  body: z.object({
+    channelId: discordIdSchema.optional(),
+    enabled: z.boolean(),
+    guildId: discordIdSchema,
+    tag: tagSchema.optional(),
+  }),
+})

@@ -412,7 +412,7 @@ export const deleteNudge = async ({ guildId, scheduledHourUTC, tag }: DeleteNudg
   return result
 }
 
-export const deleteWebhook = async (tag: string) => {
+export const deleteLinkedClanWebhookUrl = async (tag: string) => {
   await connectDB()
 
   const linkedClan = await LinkedClanModel.findOneAndUpdate(
@@ -420,6 +420,21 @@ export const deleteWebhook = async (tag: string) => {
     {
       $unset: {
         webhookUrl: 1,
+      },
+    },
+  )
+
+  return linkedClan
+}
+
+export const setLinkedClanWebhookUrl = async (tag: string, webhookUrl: string) => {
+  await connectDB()
+
+  const linkedClan = await LinkedClanModel.findOneAndUpdate(
+    { tag: formatTag(tag, true) },
+    {
+      $set: {
+        webhookUrl,
       },
     },
   )
@@ -1090,4 +1105,19 @@ export const setClanLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLo
   )
 
   return result
+}
+
+export const setSeasonalReportEnabled = async (id: string, enabled: boolean) => {
+  await connectDB()
+
+  const query = await LinkedClanModel.updateOne(
+    { guildID: id },
+    {
+      $set: {
+        seasonalReportEnabled: enabled,
+      },
+    },
+  )
+
+  return query
 }
