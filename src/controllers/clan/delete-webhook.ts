@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { DiscordApiError } from '@/lib/errors'
 import { formatTag } from '@/lib/format'
 import { deleteDiscordWebhookByUrl } from '@/services/discord'
-import { deleteWebhook } from '@/services/mongo'
+import { deleteLinkedClanWebhookUrl } from '@/services/mongo'
 
 /**
  * Delete the webhook from a linked clan
@@ -13,7 +13,7 @@ export const deleteWebhookController = async (req: Request, res: Response) => {
   try {
     const { tag } = req.params
 
-    const linkedClan = await deleteWebhook(tag)
+    const linkedClan = await deleteLinkedClanWebhookUrl(tag)
 
     if (!linkedClan) {
       res.status(404).json({ error: 'Linked clan not found.', status: 404 })

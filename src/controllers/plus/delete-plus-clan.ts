@@ -2,9 +2,9 @@ import { Request, Response } from 'express'
 
 import { formatTag } from '@/lib/format'
 import {
+  deleteLinkedClanWebhookUrl,
   deletePlusClan,
   deleteWarLogClanAttacks,
-  deleteWebhook,
   getLinkedClan,
   sliceGuildPlusFeatures,
 } from '@/services/mongo'
@@ -28,7 +28,7 @@ export const deletePlusClanController = async (req: Request, res: Response) => {
     const [linkedClan] = await Promise.all([
       getLinkedClan(tag),
       deletePlusClan(tag),
-      deleteWebhook(tag),
+      deleteLinkedClanWebhookUrl(tag),
       deleteWarLogClanAttacks(tag),
     ])
 
