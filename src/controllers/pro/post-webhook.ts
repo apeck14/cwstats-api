@@ -60,15 +60,6 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
               `[support server](https://discord.com/invite/fFY3cnMmnH).`,
             title: 'CWStats Pro Activated! ✅',
           }),
-          sendDiscordDM('493245767448789023', {
-            color: colors.green,
-            description:
-              `We greatly appreciate your support and hope you enjoy the new features for ` +
-              `[**${clanName}**](https://cwstats.com/clan/${clanTag.substring(1)})!\n\n` +
-              `If you have any questions, suggestions or need assistance, feel free to reach out in our ` +
-              `[support server](https://discord.com/invite/fFY3cnMmnH).`,
-            title: 'CWStats Pro Activated! ✅',
-          }), // TODO: remove after testing
         ])
 
         const description =
