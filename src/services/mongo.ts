@@ -1121,3 +1121,18 @@ export const setSeasonalReportEnabled = async (id: string, enabled: boolean) => 
 
   return query
 }
+
+export const setWarReportEnabled = async (id: string, enabled: boolean) => {
+  await connectDB()
+
+  const query = await LinkedClanModel.updateOne(
+    { guildID: id },
+    {
+      $set: {
+        warReportEnabled: enabled,
+      },
+    },
+  )
+
+  return query
+}

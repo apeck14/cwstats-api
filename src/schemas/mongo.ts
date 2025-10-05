@@ -369,3 +369,12 @@ export const postSeasonalReportSchema = z.object({
     tag: tagSchema.optional(),
   }),
 })
+
+export const postWarReportSchema = z.object({
+  body: z.object({
+    channelId: discordIdSchema.optional(),
+    enabled: z.boolean(),
+    guildId: discordIdSchema,
+    tag: tagSchema.optional(),
+  }),
+})
