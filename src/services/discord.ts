@@ -29,6 +29,7 @@ export interface WebhookUpdateInput {
 
 interface WebhookExistsResponse {
   exists: boolean
+  channelId?: string
   error?: string
 }
 
@@ -109,7 +110,7 @@ export const createWebhook = async (channelId: string, title: string) => {
 
 export const webhookExists = async (webhookUrl: string): Promise<WebhookExistsResponse> => {
   try {
-    // Extract the ID from either a full URL or raw ID
+    // Extract the webhook ID from a full URL or accept a raw ID directly
     const match = webhookUrl.match(/webhooks\/(\d+)/)
     const webhookId = match ? match[1] : webhookUrl
 
@@ -119,9 +120,11 @@ export const webhookExists = async (webhookUrl: string): Promise<WebhookExistsRe
       },
     })
 
-    // If the request succeeds, webhook exists
     if (res.status === 200) {
-      return { exists: true }
+      return {
+        channelId: res.data.channel_id ?? undefined,
+        exists: true,
+      }
     }
 
     return { exists: false }
@@ -129,8 +132,13 @@ export const webhookExists = async (webhookUrl: string): Promise<WebhookExistsRe
     if (axios.isAxiosError(err)) {
       const status = err.response?.status
 
-      if (status === 404) return { exists: false }
-      if (status === 403) return { error: 'Missing Permission: Cannot access webhook.', exists: false }
+      if (status === 404) {
+        return { exists: false }
+      }
+
+      if (status === 403) {
+        return { error: 'Missing Permission: Cannot access webhook.', exists: false }
+      }
     }
 
     return { error: 'Unexpected error while checking webhook.', exists: false }

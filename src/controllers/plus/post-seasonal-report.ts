@@ -16,26 +16,31 @@ export const postSeasonalReportController = async (req: Request, res: Response) 
       body: req.body,
     })
 
-    const { channelId, enabled, guildId, tag } = parsed.body
+    const { enabled, guildId, tag } = parsed.body
 
     // if enabling, create webhook if one doesn't exist
     if (enabled) {
       const linkedClan = await getLinkedClan(tag!)
 
       let isWebhookValid = false
+      let webhookChannelId
 
       // check if webhook still exists
       if (linkedClan?.webhookUrl) {
-        const { exists } = await webhookExists(linkedClan.webhookUrl)
+        const { channelId, exists } = await webhookExists(linkedClan.webhookUrl)
 
         isWebhookValid = exists
+        webhookChannelId = channelId
       }
 
       if (isWebhookValid) {
         await setSeasonalReportEnabled(guildId, true)
       } else {
         const { data: clan } = await getClan(tag!)
-        const { url } = await createWebhook(channelId!, `CWStats Reports - ${clan?.name || 'Unknown Clan'}`)
+        const { url } = await createWebhook(
+          webhookChannelId!,
+          `CWStats Reports - ${clan?.name || 'Unknown Clan'}`,
+        )
 
         await Promise.all([setSeasonalReportEnabled(guildId, true), setLinkedClanWebhookUrl(tag!, url)])
       }

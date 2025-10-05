@@ -363,7 +363,6 @@ export const getProSubscriptionSchema = z.object({
 
 export const postSeasonalReportSchema = z.object({
   body: z.object({
-    channelId: discordIdSchema.optional(),
     enabled: z.boolean(),
     guildId: discordIdSchema,
     tag: tagSchema.optional(),
@@ -372,7 +371,6 @@ export const postSeasonalReportSchema = z.object({
 
 export const postWarReportSchema = z.object({
   body: z.object({
-    channelId: discordIdSchema.optional(),
     enabled: z.boolean(),
     guildId: discordIdSchema,
     tag: tagSchema.optional(),
