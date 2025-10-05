@@ -15,7 +15,7 @@ router.get('/clans', plusClansController)
 
 router.post('/daily-tracking/entries', postAddDailyTrackingEntries)
 router.post('/hourly-tracking/entries', postAddHourlyTrackingEntries)
-router.post('/seasonal-report/entries', postSeasonalReportController)
+router.post('/seasonal-report', postSeasonalReportController)
 
 router.delete('/daily-tracking/entries', deleteDailyTrackingEntriesController)
 router.delete('/clan/:tag', validation(deletePlusClanSchema), deletePlusClanController)
