@@ -1,32 +1,22 @@
 export interface SupercellPlayer {
-  tag: string
-  name: string
-  expLevel: number
-  trophies: number
-  bestTrophies: number
-  wins: number
-  losses: number
+  arena: {
+    id: number
+    name: string
+  }
+  badges: SupercellBadge[]
   battleCount: number
-  threeCrownWins: number
+  bestTrophies: number
   challengeCardsWon: number
   challengeMaxWins: number
-  tournamentCardsWon: number
-  tournamentBattleCount: number
-  role: string
-  donations: number
-  donationsReceived: number
-  totalDonations: number
-  warDayWins: number
-  clanCardsCollected: number
   clan: {
     tag: string
     name: string
     badgeId: number
   }
-  arena: {
-    id: number
-    name: string
-  }
+  clanCardsCollected: number
+  donations: number
+  donationsReceived: number
+  expLevel: number
   leagueStatistics: {
     currentSeason?: {
       trophies: number
@@ -42,31 +32,41 @@ export interface SupercellPlayer {
       trophies: number
     }
   }
-  badges: SupercellBadge[]
+  losses: number
+  name: string
+  role: string
+  tag: string
+  threeCrownWins: number
+  totalDonations: number
+  tournamentBattleCount: number
+  tournamentCardsWon: number
+  trophies: number
+  warDayWins: number
+  wins: number
 }
 
 export interface SupercellBadge {
-  name: string
-  level: number
-  maxLevel: number
-  progress: number
-  target: number
   iconUrls: {
     large: string
   }
+  level: number
+  maxLevel: number
+  name: string
+  progress: number
+  target: number
 }
 
 export interface SupercellBattleLog extends Array<BattleLogEntry> {}
 
 export interface BattleLogEntry {
-  type: string
-  battleTime: string
-  isLadderTournament: boolean
   arena: Arena
-  gameMode: GameMode
+  battleTime: string
   deckSelection: string
-  team: Player[]
+  gameMode: GameMode
+  isLadderTournament: boolean
   opponent: Player[] // Assuming similar structure to team
+  team: Player[]
+  type: string
 }
 
 export interface Arena {
@@ -80,49 +80,49 @@ export interface GameMode {
 }
 
 export interface Player {
-  tag: string
-  name: string
-  startingTrophies?: number
-  crowns: number
-  kingTowerHitPoints: number
-  princessTowersHitPoints: number[]
-  clan?: Clan
   cards: Card[]
-  supportCards: Card[]
-  globalRank: number | null
-  rounds: Round[]
+  clan?: Clan
+  crowns: number
   elixirLeaked: number
+  globalRank: null | number
+  kingTowerHitPoints: number
+  name: string
+  princessTowersHitPoints: number[]
+  rounds: Round[]
+  startingTrophies?: number
+  supportCards: Card[]
+  tag: string
 }
 
 export interface Clan {
-  tag: string
-  name: string
   badgeId: number
+  name: string
+  tag: string
 }
 
 export interface Card {
-  name: string
+  elixirCost: number
+  evolutionLevel?: number
+  iconUrls: IconUrls
   id: number
   level: number
-  starLevel?: number
-  evolutionLevel?: number
-  maxLevel: number
   maxEvolutionLevel?: number
-  rarity: 'common' | 'rare' | 'epic' | 'legendary' | 'champion'
-  elixirCost: number
+  maxLevel: number
+  name: string
+  rarity: 'champion' | 'common' | 'epic' | 'legendary' | 'rare'
+  starLevel?: number
   used?: boolean
-  iconUrls: IconUrls
 }
 
 export interface IconUrls {
-  medium: string
   evolutionMedium?: string
+  medium: string
 }
 
 export interface Round {
+  cards: Card[]
   crowns: number
+  elixirLeaked: number
   kingTowerHitPoints: number
   princessTowersHitPoints: number[]
-  cards: Card[]
-  elixirLeaked: number
 }

@@ -1,15 +1,16 @@
+/* eslint-disable camelcase */
 import mongoose, { Model, Schema } from 'mongoose'
 
 export interface Account extends Document {
-  provider: string
-  type: string
-  providerAccountId: string
-  token_type: string
   access_token: string
   expires_at: number
+  provider: string
+  providerAccountId: string
   refresh_token?: string
   scope?: string
-  stripeCustomerId?: string | null
+  stripeCustomerId?: null | string
+  token_type: string
+  type: string
   userId: mongoose.Types.ObjectId
 }
 

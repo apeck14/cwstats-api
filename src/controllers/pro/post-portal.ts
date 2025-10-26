@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Request, Response } from 'express'
 import { JWTPayload } from 'jose'
 import { ZodError } from 'zod'

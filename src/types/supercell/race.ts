@@ -1,29 +1,29 @@
 export interface SupercellParticipant {
-  tag: string
-  name: string
-  fame: number
-  repairPoints: number
   boatAttacks: number
   decksUsed: number
   decksUsedToday: number
+  fame: number
+  name: string
+  repairPoints: number
+  tag: string
 }
 
 export interface SupercellRaceClan {
-  tag: string
-  name: string
   badgeId: number
+  clanScore: number
   fame: number
-  repairPoints: number
+  name: string
   participants: SupercellParticipant[]
   periodPoints: number
-  clanScore: number
+  repairPoints: number
+  tag: string
 }
 
 export interface SupercellRace {
-  state: string
   clan: SupercellRaceClan
   clans: SupercellRaceClan[]
-  sectionIndex: number
   periodIndex: number
-  periodType: 'warDay' | 'colosseum' | 'training'
+  periodType: 'colosseum' | 'training' | 'warDay'
+  sectionIndex: number
+  state: string
 }

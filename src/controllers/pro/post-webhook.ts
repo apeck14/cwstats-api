@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Request, Response } from 'express'
 import Stripe from 'stripe'
 
@@ -165,7 +164,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ received: true })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

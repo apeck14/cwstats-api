@@ -18,7 +18,7 @@ export const postEmojiBulkAddController = async (req: Request, res: Response) =>
     const { modifiedCount, upsertedCount } = await bulkWriteEmojis(emojis)
 
     res.status(200).json({ modifiedCount, success: true, upsertedCount })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

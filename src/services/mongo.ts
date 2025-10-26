@@ -19,35 +19,35 @@ import { WarLogClanAttacksModel } from '@/models/war-log-clan-attacks.model'
 import { getRaceLog, getRiverRace } from '@/services/supercell'
 
 interface PlayerInput {
-  tag: string
-  name: string
   clanName?: string
+  name: string
+  tag: string
 }
 
 interface LinkPlayerInput {
+  name: string
   tag: string
   userId: string
-  name: string
 }
 
 interface CommandCooldownInput {
-  id: string
   commandName: string
   delay: number
+  id: string
 }
 
 interface DailyLeaderboardInput {
-  name?: string
   limit: number
   maxTrophies: number
   minTrophies: number
+  name?: string
 }
 
 interface NudgeLinkInput {
+  guildId: string
   name: string
   tag: string
   userId: string
-  guildId: string
 }
 
 interface DeleteNudgeLinkInput {
@@ -57,13 +57,13 @@ interface DeleteNudgeLinkInput {
 
 interface DeleteNudgeInput {
   guildId: string
-  tag: string
   scheduledHourUTC: number
+  tag: string
 }
 
 interface Emoji {
-  name: string
   emoji: string
+  name: string
 }
 
 interface PartialDailyTrackingEntry {
@@ -74,30 +74,30 @@ interface PartialDailyTrackingEntry {
 interface DailyTrackingEntryScore {
   attacks: number
   fame: number
-  name: string
-  tag: string
   missed: boolean
+  name: string
   notInClan?: boolean
+  tag: string
 }
 
 interface FullDailyTrackingEntry {
-  tag: string
   day: number
-  week: number
-  season: number
-  timestamp: string
   scores: DailyTrackingEntryScore[]
+  season: number
+  tag: string
+  timestamp: string
+  week: number
 }
 
 interface HourlyTrackingEntry {
-  tag: string
   attacksCompleted: number
   avg: number
   day: number
-  season: number
-  week: number
-  timestamp: string
   lastHourAvg: number
+  season: number
+  tag: string
+  timestamp: string
+  week: number
 }
 
 interface RiserFallerEntry {
@@ -112,14 +112,14 @@ interface RiserFallerEntry {
 }
 
 interface WarLogInput {
-  timestamp: Date
   tag: string
+  timestamp: Date
 }
 
 interface WarLogClanAttacksInput {
-  tag: string
   attacks: Record<string, number>
   dayIndex: number
+  tag: string
 }
 
 interface LastUpdatedInput {
@@ -128,10 +128,10 @@ interface LastUpdatedInput {
 }
 
 interface ProClanInput {
-  clanName: string
-  tag: string
-  stripeId: string
   active: boolean
+  clanName: string
+  stripeId: string
+  tag: string
 }
 
 interface SetWarLogClanInput {
@@ -141,14 +141,14 @@ interface SetWarLogClanInput {
 }
 
 interface ClanLogsInput {
-  tag: string
   badge: string
-  type: string
-  description: string
   clanWarTrophies: number
+  description: string
   locationId: number
-  requiredTrophies: number
   members: ClanLogMember[]
+  requiredTrophies: number
+  tag: string
+  type: string
 }
 
 // list of randomly selected tags to check river race logs of to determine current season
@@ -204,12 +204,12 @@ export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
 // set function overloading for typescript
 export function getPlusClans(tagsOnly: true, query: object, projection: object): Promise<string[]>
 export function getPlusClans(tagsOnly: false, query: object, projection: object): Promise<PlusClan[]>
-export function getPlusClans(tagsOnly: boolean, query: object, projection: object): Promise<string[] | PlusClan[]>
+export function getPlusClans(tagsOnly: boolean, query: object, projection: object): Promise<PlusClan[] | string[]>
 export async function getPlusClans(
   tagsOnly: boolean,
   query: object,
   projection: object
-): Promise<string[] | PlusClan[]> {
+): Promise<PlusClan[] | string[]> {
   await connectDB()
 
   const plusClans = await PlusClanModel.find(

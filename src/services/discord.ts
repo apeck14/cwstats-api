@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import axios, { AxiosError } from 'axios'
 import fs from 'fs'
 
@@ -10,27 +11,27 @@ interface discordUserNicknameInput {
 }
 
 interface SendWebhookInput {
-  title: string
-  description: string
   color: number
+  description: string
+  title: string
 }
 
 // For updating the webhook itself
 export interface WebhookUpdateInput {
-  webhookId: string // Webhook ID (from URL)
-  webhookToken: string // Webhook token (from URL)
   botToken: string // Bot token (required for update)
   updateData: {
     name?: string // Webhook name
     avatar?: string // Base64 encoded avatar
     channel_id?: string // New channel ID to move webhook
   }
+  webhookId: string // Webhook ID (from URL)
+  webhookToken: string // Webhook token (from URL)
 }
 
 interface WebhookExistsResponse {
-  exists: boolean
   channelId?: string
   error?: string
+  exists: boolean
 }
 
 const BASE_URL = 'https://discord.com/api/v10'
@@ -205,7 +206,7 @@ export const sendDiscordDM = async (userId: string, embed: object) => {
         }
       }
     )
-  } catch (e) {
+  } catch {
     return { error: 'Error sending Discord DM for failed payment', userId }
   }
 }
@@ -245,7 +246,7 @@ export async function updateWebhook({ botToken, updateData, webhookId, webhookTo
         Authorization: `Bot ${botToken}`
       }
     })
-  } catch (err) {
+  } catch {
     return { error: 'Error updating webhook', webhookId }
   }
 }

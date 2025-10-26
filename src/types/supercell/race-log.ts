@@ -3,26 +3,26 @@ import { SupercellParticipant } from '@/types/supercell/race'
 export interface SupercellRaceLog extends Array<SupercellRaceLogEntry> {}
 
 export interface SupercellRaceLogEntry {
+  createdDate: string // ISO 8601 date string
   seasonId: number
   sectionIndex: number
-  createdDate: string // ISO 8601 date string
   standings: SupercellRaceLogClanStanding[]
 }
 
 export interface SupercellRaceLogClanStanding {
+  clan: SupercellRaceLogClan
   rank: number
   trophyChange: number
-  clan: SupercellRaceLogClan
 }
 
 export interface SupercellRaceLogClan {
-  tag: string
-  name: string
   badgeId: number
+  clanScore: number
   fame: number
-  repairPoints: number
   finishTime: string // ISO 8601 date string
+  name: string
   participants: SupercellParticipant[]
   periodPoints: number
-  clanScore: number
+  repairPoints: number
+  tag: string
 }

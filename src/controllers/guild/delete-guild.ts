@@ -21,7 +21,7 @@ export const deleteGuildController = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ guildId: id, linkedClansDeletedCount, success: true })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

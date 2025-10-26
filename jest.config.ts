@@ -4,13 +4,13 @@ export default {
     '!src/**/*.d.ts',
     '!src/**/*.test.ts',
     '!src/server.ts',
-    '!**/node_modules/**',
+    '!**/node_modules/**'
   ],
   coverageDirectory: 'coverage',
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.json',
-    },
+      tsconfig: 'tsconfig.json'
+    }
   },
   moduleFileExtensions: ['ts', 'js', 'json'],
   preset: 'ts-jest',
@@ -19,7 +19,7 @@ export default {
   testMatch: ['**/__tests__/**/*.test.(ts|js)'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': 'ts-jest'
   },
-  watchPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  watchPathIgnorePatterns: ['/node_modules/', '/dist/']
 }

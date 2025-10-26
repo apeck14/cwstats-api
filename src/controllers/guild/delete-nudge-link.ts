@@ -26,7 +26,7 @@ export const deleteGuildNudgeLinkController = async (req: Request, res: Response
     }
 
     res.status(200).json({ success: true, tag: formattedTag })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

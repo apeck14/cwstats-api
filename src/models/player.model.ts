@@ -1,9 +1,9 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
 export interface Player extends Document {
-  tag: string
-  name: string
   clanName: string
+  name: string
+  tag: string
 }
 
 const playerSchema = new Schema<Player>(

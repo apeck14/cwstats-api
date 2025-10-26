@@ -1,55 +1,55 @@
 import { SupercellParticipant } from '@/types/supercell/race'
 
 export interface RaceClan {
-  tag: string
-  name: string
-  badgeId: number
-  repairPoints: number
-  participants: SupercellParticipant[]
-  clanScore: number
-  decksUsed: number
-  slotsUsed: number
   badge: string
+  badgeId: number
+  boatPoints: number
+  clanScore: number
+  crossedFinishLine: boolean
+  currentPlace: number
+  decksUsed: number
+  fame: number
+  fameAvg: number
+  name: string
+  participants: SupercellParticipant[]
   projFame: number
   projPlace: number
-  currentPlace: number
-  fameAvg: number
-  crossedFinishLine: boolean
-  fame: number
-  boatPoints: number
+  repairPoints: number
+  slotsUsed: number
+  tag: string
 }
 
 export interface RaceClanLimited {
-  tag: string
-  name: string
   badgeId: number
+  clanScore: number
   fame: number
-  repairPoints: number
+  name: string
   participants: SupercellParticipant[]
   periodPoints: number
-  clanScore: number
+  repairPoints: number
+  tag: string
 }
 
 export interface ApiRace {
   clanIndex: number
-  state: string
   clans: RaceClan[]
-  sectionIndex: number
-  periodIndex: number
-  periodType: string
   dayIndex: number
   isColosseum: boolean
   isTraining: boolean
+  periodIndex: number
+  periodType: string
+  sectionIndex: number
+  state: string
 }
 
 export interface ApiRaceLimited {
   clanIndex: number
-  state: string
   clans: RaceClanLimited[]
-  sectionIndex: number
-  periodIndex: number
-  periodType: string
   dayIndex: number
   isColosseum: boolean
   isTraining: boolean
+  periodIndex: number
+  periodType: string
+  sectionIndex: number
+  state: string
 }

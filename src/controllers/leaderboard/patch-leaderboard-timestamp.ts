@@ -12,7 +12,7 @@ export const patchLeaderboardTimestampController = async (req: Request, res: Res
     await setLbLastUpdated(timestamp)
 
     res.status(200).json({ success: true, timestamp })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

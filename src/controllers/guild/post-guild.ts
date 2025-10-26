@@ -18,7 +18,7 @@ export const postGuildController = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({ guildId: id, success: true })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

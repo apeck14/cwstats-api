@@ -1,9 +1,9 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
 interface WarLog extends Document {
-  timestamp: Date
-  tag: string
   key: string
+  tag: string
+  timestamp: Date
 }
 
 const WarLogSchema = new Schema<WarLog>(

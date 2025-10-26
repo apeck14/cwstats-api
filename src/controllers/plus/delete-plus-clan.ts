@@ -6,7 +6,7 @@ import {
   deletePlusClan,
   deleteWarLogClanAttacks,
   getLinkedClan,
-  sliceGuildPlusFeatures,
+  sliceGuildPlusFeatures
 } from '@/services/mongo'
 import { hasActiveSubscription } from '@/services/stripe'
 
@@ -29,13 +29,13 @@ export const deletePlusClanController = async (req: Request, res: Response) => {
       getLinkedClan(tag),
       deletePlusClan(tag),
       deleteLinkedClanWebhookUrl(tag),
-      deleteWarLogClanAttacks(tag),
+      deleteWarLogClanAttacks(tag)
     ])
 
     const { nudgeLimit, playerLimit } = await sliceGuildPlusFeatures(linkedClan?.guildID || '')
 
     res.status(200).json({ nudgeLimit, playerLimit, success: true, tag: formatTag(tag, true) })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

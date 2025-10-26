@@ -70,7 +70,7 @@ export const getRiverRace = (tag: string) => {
   return handleSupercellRequest<SupercellRace>(url)
 }
 
-export const getWarLeaderboard = (locationId: string | number, limit?: number) => {
+export const getWarLeaderboard = (locationId: number | string, limit?: number) => {
   const url = `${BASE_URL}/locations/${locationId}/rankings/clanwars?limit=${limit || 100}`
   return handleSupercellRequest<SupercellWarLeaderboard>(url)
 }

@@ -11,7 +11,7 @@ export const patchResetSeasonalReportsController = async (req: Request, res: Res
     const { modifiedCount } = await resetSeasonalReportsSent()
 
     res.status(200).json({ reportsReset: modifiedCount, success: true })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

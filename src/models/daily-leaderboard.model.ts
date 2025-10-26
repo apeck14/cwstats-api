@@ -3,20 +3,20 @@ import mongoose, { Document, Model, Schema } from 'mongoose'
 export interface DailyLeaderboard extends Document, DailyLeaderboardEntry {}
 
 export interface DailyLeaderboardEntry {
-  badgeId: number
   badge: string
-  clanScore: number
-  location: object
-  name: string
-  tag: string
+  badgeId: number
   boatPoints: number
+  clanScore: number
   crossedFinishLine: boolean
   decksRemaining: number
   fameAvg: number
   isTraining: boolean
+  location: object
+  name: string
   notRanked: boolean
-  projPlacement: number | null
-  rank: number | null
+  projPlacement: null | number
+  rank: null | number
+  tag: string
 }
 
 const dailyLeaderboardSchema = new Schema<DailyLeaderboard>(

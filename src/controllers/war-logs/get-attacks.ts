@@ -11,7 +11,7 @@ export const getWarLogClanAttacksController = async (req: Request, res: Response
     const clanAttacks = await getAllWarLogClanAttacks()
 
     res.status(200).json({ data: clanAttacks })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

@@ -1,26 +1,26 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
 export interface Location {
-  id: number
-  name: string
-  isCountry: boolean
   countryCode?: string
+  id: number
+  isCountry: boolean
+  name: string
 }
 
 interface ClanMovement {
-  tag: string
-  name: string
-  rank: number
-  previousRank: number
-  location: Location
-  clanScore: number
-  members: number
   badgeId: number
+  clanScore: number
+  location: Location
+  members: number
+  name: string
+  previousRank: number
+  rank: number
+  tag: string
 }
 
 interface Statistics extends Document {
-  lbLastUpdated: number
   fallers: ClanMovement[]
+  lbLastUpdated: number
   risers: ClanMovement[]
 }
 

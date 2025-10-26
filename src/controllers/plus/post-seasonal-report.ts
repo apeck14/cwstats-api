@@ -13,12 +13,10 @@ import { getClan } from '@/services/supercell'
 export const postSeasonalReportController = async (req: Request, res: Response) => {
   try {
     const parsed = postSeasonalReportSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { enabled, guildId, tag } = parsed.body
-
-    console.log({ enabled, guildId, tag })
 
     // if enabling, check if need to update webhook
     if (enabled) {
@@ -37,10 +35,7 @@ export const postSeasonalReportController = async (req: Request, res: Response) 
 
       if (!isWebhookValid) {
         const { data: clan } = await getClan(tag!)
-        const { url } = await createWebhook(
-          webhookChannelId!,
-          `CWStats Reports - ${clan?.name || 'Unknown Clan'}`,
-        )
+        const { url } = await createWebhook(webhookChannelId!, `CWStats Reports - ${clan?.name || 'Unknown Clan'}`)
 
         await setLinkedClanWebhookUrl(tag!, url)
       }
@@ -56,7 +51,7 @@ export const postSeasonalReportController = async (req: Request, res: Response) 
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

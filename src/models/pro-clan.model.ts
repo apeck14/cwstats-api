@@ -1,15 +1,7 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
 export interface ProClan extends Document {
-  tag: string
-  clanName: string
   active: boolean
-  webhookUrl1?: string
-  webhookUrl2?: string
-  stripeId: string
-  warLogsLastUpdated?: Date
-  warLogsTimestamp?: Date
-  warLogsEnabled: boolean
   clanLogs: {
     enabled: boolean
     lastUpdated?: Date
@@ -17,6 +9,14 @@ export interface ProClan extends Document {
     webhookUrl2?: string
     timestamp?: Date
   }
+  clanName: string
+  stripeId: string
+  tag: string
+  warLogsEnabled: boolean
+  warLogsLastUpdated?: Date
+  warLogsTimestamp?: Date
+  webhookUrl1?: string
+  webhookUrl2?: string
 }
 
 const proClanSchema = new Schema<ProClan>(

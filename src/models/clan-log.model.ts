@@ -1,21 +1,21 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
 export interface ClanLogMember {
-  tag: string
+  level: number
   name: string
   role: string
-  level: number
+  tag: string
 }
 
 interface ClanLog extends Document {
-  tag: string
   badge: string
-  type: string
-  description: string
   clanWarTrophies: number
+  description: string
   locationId: number
-  requiredTrophies: number
   members: ClanLogMember[]
+  requiredTrophies: number
+  tag: string
+  type: string
 }
 
 const MemberSchema = new Schema<ClanLogMember>(

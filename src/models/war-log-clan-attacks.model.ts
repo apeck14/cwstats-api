@@ -1,9 +1,9 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
 interface WarLogClanAttacks extends Document {
-  tag: string
   attacks: Record<string, number>
   dayIndex: number
+  tag: string
 }
 
 const WarLogClanAttacksSchema = new Schema<WarLogClanAttacks>(

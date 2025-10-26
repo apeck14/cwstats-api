@@ -1,8 +1,8 @@
 import mongoose, { Document, Model, Schema } from 'mongoose'
 
 export interface Emoji extends Document {
-  name: string
   emoji: string
+  name: string
 }
 
 const emojiSchema = new Schema<Emoji>(

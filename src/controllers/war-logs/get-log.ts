@@ -14,7 +14,7 @@ export const getWarLogController = async (req: Request, res: Response) => {
     const logExists = await getWarLogExists(key)
 
     res.status(200).json({ data: logExists })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

@@ -1,9 +1,9 @@
 import mongoose, { Model, Schema } from 'mongoose'
 
 export interface SavedClan {
+  badge: string
   name: string
   tag: string
-  badge: string
 }
 
 export interface SavedPlayer {
@@ -13,9 +13,9 @@ export interface SavedPlayer {
 
 export interface LinkedAccount extends Document {
   discordID: string
-  tag: string
   savedClans: SavedClan[]
   savedPlayers: SavedPlayer[]
+  tag: string
 }
 
 const savedClanSchema = new Schema<SavedClan>(

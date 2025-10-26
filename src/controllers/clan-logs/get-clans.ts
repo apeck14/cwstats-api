@@ -11,7 +11,7 @@ export const getClanLogClansController = async (req: Request, res: Response) => 
     const activeClanLogProClans = await getProClans({ 'clanLogs.enabled': true })
 
     res.status(200).json({ data: activeClanLogProClans })
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

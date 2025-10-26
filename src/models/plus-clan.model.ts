@@ -27,10 +27,10 @@ export interface HourlyAverage {
 }
 
 export interface PlusClan extends Document {
-  tag: string
+  active: boolean
   dailyTracking: DailyTracking[]
   hourlyAverages: HourlyAverage[]
-  active: boolean
+  tag: string
 }
 
 const dailyTrackingEntrySchema = new Schema(

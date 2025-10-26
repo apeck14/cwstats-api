@@ -13,12 +13,12 @@ interface GetAvgFameParams {
 }
 
 interface GetProjFameParams {
-  dayIndex: number
-  isColosseum: boolean
-  fame: number
   boatPoints: number
-  duelsCompleted: number // p.decksUsedToday >= 2
+  dayIndex: number
   decksUsedToday: number
+  duelsCompleted: number // p.decksUsedToday >= 2
+  fame: number
+  isColosseum: boolean
 }
 
 interface GetMaxPossibleFameParams {
@@ -30,7 +30,7 @@ interface GetMaxPossibleFameParams {
 
 interface GetPlacementsParams {
   clans: RaceClan[]
-  fameAccessor: 'projFame' | 'fame'
+  fameAccessor: 'fame' | 'projFame'
 }
 
 export const getLeague = (trophyCount: number): string => {
@@ -174,7 +174,7 @@ export const calcLinkedPlayerLimit = (linkedPlusClansCount: number) => 100 + lin
 
 export const calcNudgeLimit = (linkedPlusClansCount: number) => 3 + linkedPlusClansCount * 2
 
-export const getDaysDiff = (input: Date | string | number): number => {
+export const getDaysDiff = (input: Date | number | string): number => {
   const now = Date.now()
   const target = input instanceof Date ? input.getTime() : new Date(input).getTime()
 
@@ -184,7 +184,7 @@ export const getDaysDiff = (input: Date | string | number): number => {
   return diffDays
 }
 
-export const getHoursDiff = (input: Date | string | number): number => {
+export const getHoursDiff = (input: Date | number | string): number => {
   const now = Date.now()
   const target = input instanceof Date ? input.getTime() : new Date(input).getTime()
 
@@ -221,7 +221,7 @@ export async function verifyUserToken(token: string) {
   try {
     const decoded = await decryptToken(token, process.env.NEXTAUTH_SECRET!)
     return decoded
-  } catch (err) {
+  } catch {
     return null
   }
 }

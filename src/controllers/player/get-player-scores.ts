@@ -5,8 +5,8 @@ import { DailyTrackingEntry } from '@/models/plus-clan.model'
 import { getPlusClans } from '@/services/mongo'
 
 interface Entry extends DailyTrackingEntry {
-  season: number
   day: number
+  season: number
   week: number
 }
 
@@ -50,7 +50,7 @@ export const getPlayerScoresController = async (req: Request, res: Response) => 
     )
 
     res.status(200).json({ data: sortedScores })
-  } catch (e) {
+  } catch {
     res.status(500).json({ error: 'Internal server error', status: 500 })
   }
 }

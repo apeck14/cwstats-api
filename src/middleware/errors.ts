@@ -4,8 +4,8 @@ import logger from '@/lib/logger'
 
 // Interface for custom errors
 export interface AppError extends Error {
-  statusCode?: number
   errors?: unknown
+  statusCode?: number
 }
 
 // Handler for 404 errors

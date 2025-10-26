@@ -5,12 +5,12 @@ export interface LinkedClan extends Document {
   clanName: string
   discordInviteCode?: string
   guildID: string
+  isPro?: boolean
   seasonalReportEnabled: boolean
   seasonalReportSent: boolean
   tag: string
   warReportEnabled: boolean
   webhookUrl?: string
-  isPro?: boolean
 }
 
 const linkedClanSchema = new Schema<LinkedClan>(
