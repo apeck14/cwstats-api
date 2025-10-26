@@ -11,7 +11,7 @@ import { bulkUpdateClanLogLastUpdated, bulkUpdateClanLogs } from '@/services/mon
 export const postBulkUpdateClanLogsController = async (req: Request, res: Response) => {
   try {
     const parsed = postBulkUpdateClanLogsSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { entries } = parsed.body
@@ -21,7 +21,7 @@ export const postBulkUpdateClanLogsController = async (req: Request, res: Respon
 
     const [{ modifiedCount }] = await Promise.all([
       bulkUpdateClanLogs(entries),
-      bulkUpdateClanLogLastUpdated(lastUpdatedEntries),
+      bulkUpdateClanLogLastUpdated(lastUpdatedEntries)
     ])
 
     res.status(200).json({ entriesUpdated: modifiedCount, success: true })
@@ -32,7 +32,7 @@ export const postBulkUpdateClanLogsController = async (req: Request, res: Respon
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

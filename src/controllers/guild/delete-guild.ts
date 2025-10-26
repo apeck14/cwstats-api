@@ -12,7 +12,7 @@ export const deleteGuildController = async (req: Request, res: Response) => {
 
     const [{ deletedCount }, { deletedCount: linkedClansDeletedCount }] = await Promise.all([
       deleteGuild(id),
-      deleteLinkedClans(id),
+      deleteLinkedClans(id)
     ])
 
     if (!deletedCount) {

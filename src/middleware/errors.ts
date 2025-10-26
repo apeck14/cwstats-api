@@ -25,9 +25,9 @@ export const errorHandler = (err: AppError, req: Request, res: Response): void =
     error: {
       message: msg,
       ...(process.env.NODE_ENV === 'development' && err.stack ? { stack: err.stack } : {}),
-      ...(err.errors && typeof err.errors === 'object' ? { errors: err.errors } : {}),
+      ...(err.errors && typeof err.errors === 'object' ? { errors: err.errors } : {})
     },
-    success: false,
+    success: false
   })
 
   logger.error(msg, { stack: err.stack })

@@ -33,8 +33,8 @@ app.use(helmet()) // Security headers
 app.use(
   cors({
     credentials: true,
-    origin: process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://cwstats.com',
-  }),
+    origin: process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : 'https://cwstats.com'
+  })
 )
 
 // stripe route needs access to raw body

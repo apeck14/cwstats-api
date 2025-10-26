@@ -12,7 +12,7 @@ import { setWarLogClanStatus } from '@/services/mongo'
 export const patchWarLogsActiveController = async (req: Request, res: Response) => {
   try {
     const parsed = patchWarLogActiveSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { active, tag } = parsed.body
@@ -27,7 +27,7 @@ export const patchWarLogsActiveController = async (req: Request, res: Response) 
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

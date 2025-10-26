@@ -28,11 +28,11 @@ const linkedClanSchema = new Schema<LinkedClan>(
       type: String,
       validate: {
         message: 'webhookUrl must include "https://discord.com"',
-        validator: (value: string) => !value || value.includes('https://discord.com'),
-      },
-    },
+        validator: (value: string) => !value || value.includes('https://discord.com')
+      }
+    }
   },
-  { collection: 'Linked Clans', versionKey: false },
+  { collection: 'Linked Clans', versionKey: false }
 )
 
 export const LinkedClanModel: Model<LinkedClan> =

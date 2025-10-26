@@ -10,7 +10,7 @@ import { bulkWriteEmojis } from '@/services/mongo'
 export const postEmojiBulkAddController = async (req: Request, res: Response) => {
   try {
     const parsed = emojiBulkAddSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { emojis } = parsed.body

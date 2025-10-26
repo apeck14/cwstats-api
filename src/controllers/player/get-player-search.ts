@@ -11,7 +11,7 @@ import { searchPlayersByName } from '@/services/mongo'
 export const playerSearchController = async (req: Request, res: Response) => {
   try {
     const parsed = getPlayerSearchSchema.parse({
-      query: req.query,
+      query: req.query
     })
 
     const { limit, name } = parsed.query
@@ -26,7 +26,7 @@ export const playerSearchController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

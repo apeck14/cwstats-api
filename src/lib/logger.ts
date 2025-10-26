@@ -9,13 +9,13 @@ if (!process.env.LOGTAIL_TOKEN) {
 }
 
 const logtail = new Logtail(process.env.LOGTAIL_TOKEN, {
-  endpoint: process.env.LOGTAIL_URL,
+  endpoint: process.env.LOGTAIL_URL
 })
 
 const logger = createLogger({
   format: format.combine(format.timestamp(), format.json()),
   level: 'info',
-  transports: [new LogtailTransport(logtail)],
+  transports: [new LogtailTransport(logtail)]
 })
 
 export default logger

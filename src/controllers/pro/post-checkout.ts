@@ -18,7 +18,7 @@ const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:4400
 const postProCheckoutController = async (req: Request, res: Response) => {
   try {
     const parsed = postProCheckoutSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { clanTag } = parsed.body
@@ -43,7 +43,7 @@ const postProCheckoutController = async (req: Request, res: Response) => {
       getClan(clanTag),
       getAccount(discordId),
       getLinkedClan(clanTag),
-      hasActiveSubscription(clanTag),
+      hasActiveSubscription(clanTag)
     ])
 
     if (!user) {
@@ -80,8 +80,8 @@ const postProCheckoutController = async (req: Request, res: Response) => {
       line_items: [
         {
           price: isAdmin ? process.env.STRIPE_ADMIN_PRICE_ID! : process.env.STRIPE_PRO_PRICE_ID!,
-          quantity: 1,
-        },
+          quantity: 1
+        }
       ],
       mode: 'subscription',
       subscription_data: {
@@ -90,10 +90,10 @@ const postProCheckoutController = async (req: Request, res: Response) => {
           clanName: clan.name,
           clanTag: clan.tag,
           guildId: linkedClan.guildID,
-          userId: discordId,
-        },
+          userId: discordId
+        }
       },
-      success_url: `${BASE_URL}/checkout/success?sessionId={CHECKOUT_SESSION_ID}`,
+      success_url: `${BASE_URL}/checkout/success?sessionId={CHECKOUT_SESSION_ID}`
     })
 
     res.status(201).json({ url: session.url })
@@ -104,7 +104,7 @@ const postProCheckoutController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

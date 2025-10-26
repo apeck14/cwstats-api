@@ -12,7 +12,7 @@ import { hasActiveSubscription } from '@/services/stripe'
 const getProStatusController = async (req: Request, res: Response) => {
   try {
     const parsed = getProStatusSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { clanTag } = parsed.body
@@ -27,7 +27,7 @@ const getProStatusController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

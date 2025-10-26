@@ -29,9 +29,9 @@ const locationSchema = new Schema(
     countryCode: { required: false, type: String },
     id: { required: true, type: Number },
     isCountry: { required: true, type: Boolean },
-    name: { required: true, type: String },
+    name: { required: true, type: String }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const clanMovementSchema = new Schema(
@@ -43,18 +43,18 @@ const clanMovementSchema = new Schema(
     name: { required: true, type: String },
     previousRank: { required: true, type: Number },
     rank: { required: true, type: Number },
-    tag: { required: true, type: String },
+    tag: { required: true, type: String }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const StatisticsSchema = new Schema<Statistics>(
   {
     fallers: { required: true, type: [clanMovementSchema] },
     lbLastUpdated: { required: true, type: Number }, // TODO: change this to a Date type (?)
-    risers: { required: true, type: [clanMovementSchema] },
+    risers: { required: true, type: [clanMovementSchema] }
   },
-  { collection: 'Statistics', versionKey: false },
+  { collection: 'Statistics', versionKey: false }
 )
 
 export const StatisticsModel: Model<Statistics> =

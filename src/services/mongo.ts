@@ -5,11 +5,7 @@ import { formatTag } from '@/lib/format'
 import { calcLinkedPlayerLimit, calcNudgeLimit } from '@/lib/utils'
 import { AccountModel } from '@/models/accounts.model'
 import { ClanLogMember, ClanLogModel } from '@/models/clan-log.model'
-import {
-  DailyLeaderboard,
-  DailyLeaderboardEntry,
-  DailyLeaderboardModel,
-} from '@/models/daily-leaderboard.model'
+import { DailyLeaderboard, DailyLeaderboardEntry, DailyLeaderboardModel } from '@/models/daily-leaderboard.model'
 import { EmojiModel } from '@/models/emoji.model'
 import { Guild, GuildModel } from '@/models/guild.model'
 import { LinkedAccountModel } from '@/models/linked-account.model'
@@ -171,7 +167,7 @@ const TAGS = [
   '#20LUQGRQ',
   '#YPJLQ999',
   '#9CRYRJ',
-  '#98RVLCUY',
+  '#98RVLCUY'
 ]
 
 export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
@@ -180,7 +176,7 @@ export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
   const updatedPlayer = await PlayerModel.findOneAndUpdate(
     { tag },
     { clanName, name, tag },
-    { new: true, setDefaultsOnInsert: true, upsert: true },
+    { new: true, setDefaultsOnInsert: true, upsert: true }
   )
 
   if (!updatedPlayer) {
@@ -197,9 +193,9 @@ export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
     { discordID: userId },
     {
       $set: { tag },
-      $setOnInsert: { savedPlayers: [{ name, tag }] },
+      $setOnInsert: { savedPlayers: [{ name, tag }] }
     },
-    { upsert: true },
+    { upsert: true }
   )
 
   return account
@@ -208,24 +204,20 @@ export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
 // set function overloading for typescript
 export function getPlusClans(tagsOnly: true, query: object, projection: object): Promise<string[]>
 export function getPlusClans(tagsOnly: false, query: object, projection: object): Promise<PlusClan[]>
-export function getPlusClans(
-  tagsOnly: boolean,
-  query: object,
-  projection: object,
-): Promise<string[] | PlusClan[]>
+export function getPlusClans(tagsOnly: boolean, query: object, projection: object): Promise<string[] | PlusClan[]>
 export async function getPlusClans(
   tagsOnly: boolean,
   query: object,
-  projection: object,
+  projection: object
 ): Promise<string[] | PlusClan[]> {
   await connectDB()
 
   const plusClans = await PlusClanModel.find(
     {
       $or: [{ active: true }, { active: { $exists: false } }],
-      ...query,
+      ...query
     },
-    { _id: 0, ...projection },
+    { _id: 0, ...projection }
   ).lean()
 
   if (tagsOnly) {
@@ -287,27 +279,22 @@ export const setCommandCooldown = async ({ commandName, delay, id }: CommandCool
     { guildID: id },
     {
       $set: {
-        [`cooldowns.${commandName}`]: now,
-      },
-    },
+        [`cooldowns.${commandName}`]: now
+      }
+    }
   )
 
   return query
 }
 
-export const getDailyLeaderboard = async ({
-  limit,
-  maxTrophies,
-  minTrophies,
-  name,
-}: DailyLeaderboardInput) => {
+export const getDailyLeaderboard = async ({ limit, maxTrophies, minTrophies, name }: DailyLeaderboardInput) => {
   await connectDB()
 
   const query: FilterQuery<DailyLeaderboard> = {
     clanScore: {
       ...(minTrophies ? { $gte: minTrophies } : {}),
-      ...(maxTrophies ? { $lte: maxTrophies } : {}),
-    },
+      ...(maxTrophies ? { $lte: maxTrophies } : {})
+    }
   }
 
   // if no name provided, assume global (all clans)
@@ -317,8 +304,8 @@ export const getDailyLeaderboard = async ({
     { $match: query },
     {
       $addFields: {
-        rankNull: { $cond: [{ $eq: ['$rank', null] }, 1, 0] },
-      },
+        rankNull: { $cond: [{ $eq: ['$rank', null] }, 1, 0] }
+      }
     },
     {
       $sort: {
@@ -327,10 +314,10 @@ export const getDailyLeaderboard = async ({
         fameAvg: -1, // fame descending
         rankNull: 1, // non-null ranks first
         // eslint-disable-next-line perfectionist/sort-objects
-        rank: 1, // then sort by rank ascending
-      },
+        rank: 1 // then sort by rank ascending
+      }
     },
-    ...(limit ? [{ $limit: limit }] : []),
+    ...(limit ? [{ $limit: limit }] : [])
   ])
 
   return dailyLb
@@ -366,17 +353,17 @@ export const addNudgeLink = async ({ guildId, name, tag, userId }: NudgeLinkInpu
   const result = await GuildModel.updateOne(
     {
       guildID: guildId,
-      'nudges.links.tag': { $ne: tag }, // Only update if no existing link with this tag
+      'nudges.links.tag': { $ne: tag } // Only update if no existing link with this tag
     },
     {
       $push: {
         'nudges.links': {
           discordID: userId,
           name,
-          tag,
-        },
-      },
-    },
+          tag
+        }
+      }
+    }
   )
 
   return result
@@ -389,9 +376,9 @@ export const deleteNudgeLink = async ({ guildId, tag }: DeleteNudgeLinkInput) =>
     { guildID: guildId },
     {
       $pull: {
-        'nudges.links': { tag },
-      },
-    },
+        'nudges.links': { tag }
+      }
+    }
   )
 
   return result
@@ -404,9 +391,9 @@ export const deleteNudge = async ({ guildId, scheduledHourUTC, tag }: DeleteNudg
     { guildID: guildId },
     {
       $pull: {
-        'nudges.scheduled': { clanTag: tag, scheduledHourUTC },
-      },
-    },
+        'nudges.scheduled': { clanTag: tag, scheduledHourUTC }
+      }
+    }
   )
 
   return result
@@ -419,9 +406,9 @@ export const deleteLinkedClanWebhookUrl = async (tag: string) => {
     { tag: formatTag(tag, true) },
     {
       $unset: {
-        webhookUrl: 1,
-      },
-    },
+        webhookUrl: 1
+      }
+    }
   )
 
   return linkedClan
@@ -434,9 +421,9 @@ export const setLinkedClanWebhookUrl = async (tag: string, webhookUrl: string) =
     { tag: formatTag(tag, true) },
     {
       $set: {
-        webhookUrl,
-      },
-    },
+        webhookUrl
+      }
+    }
   )
 
   return linkedClan
@@ -448,7 +435,7 @@ export const createGuild = async (guildId: string) => {
   const result = await GuildModel.updateOne(
     { guildID: guildId },
     { $setOnInsert: { guildID: guildId } },
-    { upsert: true },
+    { upsert: true }
   )
 
   return result
@@ -477,8 +464,8 @@ export const bulkWriteEmojis = async (emojis: Emoji[]) => {
     updateOne: {
       filter: { name: e.name },
       update: { $set: { emoji: e.emoji, name: e.name } },
-      upsert: true,
-    },
+      upsert: true
+    }
   }))
 
   const result = await EmojiModel.bulkWrite(operations, { ordered: false })
@@ -492,7 +479,7 @@ export const getCurrentSeason = async (): Promise<number> => {
   for (const tag of TAGS) {
     const [{ data: log, error: logError }, { data: race, error: raceError }] = await Promise.all([
       getRaceLog(tag),
-      getRiverRace(tag),
+      getRiverRace(tag)
     ])
 
     if (logError || !log || !log.length || !race || raceError) continue
@@ -524,14 +511,11 @@ export const getEmoji = async (name: string) => {
   return emoji
 }
 
-export const deleteDailyTrackingEntries = async (
-  tag: string,
-  entriesToRemove: PartialDailyTrackingEntry[],
-) => {
+export const deleteDailyTrackingEntries = async (tag: string, entriesToRemove: PartialDailyTrackingEntry[]) => {
   await connectDB()
 
   const entryPullConditions = entriesToRemove.map(({ season, timestamp }) => ({
-    $and: [{ season }, { timestamp }],
+    $and: [{ season }, { timestamp }]
   }))
 
   const result = await PlusClanModel.updateOne(
@@ -539,10 +523,10 @@ export const deleteDailyTrackingEntries = async (
     {
       $pull: {
         dailyTracking: {
-          $or: entryPullConditions,
-        },
-      },
-    },
+          $or: entryPullConditions
+        }
+      }
+    }
   )
 
   return result
@@ -563,11 +547,11 @@ export const bulkAddDailyTrackingEntries = async (entries: FullDailyTrackingEntr
             scores: e.scores,
             season: e.season,
             timestamp: e.timestamp,
-            week: e.week,
-          },
-        },
-      },
-    },
+            week: e.week
+          }
+        }
+      }
+    }
   }))
 
   const result = await PlusClanModel.bulkWrite(operations, { ordered: false })
@@ -593,14 +577,14 @@ export const bulkAddHourlyTrackingEntries = async (entries: HourlyTrackingEntry[
                 lastHourAvg: e.lastHourAvg,
                 season: e.season,
                 timestamp: e.timestamp,
-                week: e.week,
-              },
+                week: e.week
+              }
             ],
-            $slice: -300,
-          },
-        },
-      },
-    },
+            $slice: -300
+          }
+        }
+      }
+    }
   }))
 
   const result = await PlusClanModel.bulkWrite(operations, { ordered: false })
@@ -614,9 +598,9 @@ export const setSeasonalReportSent = async (tag: string, reportSent: boolean) =>
     { tag: formatTag(tag, true) },
     {
       $set: {
-        seasonalReportSent: reportSent,
-      },
-    },
+        seasonalReportSent: reportSent
+      }
+    }
   )
 
   return result
@@ -629,9 +613,9 @@ export const resetSeasonalReportsSent = async () => {
     { seasonalReportSent: true },
     {
       $set: {
-        seasonalReportSent: false,
-      },
-    },
+        seasonalReportSent: false
+      }
+    }
   )
 
   return result
@@ -645,9 +629,9 @@ export const setRisersAndFallers = async (risers: RiserFallerEntry[], fallers: R
     {
       $set: {
         fallers,
-        risers,
-      },
-    },
+        risers
+      }
+    }
   )
 
   return result
@@ -660,9 +644,9 @@ export const setLbLastUpdated = async (timestamp: number) => {
     {},
     {
       $set: {
-        lbLastUpdated: timestamp,
-      },
-    },
+        lbLastUpdated: timestamp
+      }
+    }
   )
 
   return result
@@ -679,9 +663,9 @@ export const resetDailyLeaderboardClans = async () => {
         decksRemaining: 200,
         fameAvg: 0,
         isTraining: true,
-        notRanked: false,
-      },
-    },
+        notRanked: false
+      }
+    }
   )
 
   return result
@@ -708,9 +692,9 @@ export const sliceGuildPlusFeatures = async (id: string) => {
     {
       $push: {
         'nudges.links': { $each: [], $slice: playerLimit },
-        'nudges.scheduled': { $each: [], $slice: nudgeLimit },
-      },
-    },
+        'nudges.scheduled': { $each: [], $slice: nudgeLimit }
+      }
+    }
   )
 
   return { ...result, nudgeLimit, playerLimit }
@@ -745,8 +729,8 @@ export const searchPlayersByName = async (name: string, limit = 10) => {
               autocomplete: {
                 path: 'name',
                 query: name,
-                score: { boost: { value: 5 } },
-              },
+                score: { boost: { value: 5 } }
+              }
             },
             {
               // 2️⃣ Strongly boost exact/full phrase matches
@@ -754,27 +738,27 @@ export const searchPlayersByName = async (name: string, limit = 10) => {
                 path: 'name',
                 query: name,
                 score: {
-                  boost: { value: 10 },
-                },
-              },
-            },
-          ],
+                  boost: { value: 10 }
+                }
+              }
+            }
+          ]
         },
-        index: `${process.env.NODE_ENV === 'development' ? 'dev-' : ''}searchPlayerNames`,
-      },
+        index: `${process.env.NODE_ENV === 'development' ? 'dev-' : ''}searchPlayerNames`
+      }
     },
     {
       $addFields: {
-        score: { $meta: 'searchScore' },
-      },
+        score: { $meta: 'searchScore' }
+      }
     },
     { $limit: limit },
     {
       $project: {
         __v: 0,
-        _id: 0,
-      },
-    },
+        _id: 0
+      }
+    }
   ])
 
   return players
@@ -802,7 +786,7 @@ export const addWarLogClanAttacks = async ({ attacks, dayIndex, tag }: WarLogCla
   const result = WarLogClanAttacksModel.insertOne({
     attacks,
     dayIndex,
-    tag: formatTag(tag, true),
+    tag: formatTag(tag, true)
   })
 
   return result
@@ -835,10 +819,10 @@ export const bulkUpdateWarLogClanAttacks = async (entries: WarLogClanAttacksInpu
       update: {
         $set: {
           attacks: e.attacks,
-          dayIndex: e.dayIndex,
-        },
-      },
-    },
+          dayIndex: e.dayIndex
+        }
+      }
+    }
   }))
 
   const result = await WarLogClanAttacksModel.bulkWrite(operations, { ordered: false })
@@ -855,10 +839,10 @@ export const bulkUpdateWarLogLastUpdated = async (entries: LastUpdatedInput[]) =
       filter: { tag: formatTag(e.tag, true) },
       update: {
         $set: {
-          warLogsLastUpdated: e.timestamp,
-        },
-      },
-    },
+          warLogsLastUpdated: e.timestamp
+        }
+      }
+    }
   }))
 
   const result = await ProClanModel.bulkWrite(operations, { ordered: false })
@@ -880,9 +864,9 @@ export const setStripeCustomerId = async (userId: string, customerId: string) =>
     { providerAccountId: userId },
     {
       $set: {
-        stripeCustomerId: customerId,
-      },
-    },
+        stripeCustomerId: customerId
+      }
+    }
   )
   return result
 }
@@ -910,9 +894,9 @@ export const setProClanStatus = async (tag: string, active: boolean) => {
     { tag: formatTag(tag, true) },
     {
       $set: {
-        active,
-      },
-    },
+        active
+      }
+    }
   )
 
   return result
@@ -934,7 +918,7 @@ export const addPlusClan = async (tag: string) => {
   const result = await PlusClanModel.findOneAndUpdate(
     { tag: formattedTag },
     { $set: { active: true, tag: formattedTag } },
-    { new: true, upsert: true }, // return the updated doc & create if not exists
+    { new: true, upsert: true } // return the updated doc & create if not exists
   )
 
   return result
@@ -947,9 +931,9 @@ export const setPlusClanStatus = async (tag: string, active: boolean) => {
     { tag: formatTag(tag, true) },
     {
       $set: {
-        active,
-      },
-    },
+        active
+      }
+    }
   )
 
   return result
@@ -977,12 +961,12 @@ export const setWarLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLog
       $set: {
         warLogsEnabled: true,
         warLogsTimestamp: Date.now(),
-        ...query,
+        ...query
       },
       $unset: {
-        warLogsLastUpdated: 1,
-      },
-    },
+        warLogsLastUpdated: 1
+      }
+    }
   )
 
   return result
@@ -995,9 +979,9 @@ export const setWarLogClanStatus = async (tag: string, enabled: boolean) => {
     { tag: formatTag(tag, true) },
     {
       $set: {
-        warLogsEnabled: enabled,
-      },
-    },
+        warLogsEnabled: enabled
+      }
+    }
   )
 
   return result
@@ -1010,9 +994,9 @@ export const setGuildTimezone = async (id: string, timezone: string) => {
     { guildID: id },
     {
       $set: {
-        timezone,
-      },
-    },
+        timezone
+      }
+    }
   )
 
   return result
@@ -1027,8 +1011,8 @@ export const bulkUpdateClanLogs = async (entries: ClanLogsInput[]) => {
     replaceOne: {
       filter: { tag: formatTag(e.tag, true) },
       replacement: e,
-      upsert: true,
-    },
+      upsert: true
+    }
   }))
 
   const result = await ClanLogModel.bulkWrite(operations, { ordered: false })
@@ -1052,10 +1036,10 @@ export const bulkUpdateClanLogLastUpdated = async (entries: LastUpdatedInput[]) 
       filter: { tag: formatTag(e.tag, true) },
       update: {
         $set: {
-          'clanLogs.lastUpdated': e.timestamp,
-        },
-      },
-    },
+          'clanLogs.lastUpdated': e.timestamp
+        }
+      }
+    }
   }))
 
   const result = await ProClanModel.bulkWrite(operations, { ordered: false })
@@ -1069,9 +1053,9 @@ export const setClanLogClanStatus = async (tag: string, enabled: boolean) => {
     { tag: formatTag(tag, true) },
     {
       $set: {
-        'clanLogs.enabled': enabled,
-      },
-    },
+        'clanLogs.enabled': enabled
+      }
+    }
   )
 
   return result
@@ -1090,7 +1074,7 @@ export const setClanLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLo
 
   const setQuery: Record<string, unknown> = {
     'clanLogs.enabled': true,
-    'clanLogs.timestamp': Date.now(),
+    'clanLogs.timestamp': Date.now()
   }
 
   if (webhookUrl1) setQuery['clanLogs.webhookUrl1'] = webhookUrl1
@@ -1100,8 +1084,8 @@ export const setClanLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLo
     { tag: formatTag(tag, true) },
     {
       $set: setQuery,
-      $unset: { 'clanLogs.lastUpdated': 1 },
-    },
+      $unset: { 'clanLogs.lastUpdated': 1 }
+    }
   )
 
   return result
@@ -1114,9 +1098,9 @@ export const setSeasonalReportEnabled = async (id: string, enabled: boolean) => 
     { guildID: id },
     {
       $set: {
-        seasonalReportEnabled: enabled,
-      },
-    },
+        seasonalReportEnabled: enabled
+      }
+    }
   )
 
   return query
@@ -1129,9 +1113,9 @@ export const setWarReportEnabled = async (id: string, enabled: boolean) => {
     { guildID: id },
     {
       $set: {
-        warReportEnabled: enabled,
-      },
-    },
+        warReportEnabled: enabled
+      }
+    }
   )
 
   return query

@@ -11,7 +11,7 @@ import { setRisersAndFallers } from '@/services/mongo'
 export const patchRisersAndFallersController = async (req: Request, res: Response) => {
   try {
     const parsed = patchRisersFallersSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { fallers, risers } = parsed.body
@@ -31,7 +31,7 @@ export const patchRisersAndFallersController = async (req: Request, res: Respons
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

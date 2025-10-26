@@ -34,11 +34,10 @@ const dailyLeaderboardSchema = new Schema<DailyLeaderboard>(
     notRanked: { required: true, type: Boolean },
     projPlacement: { default: null, required: false, type: Number },
     rank: { default: null, required: false, type: Number },
-    tag: { required: true, type: String },
+    tag: { required: true, type: String }
   },
-  { collection: 'Daily Clan Leaderboard', versionKey: false },
+  { collection: 'Daily Clan Leaderboard', versionKey: false }
 )
 
 export const DailyLeaderboardModel: Model<DailyLeaderboard> =
-  mongoose.models.DailyLeaderboard ||
-  mongoose.model<DailyLeaderboard>('DailyLeaderboard', dailyLeaderboardSchema)
+  mongoose.models.DailyLeaderboard || mongoose.model<DailyLeaderboard>('DailyLeaderboard', dailyLeaderboardSchema)

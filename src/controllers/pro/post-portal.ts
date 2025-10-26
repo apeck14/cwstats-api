@@ -45,7 +45,7 @@ const postProPortalController = async (req: Request, res: Response) => {
     // Create Customer Portal session
     const portalSession = await stripe.billingPortal.sessions.create({
       customer: user.stripeCustomerId,
-      return_url: BASE_URL,
+      return_url: BASE_URL
     })
 
     res.status(201).json({ url: portalSession.url })
@@ -56,7 +56,7 @@ const postProPortalController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

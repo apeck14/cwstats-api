@@ -15,7 +15,7 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
   try {
     const parsed = putGuildNudgeLinkSchema.parse({
       body: req.body,
-      params: req.params,
+      params: req.params
     })
 
     const { id } = parsed.params
@@ -38,10 +38,7 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
 
     // check if limit exceeded
     if (links) {
-      const [linkedClans, plusTags] = await Promise.all([
-        getLinkedClansByGuild(id),
-        getPlusClans(true, {}, {}),
-      ])
+      const [linkedClans, plusTags] = await Promise.all([getLinkedClansByGuild(id), getPlusClans(true, {}, {})])
 
       if (!linkedClans || !plusTags) throw new Error()
 
@@ -58,7 +55,7 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
       guildId: id,
       name: player.name,
       tag: player.tag,
-      userId,
+      userId
     })
 
     if (!modifiedCount) {
@@ -83,7 +80,7 @@ export const putGuildNudgeLinkController = async (req: Request, res: Response) =
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

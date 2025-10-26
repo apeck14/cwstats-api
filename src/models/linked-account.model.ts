@@ -22,17 +22,17 @@ const savedClanSchema = new Schema<SavedClan>(
   {
     badge: { required: true, type: String },
     name: { required: true, type: String },
-    tag: { required: true, type: String },
+    tag: { required: true, type: String }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const savedPlayerSchema = new Schema<SavedPlayer>(
   {
     name: { required: true, type: String },
-    tag: { required: true, type: String },
+    tag: { required: true, type: String }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const linkedAccountSchema = new Schema<LinkedAccount>(
@@ -45,8 +45,8 @@ const linkedAccountSchema = new Schema<LinkedAccount>(
         validator: (arr: SavedClan[]) => {
           const tags = arr.map((c) => c.tag)
           return new Set(tags).size === tags.length
-        },
-      },
+        }
+      }
     },
     savedPlayers: {
       type: [savedPlayerSchema],
@@ -55,12 +55,12 @@ const linkedAccountSchema = new Schema<LinkedAccount>(
         validator: (arr: SavedPlayer[]) => {
           const tags = arr.map((p) => p.tag)
           return new Set(tags).size === tags.length
-        },
-      },
+        }
+      }
     },
-    tag: { required: true, type: String },
+    tag: { required: true, type: String }
   },
-  { collection: 'Linked Accounts', versionKey: false },
+  { collection: 'Linked Accounts', versionKey: false }
 )
 
 export const LinkedAccountModel: Model<LinkedAccount> =

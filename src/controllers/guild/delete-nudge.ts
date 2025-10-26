@@ -12,7 +12,7 @@ import { deleteNudge } from '@/services/mongo'
 export const deleteGuildNudgeController = async (req: Request, res: Response) => {
   try {
     const parsed = deleteGuildNudgeSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { guildId, scheduledHourUTC, tag } = parsed.body
@@ -22,7 +22,7 @@ export const deleteGuildNudgeController = async (req: Request, res: Response) =>
     const { matchedCount, modifiedCount } = await deleteNudge({
       guildId,
       scheduledHourUTC,
-      tag: formattedTag,
+      tag: formattedTag
     })
 
     if (!modifiedCount) {
@@ -43,7 +43,7 @@ export const deleteGuildNudgeController = async (req: Request, res: Response) =>
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

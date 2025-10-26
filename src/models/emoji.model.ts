@@ -8,9 +8,9 @@ export interface Emoji extends Document {
 const emojiSchema = new Schema<Emoji>(
   {
     emoji: { required: true, type: String },
-    name: { required: true, type: String, unique: true },
+    name: { required: true, type: String, unique: true }
   },
-  { collection: 'Emojis', versionKey: false },
+  { collection: 'Emojis', versionKey: false }
 )
 
 export const EmojiModel: Model<Emoji> = mongoose.models.Emoji || mongoose.model<Emoji>('Emoji', emojiSchema)

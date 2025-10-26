@@ -12,7 +12,7 @@ import { addWarLogClanAttacks } from '@/services/mongo'
 export const putWarLogClanAttacksController = async (req: Request, res: Response) => {
   try {
     const parsed = putWarLogClanAttacksSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { attacks, dayIndex, tag } = parsed.body
@@ -27,7 +27,7 @@ export const putWarLogClanAttacksController = async (req: Request, res: Response
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

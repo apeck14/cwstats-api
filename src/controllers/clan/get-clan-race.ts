@@ -27,10 +27,9 @@ export const clanRaceController = async (req: Request, res: Response) => {
     const dayIndex = race.periodIndex % 7
     const clanTag = race.clan.tag
 
-    const { boatAccessor, fameAccessor }: { boatAccessor: BoatAccessorKey; fameAccessor: FameAccessorKey } =
-      isColosseum
-        ? { boatAccessor: 'periodPoints', fameAccessor: 'fame' }
-        : { boatAccessor: 'fame', fameAccessor: 'periodPoints' }
+    const { boatAccessor, fameAccessor }: { boatAccessor: BoatAccessorKey; fameAccessor: FameAccessorKey } = isColosseum
+      ? { boatAccessor: 'periodPoints', fameAccessor: 'fame' }
+      : { boatAccessor: 'fame', fameAccessor: 'periodPoints' }
 
     const clans = race.clans.map((c) => {
       let decksUsed = 0
@@ -48,7 +47,7 @@ export const clanRaceController = async (req: Request, res: Response) => {
         dayIndex,
         decksUsedToday: decksUsed,
         fame: c[fameAccessor],
-        isColosseum,
+        isColosseum
       })
 
       const projFame = getProjFame({
@@ -57,7 +56,7 @@ export const clanRaceController = async (req: Request, res: Response) => {
         decksUsedToday: decksUsed,
         duelsCompleted,
         fame: c[fameAccessor],
-        isColosseum,
+        isColosseum
       })
 
       return {
@@ -71,7 +70,7 @@ export const clanRaceController = async (req: Request, res: Response) => {
         fameAvg,
         projFame,
         projPlace: -1, // default to -1
-        slotsUsed,
+        slotsUsed
       }
     })
 
@@ -110,7 +109,7 @@ export const clanRaceController = async (req: Request, res: Response) => {
       clans,
       dayIndex,
       isColosseum,
-      isTraining: race.periodType === 'training',
+      isTraining: race.periodType === 'training'
     }
 
     res.status(200).json({ data: fullRace })

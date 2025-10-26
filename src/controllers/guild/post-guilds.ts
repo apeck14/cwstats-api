@@ -11,7 +11,7 @@ import { getGuilds } from '@/services/mongo'
 export const postGuildsController = async (req: Request, res: Response) => {
   try {
     const parsed = guildsSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { query } = parsed.body
@@ -26,7 +26,7 @@ export const postGuildsController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

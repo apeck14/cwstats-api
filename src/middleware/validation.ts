@@ -6,7 +6,7 @@ export default (schema: AnyZodObject) => async (req: Request, res: Response, nex
     await schema.parseAsync({
       body: req.body,
       params: req.params,
-      query: req.query,
+      query: req.query
     })
     next()
   } catch (err) {
@@ -16,7 +16,7 @@ export default (schema: AnyZodObject) => async (req: Request, res: Response, nex
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
     } else {
       // fallback for unexpected errors

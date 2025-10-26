@@ -13,7 +13,7 @@ export const patchGuildUserNickname = async (req: Request, res: Response) => {
   try {
     const parsed = guildUserNicknameSchema.parse({
       body: req.body,
-      params: req.params,
+      params: req.params
     })
 
     const { id } = parsed.params
@@ -29,7 +29,7 @@ export const patchGuildUserNickname = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

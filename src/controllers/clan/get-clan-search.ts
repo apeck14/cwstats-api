@@ -11,7 +11,7 @@ import { searchClans } from '@/services/supercell'
 export const clanSearchController = async (req: Request, res: Response) => {
   try {
     const parsed = searchSchema.parse({
-      query: req.query,
+      query: req.query
     })
 
     const { name } = parsed.query
@@ -31,7 +31,7 @@ export const clanSearchController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

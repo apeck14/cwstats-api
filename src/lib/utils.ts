@@ -45,7 +45,7 @@ export const getLeague = (trophyCount: number): string => {
     { min: 900, name: 'silver2' },
     { min: 600, name: 'silver1' },
     { min: 400, name: 'bronze3' },
-    { min: 200, name: 'bronze2' },
+    { min: 200, name: 'bronze2' }
   ]
 
   const found = leagues.find(({ min }) => trophyCount >= min)
@@ -65,7 +65,7 @@ const getMaxPossibleCurrentFame = ({
   dayIndex,
   decksUsedToday,
   duelsCompleted,
-  isColosseum,
+  isColosseum
 }: GetMaxPossibleFameParams): number => {
   let currentPossibleFame = duelsCompleted * 500 + (decksUsedToday - duelsCompleted * 2) * 200
 
@@ -80,13 +80,12 @@ const getMaxPossibleRemainingFame = ({
   dayIndex,
   decksUsedToday,
   duelsCompleted,
-  isColosseum,
+  isColosseum
 }: GetMaxPossibleFameParams): number => {
   const duelsRemainingToday = 50 - duelsCompleted
   const decksRemainingToday = 200 - decksUsedToday
 
-  let maxPossibleRemainingFame =
-    duelsRemainingToday * 500 + (decksRemainingToday - duelsRemainingToday * 2) * 200
+  let maxPossibleRemainingFame = duelsRemainingToday * 500 + (decksRemainingToday - duelsRemainingToday * 2) * 200
 
   if (isColosseum) {
     maxPossibleRemainingFame += 45000 * (6 - dayIndex)
@@ -95,13 +94,7 @@ const getMaxPossibleRemainingFame = ({
   return maxPossibleRemainingFame
 }
 
-export const getAvgFame = ({
-  boatPoints,
-  dayIndex,
-  decksUsedToday,
-  fame,
-  isColosseum,
-}: GetAvgFameParams): number => {
+export const getAvgFame = ({ boatPoints, dayIndex, decksUsedToday, fame, isColosseum }: GetAvgFameParams): number => {
   if (dayIndex < 3 || boatPoints >= 10000) return 0
 
   const firstDayOfColosseum = isColosseum && dayIndex === 3
@@ -120,7 +113,7 @@ export const getProjFame = ({
   decksUsedToday,
   duelsCompleted,
   fame,
-  isColosseum,
+  isColosseum
 }: GetProjFameParams): number => {
   if (dayIndex < 3 || boatPoints >= 10000) return 0
 
@@ -133,14 +126,14 @@ export const getProjFame = ({
     dayIndex,
     decksUsedToday,
     duelsCompleted,
-    isColosseum,
+    isColosseum
   })
 
   const maxPossibleRemainingFame = getMaxPossibleRemainingFame({
     dayIndex,
     decksUsedToday,
     duelsCompleted,
-    isColosseum,
+    isColosseum
   })
 
   const currentFamePerc = fame / maxPossibleCurrentFame
@@ -151,10 +144,7 @@ export const getProjFame = ({
   return Math.min(isColosseum ? 180000 : 45000, Math.ceil(projFame / multiple) * multiple)
 }
 
-export const getPlacements = ({
-  clans,
-  fameAccessor,
-}: GetPlacementsParams): { place: number; tag: string }[] => {
+export const getPlacements = ({ clans, fameAccessor }: GetPlacementsParams): { place: number; tag: string }[] => {
   const sortedClans = clans.slice().sort((a, b) => b[fameAccessor] - a[fameAccessor]) // copy to avoid mutating input
   const placements = [] // [{ place: 1, tag: "#ABC1234" }]
 
@@ -212,19 +202,13 @@ export const parseDate = (date: string) => {
       +date.slice(6, 8), // day
       +date.slice(9, 11), // hour
       +date.slice(11, 13), // minute
-      +date.slice(13, 15), // second
-    ),
+      +date.slice(13, 15) // second
+    )
   )
 }
 
 async function getDerivedEncryptionKey(keyMaterial: string, salt: string) {
-  return await hkdf(
-    'sha256',
-    keyMaterial,
-    salt,
-    `NextAuth.js Generated Encryption Key${salt ? ` (${salt})` : ''}`,
-    32,
-  )
+  return await hkdf('sha256', keyMaterial, salt, `NextAuth.js Generated Encryption Key${salt ? ` (${salt})` : ''}`, 32)
 }
 
 async function decryptToken(token: string, secret: string) {

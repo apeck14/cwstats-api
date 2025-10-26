@@ -12,7 +12,7 @@ export const leaderboardWarController = async (req: Request, res: Response) => {
   try {
     const parsed = leaderboardWarSchema.parse({
       params: req.params,
-      query: req.query,
+      query: req.query
     })
 
     const { limit } = parsed.query
@@ -33,7 +33,7 @@ export const leaderboardWarController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

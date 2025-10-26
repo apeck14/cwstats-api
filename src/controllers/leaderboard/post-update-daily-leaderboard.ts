@@ -11,7 +11,7 @@ import { deleteDailyLeaderboard, updateDailyLeaderboard } from '@/services/mongo
 export const postUpdateDailyLeaderboardController = async (req: Request, res: Response) => {
   try {
     const parsed = updateDailyLeaderboardSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { entries } = parsed.body
@@ -27,7 +27,7 @@ export const postUpdateDailyLeaderboardController = async (req: Request, res: Re
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

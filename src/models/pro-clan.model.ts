@@ -27,7 +27,7 @@ const proClanSchema = new Schema<ProClan>(
       lastUpdated: { type: Date }, // last time log entry was updated
       timestamp: { type: Date }, // when webhook url was last changed
       webhookUrl1: { type: String },
-      webhookUrl2: { type: String },
+      webhookUrl2: { type: String }
     },
     clanName: { required: true, type: String },
     stripeId: { required: true, type: String },
@@ -36,10 +36,9 @@ const proClanSchema = new Schema<ProClan>(
     warLogsLastUpdated: { type: Date }, // last time war logs were udpated
     warLogsTimestamp: { type: Date }, // when war log webhooks were last changed
     webhookUrl1: { default: '', type: String },
-    webhookUrl2: { default: '', type: String },
+    webhookUrl2: { default: '', type: String }
   },
-  { collection: 'CWStats Pro', versionKey: false },
+  { collection: 'CWStats Pro', versionKey: false }
 )
 
-export const ProClanModel: Model<ProClan> =
-  mongoose.models.ProClan || mongoose.model<ProClan>('ProClan', proClanSchema)
+export const ProClanModel: Model<ProClan> = mongoose.models.ProClan || mongoose.model<ProClan>('ProClan', proClanSchema)

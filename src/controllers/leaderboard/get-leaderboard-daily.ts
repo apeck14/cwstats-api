@@ -12,7 +12,7 @@ import locations from '@/static/locations.json'
 export const leaderboardDailyController = async (req: Request, res: Response) => {
   try {
     const parsed = leaderboardDailySchema.parse({
-      query: req.query,
+      query: req.query
     })
 
     const { key, limit = 0, maxTrophies = Infinity, minTrophies = 0 } = parsed.query
@@ -27,7 +27,7 @@ export const leaderboardDailyController = async (req: Request, res: Response) =>
 
     const [dailyLb, stats] = await Promise.all([
       getDailyLeaderboard({ limit, maxTrophies, minTrophies, name: location?.name }),
-      getStatistics(),
+      getStatistics()
     ])
 
     res.status(200).json({ data: { clans: dailyLb, lastUpdated: stats?.lbLastUpdated } })
@@ -38,7 +38,7 @@ export const leaderboardDailyController = async (req: Request, res: Response) =>
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

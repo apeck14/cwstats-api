@@ -22,7 +22,7 @@ const getProSubscriptionController = async (req: Request, res: Response) => {
     }
 
     res.status(200).json({
-      data: subscriptionData,
+      data: subscriptionData
     })
   } catch (err) {
     if (err instanceof ZodError) {
@@ -31,7 +31,7 @@ const getProSubscriptionController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

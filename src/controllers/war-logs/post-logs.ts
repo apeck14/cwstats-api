@@ -13,7 +13,7 @@ import { addWarLogs } from '@/services/mongo'
 export const postWarLogsController = async (req: Request, res: Response) => {
   try {
     const parsed = postWarLogsBulkAddSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { entries } = parsed.body
@@ -21,7 +21,7 @@ export const postWarLogsController = async (req: Request, res: Response) => {
     const mappedEntries = entries.map((e) => ({
       key: `${formatTag(e.tag, false)}_${e.battleTime}`,
       tag: e.tag,
-      timestamp: parseDate(e.battleTime),
+      timestamp: parseDate(e.battleTime)
     }))
 
     await addWarLogs(mappedEntries)
@@ -34,7 +34,7 @@ export const postWarLogsController = async (req: Request, res: Response) => {
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

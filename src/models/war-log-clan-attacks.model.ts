@@ -12,14 +12,13 @@ const WarLogClanAttacksSchema = new Schema<WarLogClanAttacks>(
       default: {},
       of: Number,
       required: true,
-      type: Map,
+      type: Map
     },
     dayIndex: { required: true, type: Number },
-    tag: { required: true, trim: true, type: String },
+    tag: { required: true, trim: true, type: String }
   },
-  { collection: 'War Log Clan Attacks', versionKey: false },
+  { collection: 'War Log Clan Attacks', versionKey: false }
 )
 
 export const WarLogClanAttacksModel: Model<WarLogClanAttacks> =
-  mongoose.models.WarLogClanAttacks ||
-  mongoose.model<WarLogClanAttacks>('WarLogClanAttacks', WarLogClanAttacksSchema)
+  mongoose.models.WarLogClanAttacks || mongoose.model<WarLogClanAttacks>('WarLogClanAttacks', WarLogClanAttacksSchema)

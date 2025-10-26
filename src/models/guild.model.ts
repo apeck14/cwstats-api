@@ -55,35 +55,35 @@ const abbrSchema = new Schema(
   {
     abbr: { required: true, type: String },
     name: { required: true, type: String },
-    tag: { required: true, type: String },
+    tag: { required: true, type: String }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const channelSchema = new Schema(
   {
     applicationsChannelID: { default: '', type: String },
     applyChannelID: { default: '', type: String },
-    commandChannelIDs: { default: [], type: [String] },
+    commandChannelIDs: { default: [], type: [String] }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const defaultClanSchema = new Schema(
   {
     name: { required: true, type: String },
-    tag: { required: true, type: String },
+    tag: { required: true, type: String }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const linkedPlayerSchema = new Schema(
   {
     discordID: { required: true, type: String },
     name: { required: true, type: String },
-    tag: { required: true, type: String },
+    tag: { required: true, type: String }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const scheduledNudgeSchema = new Schema(
@@ -91,9 +91,9 @@ const scheduledNudgeSchema = new Schema(
     channelID: { required: true, type: String },
     clanName: { required: true, type: String },
     clanTag: { required: true, type: String },
-    scheduledHourUTC: { required: true, type: Number },
+    scheduledHourUTC: { required: true, type: Number }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const nudgesSchema = new Schema(
@@ -102,9 +102,9 @@ const nudgesSchema = new Schema(
     ignoreWhenCrossedFinishLine: { default: false, type: Boolean },
     links: { default: [], type: [linkedPlayerSchema] },
     message: { default: '', type: String },
-    scheduled: { default: [], type: [scheduledNudgeSchema] },
+    scheduled: { default: [], type: [scheduledNudgeSchema] }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const guildSchema = new Schema<Guild>(
@@ -117,9 +117,9 @@ const guildSchema = new Schema<Guild>(
     discordInviteCode: { type: String },
     guildID: { required: true, type: String, unique: true },
     nudges: { type: nudgesSchema },
-    timezone: { type: String },
+    timezone: { type: String }
   },
-  { collection: 'Guilds', versionKey: false },
+  { collection: 'Guilds', versionKey: false }
 )
 
 export const GuildModel: Model<Guild> = mongoose.models.Guild || mongoose.model<Guild>('Guild', guildSchema)

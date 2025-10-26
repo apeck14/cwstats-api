@@ -39,9 +39,9 @@ const dailyTrackingEntrySchema = new Schema(
     fame: { required: true, type: Number },
     missed: { required: true, type: Boolean },
     name: { required: true, type: String },
-    tag: { required: true, trim: true, type: String },
+    tag: { required: true, trim: true, type: String }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const dailyTrackingSchema = new Schema(
@@ -50,9 +50,9 @@ const dailyTrackingSchema = new Schema(
     scores: { required: true, type: [dailyTrackingEntrySchema] },
     season: { required: true, type: Number },
     timestamp: { required: true, type: Date },
-    week: { max: 5, min: 1, required: true, type: Number },
+    week: { max: 5, min: 1, required: true, type: Number }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const hourlyAverageSchema = new Schema(
@@ -63,9 +63,9 @@ const hourlyAverageSchema = new Schema(
     lastHourAvg: { required: true, type: Number },
     season: { required: true, type: Number },
     timestamp: { required: true, type: Date },
-    week: { max: 5, min: 1, required: true, type: Number },
+    week: { max: 5, min: 1, required: true, type: Number }
   },
-  { _id: false },
+  { _id: false }
 )
 
 const plusClanSchema = new Schema<PlusClan>(
@@ -73,9 +73,9 @@ const plusClanSchema = new Schema<PlusClan>(
     active: { default: true, required: true, type: Boolean },
     dailyTracking: { default: [], required: true, type: [dailyTrackingSchema] },
     hourlyAverages: { default: [], required: true, type: [hourlyAverageSchema] },
-    tag: { required: true, trim: true, type: String, unique: true },
+    tag: { required: true, trim: true, type: String, unique: true }
   },
-  { collection: 'CWStats+', versionKey: false },
+  { collection: 'CWStats+', versionKey: false }
 )
 
 export const PlusClanModel: Model<PlusClan> =

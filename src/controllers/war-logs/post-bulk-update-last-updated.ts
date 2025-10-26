@@ -11,7 +11,7 @@ import { bulkUpdateWarLogLastUpdated } from '@/services/mongo'
 export const postWarLogsBulkUpdateLastUpdatedController = async (req: Request, res: Response) => {
   try {
     const parsed = postWarLogsBulkUpdateLastUpdatedSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { entries } = parsed.body
@@ -26,7 +26,7 @@ export const postWarLogsBulkUpdateLastUpdatedController = async (req: Request, r
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

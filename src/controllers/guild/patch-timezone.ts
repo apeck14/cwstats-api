@@ -21,7 +21,7 @@ export const patchGuildTimezoneController = async (req: Request, res: Response) 
   try {
     const parsed = patchGuildTimezoneSchema.parse({
       body: req.body,
-      params: req.params,
+      params: req.params
     })
 
     const { id } = parsed.params
@@ -30,7 +30,7 @@ export const patchGuildTimezoneController = async (req: Request, res: Response) 
     if (!isSupportedTimezone(timezone)) {
       res.status(400).json({
         error: `Invalid or unsupported timezone: ${timezone}`,
-        status: 400,
+        status: 400
       })
       return
     }
@@ -45,7 +45,7 @@ export const patchGuildTimezoneController = async (req: Request, res: Response) 
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

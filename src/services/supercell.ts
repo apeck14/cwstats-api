@@ -19,9 +19,9 @@ interface SupercellResponse<T> {
 export const handleSupercellRequest = async <T>(url: string): Promise<SupercellResponse<T>> => {
   const response: AxiosResponse = await axios.get(url, {
     headers: {
-      Authorization: `Bearer ${isDev ? process.env.TEST_CR_API_TOKEN : process.env.CR_API_TOKEN}`,
+      Authorization: `Bearer ${isDev ? process.env.TEST_CR_API_TOKEN : process.env.CR_API_TOKEN}`
     },
-    validateStatus: () => true, // prevent Axios from throwing on 4xx/5xx
+    validateStatus: () => true // prevent Axios from throwing on 4xx/5xx
   })
 
   const { data, status } = response
@@ -29,7 +29,7 @@ export const handleSupercellRequest = async <T>(url: string): Promise<SupercellR
   if (status === 200) {
     return {
       data: data?.items ?? data,
-      status,
+      status
     }
   } else {
     let error = 'Unexpected error. Please try again.'
@@ -40,7 +40,7 @@ export const handleSupercellRequest = async <T>(url: string): Promise<SupercellR
 
     return {
       error,
-      status,
+      status
     }
   }
 }

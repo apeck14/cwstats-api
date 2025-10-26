@@ -23,9 +23,7 @@ export const deleteWebhookController = async (req: Request, res: Response) => {
       await deleteDiscordWebhookByUrl(linkedClan?.webhookUrl)
     }
 
-    res
-      .status(200)
-      .json({ success: true, tag: formatTag(tag, true), webhookUrl: linkedClan?.webhookUrl || false })
+    res.status(200).json({ success: true, tag: formatTag(tag, true), webhookUrl: linkedClan?.webhookUrl || false })
   } catch (err) {
     if (err instanceof DiscordApiError) {
       res.status(err.status).json({ error: err.message, status: err.status })

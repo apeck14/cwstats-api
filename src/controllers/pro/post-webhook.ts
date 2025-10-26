@@ -12,7 +12,7 @@ import {
   deleteProClan,
   deleteWarLogClanAttacks,
   setPlusClanStatus,
-  setProClanStatus,
+  setProClanStatus
 } from '@/services/mongo'
 import { getClan } from '@/services/supercell'
 import colors from '@/static/colors'
@@ -36,7 +36,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
   const event: Stripe.Event = stripe.webhooks.constructEvent(
     req.body as Buffer,
     sig,
-    process.env.STRIPE_WEBHOOK_SECRET!,
+    process.env.STRIPE_WEBHOOK_SECRET!
   )
 
   try {
@@ -58,8 +58,8 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
               `[**${clanName}**](https://cwstats.com/clan/${clanTag.substring(1)})!\n\n` +
               `If you have any questions, suggestions or need assistance, feel free to reach out in our ` +
               `[support server](https://discord.com/invite/fFY3cnMmnH).`,
-            title: 'CWStats Pro Activated! ✅',
-          }),
+            title: 'CWStats Pro Activated! ✅'
+          })
         ])
 
         const description =
@@ -81,7 +81,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
           deleteProClan(clanTag),
           deleteClanLogEntry(clanTag),
           deleteWarLogClanAttacks(clanTag),
-          unassignRoleFromUser(SUPPORT_SERVER_ID, userId, PRO_ROLE_ID),
+          unassignRoleFromUser(SUPPORT_SERVER_ID, userId, PRO_ROLE_ID)
         ])
 
         const lowercaseDesc = clan?.description.toLowerCase()
@@ -117,7 +117,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         await sendWebhookEmbed({
           color: colors.green,
           description,
-          title: 'Payment Succeeded!',
+          title: 'Payment Succeeded!'
         })
 
         break
@@ -145,7 +145,7 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
           sendWebhookEmbed({
             color: colors.orange,
             description,
-            title: 'Payment Failed!',
+            title: 'Payment Failed!'
           }),
           sendDiscordDM(userId, {
             color: colors.red,
@@ -154,8 +154,8 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
               `has failed. Please update your payment information to avoid losing Pro status.\n\n` +
               `If you believe this is a mistake, please contact ` +
               `[support](https://discord.com/invite/fFY3cnMmnH).`,
-            title: 'Payment Failed',
-          }),
+            title: 'Payment Failed'
+          })
         ])
         break
       }

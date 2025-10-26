@@ -34,7 +34,7 @@ process.on('SIGTERM', () => {
 connectDB()
   .then(() => {
     server = app.listen(PORT, HOST, () =>
-      console.log(`Server running in ${process.env.NODE_ENV} mode on http://${HOST}:${PORT}`),
+      console.log(`Server running in ${process.env.NODE_ENV} mode on http://${HOST}:${PORT}`)
     )
   })
   .catch((err) => console.error(`Server startup failed: ${err}`))

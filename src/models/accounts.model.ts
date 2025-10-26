@@ -24,9 +24,9 @@ const linkedAccountSchema = new Schema<Account>(
     stripeCustomerId: { default: null, type: String },
     token_type: { required: true, type: String },
     type: { required: true, type: String },
-    userId: { ref: 'User', required: true, type: Schema.Types.ObjectId },
+    userId: { ref: 'User', required: true, type: Schema.Types.ObjectId }
   },
-  { collection: 'accounts', versionKey: false },
+  { collection: 'accounts', versionKey: false }
 )
 
 export const AccountModel: Model<Account> =

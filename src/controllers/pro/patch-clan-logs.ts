@@ -11,7 +11,7 @@ import {
   getLinkedClan,
   getProClan,
   setClanLogClan,
-  setClanLogClanStatus,
+  setClanLogClanStatus
 } from '@/services/mongo'
 
 /**
@@ -21,7 +21,7 @@ import {
 export const patchProClanLogController = async (req: Request, res: Response) => {
   try {
     const parsed = patchProWarLogSchema.parse({
-      body: req.body,
+      body: req.body
     })
 
     const { channelId, guildId, tag } = parsed.body
@@ -35,7 +35,7 @@ export const patchProClanLogController = async (req: Request, res: Response) => 
       const [linkedClan, guild, proClan] = await Promise.all([
         getLinkedClan(tag),
         getGuild(guildId, true),
-        getProClan(tag),
+        getProClan(tag)
       ])
 
       if (!guild) {
@@ -58,9 +58,7 @@ export const patchProClanLogController = async (req: Request, res: Response) => 
         return
       }
 
-      const hoursSinceLastChange = proClan?.clanLogs?.timestamp
-        ? getHoursDiff(proClan.clanLogs.timestamp)
-        : Infinity
+      const hoursSinceLastChange = proClan?.clanLogs?.timestamp ? getHoursDiff(proClan.clanLogs.timestamp) : Infinity
 
       if (hoursSinceLastChange <= 0.25) {
         res.status(409).json({ error: 'Clan logs update allowed every 15 mins.', status: 409 })
@@ -89,8 +87,7 @@ export const patchProClanLogController = async (req: Request, res: Response) => 
       }
 
       const webhookUrl1 = proClan?.clanLogs?.webhookUrl1 || results[0]?.url
-      const webhookUrl2 =
-        proClan?.clanLogs?.webhookUrl2 || results[1 - (proClan?.clanLogs?.webhookUrl1 ? 0 : 1)]?.url
+      const webhookUrl2 = proClan?.clanLogs?.webhookUrl2 || results[1 - (proClan?.clanLogs?.webhookUrl1 ? 0 : 1)]?.url
 
       await setClanLogClan({ tag, webhookUrl1, webhookUrl2 })
     } else {
@@ -105,7 +102,7 @@ export const patchProClanLogController = async (req: Request, res: Response) => 
 
       res.status(400).json({
         error: formattedErr,
-        status: 400,
+        status: 400
       })
       return
     }

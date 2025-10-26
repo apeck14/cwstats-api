@@ -53,7 +53,7 @@ const handleDiscordApiError = (err: unknown): never => {
 export const updateDiscordUserNickname = async ({
   guildId,
   nickname,
-  userId,
+  userId
 }: discordUserNicknameInput): Promise<void> => {
   const url = `${BASE_URL}/guilds/${guildId}/members/${userId}`
 
@@ -63,9 +63,9 @@ export const updateDiscordUserNickname = async ({
       { nick: nickname },
       {
         headers: {
-          Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
-        },
-      },
+          Authorization: `Bot ${process.env.CLIENT_TOKEN}`
+        }
+      }
     )
   } catch (err) {
     handleDiscordApiError(err)
@@ -86,14 +86,14 @@ export const createWebhook = async (channelId: string, title: string) => {
 
     const webhook = {
       avatar: `data:image/png;base64,${base64Image}`,
-      name: title,
+      name: title
     }
 
     const res = await axios.post(`${BASE_URL}/channels/${channelId}/webhooks`, webhook, {
       headers: {
         Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     })
 
     const data = res.data
@@ -116,14 +116,14 @@ export const webhookExists = async (webhookUrl: string): Promise<WebhookExistsRe
 
     const res = await axios.get(`${BASE_URL}/webhooks/${webhookId}`, {
       headers: {
-        Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
-      },
+        Authorization: `Bot ${process.env.CLIENT_TOKEN}`
+      }
     })
 
     if (res.status === 200) {
       return {
         channelId: res.data.channel_id ?? undefined,
-        exists: true,
+        exists: true
       }
     }
 
@@ -156,15 +156,15 @@ export const sendWebhookEmbed = async ({ color, description, title }: SendWebhoo
         {
           color,
           description,
-          title,
-        },
-      ],
+          title
+        }
+      ]
     }
 
     await axios.post(process.env.STRIPE_WEBHOOK_URL, payload, {
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     })
 
     return { success: true }
@@ -172,7 +172,7 @@ export const sendWebhookEmbed = async ({ color, description, title }: SendWebhoo
     if (axios.isAxiosError(err)) {
       return {
         details: err.response?.data,
-        error: `Webhook request failed: ${err.response?.status} ${err.response?.statusText}`,
+        error: `Webhook request failed: ${err.response?.status} ${err.response?.statusText}`
       }
     }
 
@@ -189,9 +189,9 @@ export const sendDiscordDM = async (userId: string, embed: object) => {
       {
         headers: {
           Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      },
+          'Content-Type': 'application/json'
+        }
+      }
     )
 
     // send message to that DM channel
@@ -201,9 +201,9 @@ export const sendDiscordDM = async (userId: string, embed: object) => {
       {
         headers: {
           Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      },
+          'Content-Type': 'application/json'
+        }
+      }
     )
   } catch (e) {
     return { error: 'Error sending Discord DM for failed payment', userId }
@@ -217,9 +217,9 @@ export async function assignRoleToUser(guildId: string, userId: string, roleId: 
       {},
       {
         headers: {
-          Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
-        },
-      },
+          Authorization: `Bot ${process.env.CLIENT_TOKEN}`
+        }
+      }
     )
   } catch {
     return { error: 'Error assigning role to user', guildId, roleId, userId }
@@ -230,8 +230,8 @@ export async function unassignRoleFromUser(guildId: string, userId: string, role
   try {
     await axios.delete(`${BASE_URL}/guilds/${guildId}/members/${userId}/roles/${roleId}`, {
       headers: {
-        Authorization: `Bot ${process.env.CLIENT_TOKEN}`,
-      },
+        Authorization: `Bot ${process.env.CLIENT_TOKEN}`
+      }
     })
   } catch {
     return { error: 'Error unassigning role to user', guildId, roleId, userId }
@@ -242,8 +242,8 @@ export async function updateWebhook({ botToken, updateData, webhookId, webhookTo
   try {
     await axios.patch(`${BASE_URL}/webhooks/${webhookId}/${webhookToken}`, updateData, {
       headers: {
-        Authorization: `Bot ${botToken}`,
-      },
+        Authorization: `Bot ${botToken}`
+      }
     })
   } catch (err) {
     return { error: 'Error updating webhook', webhookId }

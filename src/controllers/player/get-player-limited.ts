@@ -28,7 +28,7 @@ export const playerLimitedController = async (req: Request, res: Response) => {
       'currentFavouriteCard',
       'lastPathOfLegendSeasonResult',
       'bestPathOfLegendSeasonResult',
-      'leagueStatistics',
+      'leagueStatistics'
     ])
 
     res.status(200).json({ data: limitedPlayer })

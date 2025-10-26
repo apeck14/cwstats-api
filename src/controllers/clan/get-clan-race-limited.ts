@@ -28,7 +28,7 @@ export const clanRaceLimitedController = async (req: Request, res: Response) => 
       dayIndex: race.periodIndex % 7,
       isColosseum: race.periodType === 'colosseum',
       isTraining: race.periodType === 'training',
-      ...raceWithoutClan,
+      ...raceWithoutClan
     }
 
     res.status(200).json({ data: limitedRace })
