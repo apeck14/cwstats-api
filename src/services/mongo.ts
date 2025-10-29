@@ -218,7 +218,7 @@ export async function getPlusClans(
       ...query
     },
     { _id: 0, ...projection }
-  ).lean()
+  ).lean<PlusClan[]>()
 
   if (tagsOnly) {
     return plusClans.map((doc) => doc.tag)
@@ -248,7 +248,7 @@ export const getGuilds = async (query: object) => {
 export const getLinkedClansByGuild = async (id: string): Promise<LinkedClan[]> => {
   await connectDB()
 
-  const linkedClans = await LinkedClanModel.find({ guildID: id }, { _id: 0 }).lean()
+  const linkedClans = await LinkedClanModel.find({ guildID: id }, { _id: 0 }).lean<LinkedClan[]>()
 
   return linkedClans
 }
@@ -256,7 +256,7 @@ export const getLinkedClansByGuild = async (id: string): Promise<LinkedClan[]> =
 export const getLinkedClan = async (tag: string): Promise<LinkedClan | null> => {
   await connectDB()
 
-  const linkedClan = await LinkedClanModel.findOne({ tag: formatTag(tag, true) }, { _id: 0 }).lean()
+  const linkedClan = await LinkedClanModel.findOne({ tag: formatTag(tag, true) }, { _id: 0 }).lean<LinkedClan>()
 
   return linkedClan
 }
@@ -264,7 +264,7 @@ export const getLinkedClan = async (tag: string): Promise<LinkedClan | null> => 
 export const getAllLinkedClans = async (): Promise<LinkedClan[]> => {
   await connectDB()
 
-  const linkedClans = await LinkedClanModel.find({}, { _id: 0 }).lean()
+  const linkedClans = await LinkedClanModel.find({}, { _id: 0 }).lean<LinkedClan[]>()
 
   return linkedClans
 }
