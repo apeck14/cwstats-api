@@ -50,5 +50,8 @@
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
     "xo-wrapper": "^3.4.15"
+  },
+  "overrides": {
+    "eslint": "9.38.0"
   }
 }
