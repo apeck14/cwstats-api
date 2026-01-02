@@ -16,7 +16,7 @@ export const postWarReportController = async (req: Request, res: Response) => {
       body: req.body
     })
 
-    const { enabled, guildId, tag } = parsed.body
+    const { channelId, enabled, guildId, tag } = parsed.body
 
     // if enabling, create webhook if one doesn't exist
     if (enabled) {
@@ -35,7 +35,19 @@ export const postWarReportController = async (req: Request, res: Response) => {
 
       if (!isWebhookValid) {
         const { data: clan } = await getClan(tag!)
-        const { url } = await createWebhook(webhookChannelId!, `CWStats Reports - ${clan?.name || 'Unknown Clan'}`)
+        const targetChannelId = webhookChannelId ?? channelId
+
+        if (!targetChannelId) {
+          res.status(400).json({ error: 'Channel is required to create a new webhook', status: 400 })
+          return
+        }
+
+        const { error, url } = await createWebhook(targetChannelId, `CWStats Reports - ${clan?.name || 'Unknown Clan'}`)
+
+        if (error) {
+          res.status(400).json({ error, status: 400 })
+          return
+        }
 
         await setLinkedClanWebhookUrl(tag!, url)
       }
