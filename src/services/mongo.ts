@@ -399,36 +399,6 @@ export const deleteNudge = async ({ guildId, scheduledHourUTC, tag }: DeleteNudg
   return result
 }
 
-export const deleteLinkedClanWebhookUrl = async (tag: string) => {
-  await connectDB()
-
-  const linkedClan = await LinkedClanModel.findOneAndUpdate(
-    { tag: formatTag(tag, true) },
-    {
-      $unset: {
-        webhookUrl: 1
-      }
-    }
-  )
-
-  return linkedClan
-}
-
-export const setLinkedClanWebhookUrl = async (tag: string, webhookUrl: string) => {
-  await connectDB()
-
-  const linkedClan = await LinkedClanModel.findOneAndUpdate(
-    { tag: formatTag(tag, true) },
-    {
-      $set: {
-        webhookUrl
-      }
-    }
-  )
-
-  return linkedClan
-}
-
 export const createGuild = async (guildId: string) => {
   await connectDB()
 
@@ -1091,30 +1061,42 @@ export const setClanLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLo
   return result
 }
 
-export const setSeasonalReportEnabled = async (id: string, enabled: boolean) => {
+export const setSeasonalReport = async (id: string, enabled: boolean, channelId?: string) => {
   await connectDB()
+
+  const updateQuery: Record<string, unknown> = {
+    seasonalReportEnabled: enabled
+  }
+
+  if (channelId) {
+    updateQuery.seasonalReportChannelId = channelId
+  }
 
   const query = await LinkedClanModel.updateOne(
     { guildID: id },
     {
-      $set: {
-        seasonalReportEnabled: enabled
-      }
+      $set: updateQuery
     }
   )
 
   return query
 }
 
-export const setWarReportEnabled = async (id: string, enabled: boolean) => {
+export const setWarReport = async (id: string, enabled: boolean, channelId?: string) => {
   await connectDB()
+
+  const updateQuery: Record<string, unknown> = {
+    warReportEnabled: enabled
+  }
+
+  if (channelId) {
+    updateQuery.warReportChannelId = channelId
+  }
 
   const query = await LinkedClanModel.updateOne(
     { guildID: id },
     {
-      $set: {
-        warReportEnabled: enabled
-      }
+      $set: updateQuery
     }
   )
 

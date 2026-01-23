@@ -6,11 +6,12 @@ export interface LinkedClan extends Document {
   discordInviteCode?: string
   guildID: string
   isPro?: boolean
+  seasonalReportChannelId?: string
   seasonalReportEnabled: boolean
   seasonalReportSent: boolean
   tag: string
+  warReportChannelId?: string
   warReportEnabled: boolean
-  webhookUrl?: string
 }
 
 const linkedClanSchema = new Schema<LinkedClan>(
@@ -20,17 +21,12 @@ const linkedClanSchema = new Schema<LinkedClan>(
     discordInviteCode: { type: String },
     guildID: { required: true, type: String },
     isPro: { default: false, type: Boolean },
+    seasonalReportChannelId: { type: String },
     seasonalReportEnabled: { required: true, type: Boolean },
     seasonalReportSent: { required: true, type: Boolean },
     tag: { required: true, trim: true, type: String, unique: true },
-    warReportEnabled: { required: true, type: Boolean },
-    webhookUrl: {
-      type: String,
-      validate: {
-        message: 'webhookUrl must include "https://discord.com"',
-        validator: (value: string) => !value || value.includes('https://discord.com')
-      }
-    }
+    warReportChannelId: { type: String },
+    warReportEnabled: { required: true, type: Boolean }
   },
   { collection: 'Linked Clans', versionKey: false }
 )

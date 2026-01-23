@@ -2,12 +2,10 @@ import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
 import { postWarReportSchema } from '@/schemas/mongo'
-import { createWebhook, webhookExists } from '@/services/discord'
-import { getLinkedClan, setLinkedClanWebhookUrl, setWarReportEnabled } from '@/services/mongo'
-import { getClan } from '@/services/supercell'
+import { setWarReport } from '@/services/mongo'
 
 /**
- * Set war report clan (and handle webhooks)
+ * Set war report clan (store Discord channel ID)
  * @route POST /plus/war-report
  */
 export const postWarReportController = async (req: Request, res: Response) => {
@@ -16,44 +14,9 @@ export const postWarReportController = async (req: Request, res: Response) => {
       body: req.body
     })
 
-    const { channelId, enabled, guildId, tag } = parsed.body
+    const { channelId, enabled, guildId } = parsed.body
 
-    // if enabling, create webhook if one doesn't exist
-    if (enabled) {
-      const linkedClan = await getLinkedClan(tag!)
-
-      let isWebhookValid = false
-      let webhookChannelId
-
-      // check if webhook still exists
-      if (linkedClan?.webhookUrl) {
-        const { channelId, exists } = await webhookExists(linkedClan.webhookUrl)
-
-        isWebhookValid = exists
-        webhookChannelId = channelId
-      }
-
-      if (!isWebhookValid) {
-        const { data: clan } = await getClan(tag!)
-        const targetChannelId = webhookChannelId ?? channelId
-
-        if (!targetChannelId) {
-          res.status(400).json({ error: 'Channel is required to create a new webhook', status: 400 })
-          return
-        }
-
-        const { error, url } = await createWebhook(targetChannelId, `CWStats Reports - ${clan?.name || 'Unknown Clan'}`)
-
-        if (error) {
-          res.status(400).json({ error, status: 400 })
-          return
-        }
-
-        await setLinkedClanWebhookUrl(tag!, url)
-      }
-    }
-
-    await setWarReportEnabled(guildId, enabled)
+    await setWarReport(guildId, enabled, channelId)
 
     res.status(200).json({ success: true })
   } catch (err) {

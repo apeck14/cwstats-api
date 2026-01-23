@@ -2,12 +2,10 @@ import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
 import { postSeasonalReportSchema } from '@/schemas/mongo'
-import { createWebhook, webhookExists } from '@/services/discord'
-import { getLinkedClan, setLinkedClanWebhookUrl, setSeasonalReportEnabled } from '@/services/mongo'
-import { getClan } from '@/services/supercell'
+import { setSeasonalReport } from '@/services/mongo'
 
 /**
- * Set seasonal report clan (and handle webhooks)
+ * Set seasonal report clan (store Discord channel ID)
  * @route POST /plus/seasonal-report
  */
 export const postSeasonalReportController = async (req: Request, res: Response) => {
@@ -16,44 +14,9 @@ export const postSeasonalReportController = async (req: Request, res: Response) 
       body: req.body
     })
 
-    const { channelId, enabled, guildId, tag } = parsed.body
+    const { channelId, enabled, guildId } = parsed.body
 
-    // if enabling, check if need to update webhook
-    if (enabled) {
-      const linkedClan = await getLinkedClan(tag!)
-
-      let isWebhookValid = false
-      let webhookChannelId
-
-      // check if webhook still exists
-      if (linkedClan?.webhookUrl) {
-        const { channelId, exists } = await webhookExists(linkedClan.webhookUrl)
-
-        isWebhookValid = exists
-        webhookChannelId = channelId
-      }
-
-      if (!isWebhookValid) {
-        const { data: clan } = await getClan(tag!)
-        const targetChannelId = webhookChannelId ?? channelId
-
-        if (!targetChannelId) {
-          res.status(400).json({ error: 'Channel is required to create a new webhook', status: 400 })
-          return
-        }
-
-        const { error, url } = await createWebhook(targetChannelId, `CWStats Reports - ${clan?.name || 'Unknown Clan'}`)
-
-        if (error) {
-          res.status(400).json({ error, status: 400 })
-          return
-        }
-
-        await setLinkedClanWebhookUrl(tag!, url)
-      }
-    }
-
-    await setSeasonalReportEnabled(guildId, enabled)
+    await setSeasonalReport(guildId, enabled, channelId)
 
     res.status(200).json({ success: true })
   } catch (err) {
