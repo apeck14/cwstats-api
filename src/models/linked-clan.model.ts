@@ -22,11 +22,11 @@ const linkedClanSchema = new Schema<LinkedClan>(
     guildID: { required: true, type: String },
     isPro: { default: false, type: Boolean },
     seasonalReportChannelId: { type: String },
-    seasonalReportEnabled: { required: true, type: Boolean },
-    seasonalReportSent: { required: true, type: Boolean },
+    seasonalReportEnabled: { default: true, required: true, type: Boolean },
+    seasonalReportSent: { default: false, required: true, type: Boolean },
     tag: { required: true, trim: true, type: String, unique: true },
     warReportChannelId: { type: String },
-    warReportEnabled: { required: true, type: Boolean }
+    warReportEnabled: { default: true, required: true, type: Boolean }
   },
   { collection: 'Linked Clans', versionKey: false }
 )

@@ -14,9 +14,9 @@ export const postSeasonalReportController = async (req: Request, res: Response) 
       body: req.body
     })
 
-    const { channelId, enabled, guildId } = parsed.body
+    const { channelId, enabled, guildId, tag } = parsed.body
 
-    await setSeasonalReport(guildId, enabled, channelId)
+    await setSeasonalReport(guildId, tag, enabled, channelId)
 
     res.status(200).json({ success: true })
   } catch (err) {

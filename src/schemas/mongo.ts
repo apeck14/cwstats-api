@@ -361,7 +361,7 @@ export const postSeasonalReportSchema = z.object({
       channelId: discordIdSchema.optional(),
       enabled: z.boolean(),
       guildId: discordIdSchema,
-      tag: tagSchema.optional()
+      tag: tagSchema
     })
     .refine((data) => !data.enabled || data.channelId, {
       message: 'channelId is required when enabling seasonal report',
@@ -375,7 +375,7 @@ export const postWarReportSchema = z.object({
       channelId: discordIdSchema.optional(),
       enabled: z.boolean(),
       guildId: discordIdSchema,
-      tag: tagSchema.optional()
+      tag: tagSchema
     })
     .refine((data) => !data.enabled || data.channelId, {
       message: 'channelId is required when enabling war report',

@@ -1061,7 +1061,7 @@ export const setClanLogClan = async ({ tag, webhookUrl1, webhookUrl2 }: SetWarLo
   return result
 }
 
-export const setSeasonalReport = async (id: string, enabled: boolean, channelId?: string) => {
+export const setSeasonalReport = async (id: string, tag: string, enabled: boolean, channelId?: string) => {
   await connectDB()
 
   const updateQuery: Record<string, unknown> = {
@@ -1073,7 +1073,7 @@ export const setSeasonalReport = async (id: string, enabled: boolean, channelId?
   }
 
   const query = await LinkedClanModel.updateOne(
-    { guildID: id },
+    { guildID: id, tag: formatTag(tag, true) },
     {
       $set: updateQuery
     }
@@ -1082,7 +1082,7 @@ export const setSeasonalReport = async (id: string, enabled: boolean, channelId?
   return query
 }
 
-export const setWarReport = async (id: string, enabled: boolean, channelId?: string) => {
+export const setWarReport = async (id: string, tag: string, enabled: boolean, channelId?: string) => {
   await connectDB()
 
   const updateQuery: Record<string, unknown> = {
@@ -1094,7 +1094,7 @@ export const setWarReport = async (id: string, enabled: boolean, channelId?: str
   }
 
   const query = await LinkedClanModel.updateOne(
-    { guildID: id },
+    { guildID: id, tag: formatTag(tag, true) },
     {
       $set: updateQuery
     }

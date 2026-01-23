@@ -14,9 +14,9 @@ export const postWarReportController = async (req: Request, res: Response) => {
       body: req.body
     })
 
-    const { channelId, enabled, guildId } = parsed.body
+    const { channelId, enabled, guildId, tag } = parsed.body
 
-    await setWarReport(guildId, enabled, channelId)
+    await setWarReport(guildId, tag, enabled, channelId)
 
     res.status(200).json({ success: true })
   } catch (err) {
