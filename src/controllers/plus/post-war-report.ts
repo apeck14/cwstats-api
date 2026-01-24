@@ -16,9 +16,16 @@ export const postWarReportController = async (req: Request, res: Response) => {
 
     const { channelId, enabled, guildId, tag } = parsed.body
 
-    await setWarReport(guildId, tag, enabled, channelId)
+    const result = await setWarReport(guildId, tag, enabled, channelId)
 
-    res.status(200).json({ success: true })
+    if (!result?.matchedCount) {
+      res.status(404).json({ error: 'Linked clan not found', status: 404 })
+      return
+    }
+
+    res.status(200).json({
+      success: true
+    })
   } catch (err) {
     if (err instanceof ZodError) {
       const e = err.errors[0]
