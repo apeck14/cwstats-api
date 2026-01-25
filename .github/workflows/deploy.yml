@@ -53,6 +53,7 @@ jobs:
             $VPS_USER@$VPS_HOST "
               cd $VPS_PATH &&
               npm ci &&
+              rm -rf dist &&
               npm run build &&
-              pm2 reload cwstats-api || pm2 start dist/server.js --name cwstats-api
+              pm2 restart cwstats-api || pm2 start dist/server.js --name cwstats-api
             "
