@@ -10,37 +10,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2️⃣ Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # 3️⃣ Set up SSH key
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Sync files via rsync
+      # 4️⃣ Deploy, build, and reload API
+      - name: Deploy and Reload API
         env:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PATH: ${{ secrets.VPS_PATH }}
         run: |
-          echo ".env" >> rsync_exclude.txt
-          rsync -avz --delete --exclude-from=rsync_exclude.txt -e "ssh -o StrictHostKeyChecking=no" ./ $VPS_USER@$VPS_HOST:$VPS_PATH
+          set -e
+          set -o pipefail
 
-      - name: Install, Build, and Reload PM2 on VPS
-        env:
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PATH: ${{ secrets.VPS_PATH }}
-        run: |
-          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST "
-            cd $VPS_PATH &&
-            npm ci &&
-            npm run build &&
-            pm2 reload cwstats-api || pm2 start dist/server.js --name cwstats-api
-          "
+          # Exclude sensitive/unnecessary files
+          echo ".env" > rsync_exclude.txt
+          echo "node_modules" >> rsync_exclude.txt
+          echo ".git" >> rsync_exclude.txt
+          echo "*.log" >> rsync_exclude.txt
+
+          # Sync files to VPS
+          rsync -avz --delete --info=progress2 \
+            --exclude-from=rsync_exclude.txt \
+            -e "ssh -p 22022 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ConnectTimeout=15 -o BatchMode=yes" \
+            ./ $VPS_USER@$VPS_HOST:$VPS_PATH
+
+          # Install deps, build, and reload PM2 on VPS
+          ssh -p 22022 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ConnectTimeout=15 -o BatchMode=yes \
+            $VPS_USER@$VPS_HOST "
+              cd $VPS_PATH &&
+              npm ci &&
+              npm run build &&
+              pm2 reload cwstats-api || pm2 start dist/server.js --name cwstats-api
+            "
