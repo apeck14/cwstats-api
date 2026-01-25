@@ -1,13 +1,20 @@
 /* eslint-disable camelcase */
 import { Request, Response } from 'express'
 import { JWTPayload } from 'jose'
+import type Stripe from 'stripe'
 import { ZodError } from 'zod'
 
 import stripe from '@/lib/stripe'
 import { verifyUserToken } from '@/lib/utils'
-import { getAccount } from '@/services/mongo'
+import { getAccount, setStripeCustomerId } from '@/services/mongo'
 
 const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:4400' : 'https://cwstats.com'
+
+const NO_SUBSCRIPTION_RESPONSE = {
+  code: 'NO_SUBSCRIPTION',
+  error: 'No active subscription found. Please subscribe first.',
+  status: 403
+} as const
 
 /**
  * Create Stripe Customer Portal Session for managing subscriptions
@@ -32,22 +39,55 @@ const postProPortalController = async (req: Request, res: Response) => {
 
     const user = await getAccount(discordId)
 
-    if (!user || !user.stripeCustomerId) {
-      res.status(400).json({ error: 'User not found or no Stripe customer', status: 400 })
+    if (!user) {
+      res.status(401).json({ error: 'User not found', status: 401 })
       return
     }
 
-    // Verify customer exists in Stripe
+    // If no customer ID, user has never subscribed
+    if (!user.stripeCustomerId) {
+      res.status(403).json(NO_SUBSCRIPTION_RESPONSE)
+      return
+    }
+
+    // Verify customer exists in Stripe and has subscriptions
     let customer
     try {
-      customer = await stripe.customers.retrieve(user.stripeCustomerId)
-    } catch {
-      res.status(404).json({ error: 'Stripe customer not found', status: 404 })
+      customer = await stripe.customers.retrieve(user.stripeCustomerId, {
+        expand: ['subscriptions']
+      })
+    } catch (stripeErr: unknown) {
+      // Customer was deleted or doesn't exist - clear the invalid ID
+      if (
+        typeof stripeErr === 'object' &&
+        stripeErr !== null &&
+        'statusCode' in stripeErr &&
+        stripeErr.statusCode === 404
+      ) {
+        await setStripeCustomerId(discordId, '')
+        res.status(403).json(NO_SUBSCRIPTION_RESPONSE)
+        return
+      }
+
+      throw stripeErr
+    }
+
+    if (customer.deleted) {
+      // Clear the deleted customer ID
+      await setStripeCustomerId(discordId, '')
+      res.status(403).json(NO_SUBSCRIPTION_RESPONSE)
       return
     }
 
-    if (!customer || customer.deleted) {
-      res.status(404).json({ error: 'Stripe customer deleted', status: 404 })
+    // Check if user has any subscriptions
+    const subscriptions = (customer as Stripe.Customer & { subscriptions?: Stripe.ApiList<Stripe.Subscription> })
+      .subscriptions
+    const hasActiveSubscription = subscriptions?.data.some((sub) =>
+      ['active', 'trialing', 'past_due'].includes(sub.status)
+    )
+
+    if (!hasActiveSubscription) {
+      res.status(403).json(NO_SUBSCRIPTION_RESPONSE)
       return
     }
 
