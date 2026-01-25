@@ -20,14 +20,18 @@ jobs:
         with:
           node-version: '20'
 
-      # 3️⃣ Set up SSH key
+      # 3️⃣ Install dependencies (exact versions)
+      - name: Install dependencies
+        run: npm ci
+
+      # 4️⃣ Set up SSH key
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 4️⃣ Deploy, build, and reload API
-      - name: Deploy and Reload API
+      # 5️⃣ Deploy and reload PM2
+      - name: Deploy and Reload PM2
         env:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
@@ -42,18 +46,12 @@ jobs:
           echo ".git" >> rsync_exclude.txt
           echo "*.log" >> rsync_exclude.txt
 
-          # Sync files to VPS
+          # Rsync to VPS using custom SSH port and robust options
           rsync -avz --delete --info=progress2 \
             --exclude-from=rsync_exclude.txt \
             -e "ssh -p 22022 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ConnectTimeout=15 -o BatchMode=yes" \
             ./ $VPS_USER@$VPS_HOST:$VPS_PATH
 
-          # Install deps, build, and reload PM2 on VPS
+          # Fail-safe PM2 reload
           ssh -p 22022 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ConnectTimeout=15 -o BatchMode=yes \
-            $VPS_USER@$VPS_HOST "
-              cd $VPS_PATH &&
-              npm ci &&
-              rm -rf dist &&
-              npm run build &&
-              pm2 restart cwstats-api || pm2 start dist/server.js --name cwstats-api
-            "
+            $VPS_USER@$VPS_HOST "pm2 reload cwstats-api || pm2 start cwstats-api"
