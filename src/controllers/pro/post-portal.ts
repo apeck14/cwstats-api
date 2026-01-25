@@ -33,13 +33,21 @@ const postProPortalController = async (req: Request, res: Response) => {
     const user = await getAccount(discordId)
 
     if (!user || !user.stripeCustomerId) {
-      res.status(400).json({ error: 'User not found', status: 400 })
+      res.status(400).json({ error: 'User not found or no Stripe customer', status: 400 })
       return
     }
 
-    const customer = await stripe.customers.retrieve(user.stripeCustomerId)
-    if (!customer || customer.deleted) {
+    // Verify customer exists in Stripe
+    let customer
+    try {
+      customer = await stripe.customers.retrieve(user.stripeCustomerId)
+    } catch {
       res.status(404).json({ error: 'Stripe customer not found', status: 404 })
+      return
+    }
+
+    if (!customer || customer.deleted) {
+      res.status(404).json({ error: 'Stripe customer deleted', status: 404 })
       return
     }
 
