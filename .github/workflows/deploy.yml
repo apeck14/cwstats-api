@@ -5,29 +5,36 @@ on:
     branches:
       - master
 
+# Prevent concurrent deploys
+concurrency:
+  group: deploy-api
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       # 1️⃣ Checkout code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2️⃣ Set up Node.js
+      # 2️⃣ Set up Node.js with caching
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       # 3️⃣ Set up SSH key
       - name: Set up SSH key
-        uses: webfactory/ssh-agent@v0.7.0
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # 4️⃣ Deploy, build, and reload PM2
-      - name: Deploy, Build, and Reload PM2
+      # 4️⃣ Deploy, build on VPS, and reload PM2
+      - name: Deploy, build on VPS, and reload PM2
         env:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
@@ -39,21 +46,17 @@ jobs:
           # Exclude sensitive/unnecessary files
           echo ".env" > rsync_exclude.txt
           echo "node_modules" >> rsync_exclude.txt
+          echo "dist" >> rsync_exclude.txt
           echo ".git" >> rsync_exclude.txt
           echo "*.log" >> rsync_exclude.txt
+          echo "ecosystem.config.js" >> rsync_exclude.txt
 
-          # Rsync to VPS using custom SSH port and robust options
-          rsync -avz --delete --info=progress2 \
+          # Rsync to VPS using custom SSH port
+          rsync -avz --delete \
             --exclude-from=rsync_exclude.txt \
-            -e "ssh -p 22022 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ConnectTimeout=15 -o BatchMode=yes" \
+            -e "ssh -p 22022 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ConnectTimeout=30 -o BatchMode=yes" \
             ./ $VPS_USER@$VPS_HOST:$VPS_PATH
 
-          # Build and restart PM2 on VPS
+          # Build on VPS and reload PM2
           ssh -p 22022 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ConnectTimeout=15 -o BatchMode=yes \
-            $VPS_USER@$VPS_HOST "
-              cd $VPS_PATH &&
-              npm ci &&
-              rm -rf dist &&
-              npm run build &&
-              pm2 restart cwstats-api || pm2 start dist/server.js --name cwstats-api
-            "
+            $VPS_USER@$VPS_HOST "cd $VPS_PATH && npm ci && npm run build && pm2 reload ecosystem.config.js"
