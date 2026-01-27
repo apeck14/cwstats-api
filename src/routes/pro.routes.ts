@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import getCheckoutRedirectController from '@/controllers/pro/get-checkout-redirect'
 import getProStatusController from '@/controllers/pro/get-status'
 import getProSubscriptionController from '@/controllers/pro/get-subscription'
 import patchProClanLogController from '@/controllers/pro/patch-clan-logs'
@@ -9,6 +10,7 @@ import postProPortalController from '@/controllers/pro/post-portal'
 
 const router: Router = Router()
 
+router.get('/checkout-redirect', getCheckoutRedirectController)
 router.get('/status', getProStatusController)
 router.get('/subscription', getProSubscriptionController)
 

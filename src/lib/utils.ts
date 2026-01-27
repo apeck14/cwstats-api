@@ -225,3 +225,23 @@ export async function verifyUserToken(token: string) {
     return null
   }
 }
+
+/**
+ * Validate required metadata fields are present
+ */
+export const validateMetadata = (
+  metadata: Record<string, null | string> | undefined,
+  requiredFields: string[]
+): boolean => {
+  if (!metadata) return false
+  return requiredFields.every((field) => metadata[field])
+}
+
+/**
+ * Check if clan description contains CWStats URL
+ */
+export const hasCWStatsUrl = (clanDescription?: string): boolean => {
+  if (!clanDescription) return false
+  const lowercaseDesc = clanDescription.toLowerCase()
+  return lowercaseDesc.includes('cwstats') || lowercaseDesc.includes('cw-stats')
+}

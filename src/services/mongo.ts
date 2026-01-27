@@ -16,6 +16,7 @@ import { ProClanModel } from '@/models/pro-clan.model'
 import { Location, StatisticsModel } from '@/models/statistics.model'
 import { WarLogModel } from '@/models/war-log.model'
 import { WarLogClanAttacksModel } from '@/models/war-log-clan-attacks.model'
+import { WebhookEventModel } from '@/models/webhook-event.model'
 import { getRaceLog, getRiverRace } from '@/services/supercell'
 
 interface PlayerInput {
@@ -838,13 +839,29 @@ export const setStripeCustomerId = async (userId: string, customerId: string) =>
       }
     }
   )
+
   return result
 }
 
 export const addProClan = async ({ active, clanName, stripeId, tag }: ProClanInput) => {
   await connectDB()
 
-  const result = await ProClanModel.create({ active, clanName, stripeId, tag: formatTag(tag, true) })
+  const formattedTag = formatTag(tag, true)
+
+  // Use findOneAndUpdate with upsert to prevent race conditions and duplicate key errors
+  const result = await ProClanModel.findOneAndUpdate(
+    { tag: formattedTag },
+    {
+      $set: { active, clanName, stripeId, tag: formattedTag },
+      $setOnInsert: {
+        clanLogs: { enabled: false },
+        warLogsEnabled: false,
+        webhookUrl1: '',
+        webhookUrl2: ''
+      }
+    },
+    { new: true, upsert: true }
+  )
 
   return result
 }
@@ -855,6 +872,22 @@ export const deleteProClan = async (tag: string) => {
   const result = await ProClanModel.findOneAndDelete({ tag: formatTag(tag, true) })
 
   return result
+}
+
+export const deleteProClanByStripeId = async (stripeId: string) => {
+  await connectDB()
+
+  const result = await ProClanModel.findOneAndDelete({ stripeId })
+
+  return result
+}
+
+export const getProClanByStripeId = async (stripeId: string) => {
+  await connectDB()
+
+  const proClan = await ProClanModel.findOne({ stripeId }, { _id: 0 })
+
+  return proClan
 }
 
 export const setProClanStatus = async (tag: string, active: boolean) => {
@@ -1101,4 +1134,39 @@ export const setWarReport = async (id: string, tag: string, enabled: boolean, ch
   )
 
   return query
+}
+
+// ================== Webhook Idempotency ==================
+
+/**
+ * Check if a webhook event has already been processed
+ * @param eventId - Stripe event ID
+ * @returns true if event was already processed
+ */
+export const isWebhookEventProcessed = async (eventId: string): Promise<boolean> => {
+  await connectDB()
+
+  const existing = await WebhookEventModel.findOne({ eventId })
+  return !!existing
+}
+
+/**
+ * Mark a webhook event as processed
+ * @param eventId - Stripe event ID
+ * @param eventType - Type of event (e.g., customer.subscription.created)
+ * @param metadata - Optional metadata to store
+ */
+export const markWebhookEventProcessed = async (
+  eventId: string,
+  eventType: string,
+  metadata?: Record<string, unknown>
+) => {
+  await connectDB()
+
+  await WebhookEventModel.create({
+    eventId,
+    eventType,
+    metadata,
+    processedAt: new Date()
+  })
 }
