@@ -331,9 +331,22 @@ const postStripeWebhookController = async (req: Request, res: Response) => {
         break
     }
 
-    // Mark event as processed for idempotency
+    // Gather extra metadata if available
+    const obj = event.data.object as { metadata?: Record<string, string>; object?: string }
+    let { clanName, clanTag, userId } = obj.metadata ?? ({} as Record<string, string | undefined>)
+
+    if (event.type.startsWith('invoice.') && obj.object === 'invoice') {
+      const meta = await getInvoiceSubscriptionMetadata(obj as Stripe.Invoice)
+      clanName ??= meta?.clanName
+      clanTag ??= meta?.clanTag
+      userId ??= meta?.userId
+    }
+
     await markWebhookEventProcessed(event.id, event.type, {
-      processedAt: new Date().toISOString()
+      clanName,
+      clanTag,
+      processedAt: new Date().toISOString(),
+      userId
     })
 
     res.status(200).json({ received: true })
