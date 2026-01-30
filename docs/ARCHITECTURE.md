@@ -103,6 +103,48 @@ Response sent
 | `discord.ts`   | Discord API (webhooks, DMs, roles)  |
 | `stripe.ts`    | Stripe API (subscriptions, portals) |
 
+## Redis Integration
+
+Redis 8.x (with RediSearch) is used for player autocomplete search across millions of players.
+
+### Connection
+
+- **Location:** VPS localhost:6379 (no auth, localhost-only binding)
+- **Client:** ioredis with lazy connection
+- **Config:** `src/config/redis.ts`
+
+### Player Search Index
+
+| Field       | Type        | Purpose                                                                              |
+| ----------- | ----------- | ------------------------------------------------------------------------------------ |
+| `name`      | TEXT NOSTEM | Display name, sortable                                                               |
+| `nameNorm`  | TEXT NOSTEM | Normalized (lowercase, punctuation stripped, spaces preserved) for word-level search |
+| `nameLower` | TAG         | Full lowercase for edge cases                                                        |
+| `tag`       | TAG         | Exact player tag lookup                                                              |
+| `clanName`  | TEXT NOSTEM | Current clan name for display                                                        |
+
+### Write Pattern
+
+Players are upserted to Redis whenever fetched from Supercell API:
+
+```typescript
+// In getPlayer() - fire-and-forget
+upsertPlayerInRedis({ name, tag, clanName }).catch(() => {})
+```
+
+This ensures the search index grows organically as users look up players.
+
+### Service Functions
+
+| Function               | Purpose                     |
+| ---------------------- | --------------------------- |
+| `upsertPlayerInRedis`  | Add/update player hash      |
+| `searchPlayersInRedis` | Prefix search via FT.SEARCH |
+| `getPlayerFromRedis`   | Get single player by tag    |
+| `checkRedisHealth`     | Connection health check     |
+
+---
+
 ## Models (MongoDB Collections)
 
 | Model               | Purpose                       |

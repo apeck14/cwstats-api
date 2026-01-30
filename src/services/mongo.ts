@@ -10,7 +10,6 @@ import { EmojiModel } from '@/models/emoji.model'
 import { Guild, GuildModel } from '@/models/guild.model'
 import { LinkedAccountModel } from '@/models/linked-account.model'
 import { LinkedClan, LinkedClanModel } from '@/models/linked-clan.model'
-import { PlayerModel } from '@/models/player.model'
 import { PlusClan, PlusClanModel } from '@/models/plus-clan.model'
 import { ProClanModel } from '@/models/pro-clan.model'
 import { Location, StatisticsModel } from '@/models/statistics.model'
@@ -18,12 +17,6 @@ import { WarLogModel } from '@/models/war-log.model'
 import { WarLogClanAttacksModel } from '@/models/war-log-clan-attacks.model'
 import { WebhookEventModel } from '@/models/webhook-event.model'
 import { getRaceLog, getRiverRace } from '@/services/supercell'
-
-interface PlayerInput {
-  clanName?: string
-  name: string
-  tag: string
-}
 
 interface LinkPlayerInput {
   name: string
@@ -170,22 +163,6 @@ const TAGS = [
   '#9CRYRJ',
   '#98RVLCUY'
 ]
-
-export const addPlayer = async ({ clanName, name, tag }: PlayerInput) => {
-  await connectDB()
-
-  const updatedPlayer = await PlayerModel.findOneAndUpdate(
-    { tag },
-    { clanName, name, tag },
-    { new: true, setDefaultsOnInsert: true, upsert: true }
-  )
-
-  if (!updatedPlayer) {
-    throw new Error('Player was not added or updated.')
-  }
-
-  return updatedPlayer
-}
 
 export const linkPlayer = async ({ name, tag, userId }: LinkPlayerInput) => {
   await connectDB()
@@ -685,54 +662,6 @@ export const updateDailyLeaderboard = async (entries: DailyLeaderboardEntry[]) =
   const result = await DailyLeaderboardModel.insertMany(entries)
 
   return result
-}
-
-export const searchPlayersByName = async (name: string, limit = 10) => {
-  await connectDB()
-
-  const players = await PlayerModel.aggregate([
-    {
-      $search: {
-        compound: {
-          should: [
-            {
-              // 1️⃣ Prioritize in-order prefix matches
-              autocomplete: {
-                path: 'name',
-                query: name,
-                score: { boost: { value: 5 } }
-              }
-            },
-            {
-              // 2️⃣ Strongly boost exact/full phrase matches
-              phrase: {
-                path: 'name',
-                query: name,
-                score: {
-                  boost: { value: 10 }
-                }
-              }
-            }
-          ]
-        },
-        index: `${process.env.NODE_ENV === 'development' ? 'dev-' : ''}searchPlayerNames`
-      }
-    },
-    {
-      $addFields: {
-        score: { $meta: 'searchScore' }
-      }
-    },
-    { $limit: limit },
-    {
-      $project: {
-        __v: 0,
-        _id: 0
-      }
-    }
-  ])
-
-  return players
 }
 
 export const getAllWarLogClanAttacks = async () => {

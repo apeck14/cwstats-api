@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { ZodError } from 'zod'
 
 import { playerLinkSchema } from '@/schemas/mongo'
-import { addPlayer, linkPlayer } from '@/services/mongo'
+import { linkPlayer } from '@/services/mongo'
 import { getPlayer } from '@/services/supercell'
 
 /**
@@ -21,10 +21,6 @@ export const playerLinkController = async (req: Request, res: Response) => {
       res.status(status || 404).json({ error: error || 'Player not found.', status: status || 404 })
       return
     }
-
-    const data = { clanName: player?.clan?.name, name: player.name, tag: player.tag }
-
-    addPlayer(data)
 
     const result = await linkPlayer({ name: player.name, tag: player.tag, userId })
 

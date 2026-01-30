@@ -3,10 +3,6 @@ import { z } from 'zod'
 
 import { discordIdSchema, locationSchema, riserFallerEntrySchema, tagSchema } from '@/schemas/utils'
 
-export const playerDocumentSchema = z.object({
-  tag: tagSchema
-})
-
 export const playerLinkSchema = z.object({
   tag: tagSchema,
   userId: discordIdSchema
@@ -210,13 +206,6 @@ export const patchRisersFallersSchema = z.object({
 export const deletePlusClanSchema = z.object({
   params: z.object({
     tag: tagSchema
-  })
-})
-
-export const getPlayerSearchSchema = z.object({
-  query: z.object({
-    limit: z.string().optional(),
-    name: z.string().min(1, { message: 'name cannot be empty' })
   })
 })
 

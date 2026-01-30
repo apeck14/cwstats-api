@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 
 import { formatTag } from '@/lib/format'
+import { upsertPlayerInRedis } from '@/services/redis'
 import { SupercellClan, SupercellClansSearch } from '@/types/supercell/clan'
 import { SupercellWarLeaderboard } from '@/types/supercell/leaderboard'
 import { SupercellBattleLog, SupercellPlayer } from '@/types/supercell/player'
@@ -45,9 +46,20 @@ export const handleSupercellRequest = async <T>(url: string): Promise<SupercellR
   }
 }
 
-export const getPlayer = (tag: string) => {
+export const getPlayer = async (tag: string) => {
   const url = `${BASE_URL}/players/%23${formatTag(tag, false)}`
-  return handleSupercellRequest<SupercellPlayer>(url)
+  const result = await handleSupercellRequest<SupercellPlayer>(url)
+
+  // Update Redis with player info (non-blocking, fire-and-forget)
+  if (result.data) {
+    upsertPlayerInRedis({
+      clanName: result.data.clan?.name || '',
+      name: result.data.name,
+      tag: result.data.tag
+    }).catch(() => {})
+  }
+
+  return result
 }
 
 export const getPlayerBattleLog = (tag: string) => {

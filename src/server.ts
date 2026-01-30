@@ -3,6 +3,7 @@ import { config } from 'dotenv'
 config()
 
 import { connectDB } from '@/config/db'
+import { closeRedis, getRedis } from '@/config/redis'
 
 import app from './app'
 
@@ -22,19 +23,26 @@ process.on('unhandledRejection', (err) => {
 })
 
 // Handle SIGTERM signal
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   console.log('SIGTERM signal received: closing HTTP server')
+  await closeRedis()
   if (server) {
     server.close(() => console.log('HTTP server closed'))
   }
 })
 
-connectDB()
-  .then(() => {
-    server = app.listen(PORT, HOST, () =>
-      console.log(`Server running in ${process.env.NODE_ENV} mode on http://${HOST}:${PORT}`)
-    )
+const startServer = async () => {
+  // Connect to MongoDB
+  await connectDB()
 
-    return
-  })
-  .catch((err) => console.error(`Server startup failed: ${err}`))
+  // Connect to Redis
+  const redis = getRedis()
+  await redis.connect()
+
+  // Start HTTP server
+  server = app.listen(PORT, HOST, () =>
+    console.log(`Server running in ${process.env.NODE_ENV} mode on http://${HOST}:${PORT}`)
+  )
+}
+
+startServer().catch((err) => console.error(`Server startup failed: ${err}`))
