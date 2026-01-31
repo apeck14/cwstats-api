@@ -1,8 +1,12 @@
 import { Request, Response } from 'express'
 import { omit } from 'lodash'
+import { z } from 'zod'
 
+import { clanSchema } from '@/schemas/supercell'
 import { getRiverRace } from '@/services/supercell'
 import { ApiRaceLimited } from '@/types/api/race'
+
+type ClanParams = z.infer<typeof clanSchema>['params']
 
 /**
  * Get clan
@@ -10,7 +14,7 @@ import { ApiRaceLimited } from '@/types/api/race'
  */
 export const clanRaceLimitedController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as ClanParams
 
     const { data: race, error, status } = await getRiverRace(tag)
 

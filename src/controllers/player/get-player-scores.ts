@@ -1,8 +1,12 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
 import { formatTag } from '@/lib/format'
 import { DailyTrackingEntry } from '@/models/plus-clan.model'
+import { playerSchema } from '@/schemas/supercell'
 import { getPlusClans } from '@/services/mongo'
+
+type PlayerParams = z.infer<typeof playerSchema>['params']
 
 interface Entry extends DailyTrackingEntry {
   day: number
@@ -16,7 +20,7 @@ interface Entry extends DailyTrackingEntry {
  */
 export const getPlayerScoresController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as PlayerParams
 
     const formattedTag = formatTag(tag, true)
 

@@ -14,10 +14,6 @@ export const plusClansSchema = z.object({
       .enum(['true', 'false'], { message: "hideDailyTracking must be 'true' or 'false'" })
       .optional()
       .default('false'),
-    hideHourlyAverages: z
-      .enum(['true', 'false'], { message: "hideHourlyAverages must be 'true' or 'false'" })
-      .optional()
-      .default('false'),
     tagsOnly: z.enum(['true', 'false'], { message: "tagsOnly must be 'true' or 'false'" }).optional().default('false')
   })
 })
@@ -134,26 +130,6 @@ export const addDailyTrackingEntriesSchema = z.object({
           ),
           season: z.number(),
           tag: tagSchema,
-          timestamp: z.string(),
-          week: z.number()
-        }),
-        { required_error: 'entries must be an array of objects' }
-      )
-      .min(1, { message: 'entries array cannot be empty' })
-  })
-})
-
-export const addHourlyTrackingEntriesSchema = z.object({
-  body: z.object({
-    entries: z
-      .array(
-        z.object({
-          attacksCompleted: z.number(),
-          avg: z.number(),
-          day: z.number(),
-          lastHourAvg: z.number(),
-          season: z.number(),
-          tag: z.string(),
           timestamp: z.string(),
           week: z.number()
         }),

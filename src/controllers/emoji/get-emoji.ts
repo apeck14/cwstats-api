@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { getEmojiSchema } from '@/schemas/mongo'
 import { getEmoji } from '@/services/mongo'
+
+type EmojiParams = z.infer<typeof getEmojiSchema>['params']
 
 /**
  * Get an emoji
@@ -8,7 +12,7 @@ import { getEmoji } from '@/services/mongo'
  */
 export const getEmojiController = async (req: Request, res: Response) => {
   try {
-    const { name } = req.params
+    const { name } = req.params as EmojiParams
 
     const emoji = await getEmoji(name)
 

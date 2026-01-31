@@ -83,17 +83,6 @@ interface FullDailyTrackingEntry {
   week: number
 }
 
-interface HourlyTrackingEntry {
-  attacksCompleted: number
-  avg: number
-  day: number
-  lastHourAvg: number
-  season: number
-  tag: string
-  timestamp: string
-  week: number
-}
-
 interface RiserFallerEntry {
   badgeId: number
   clanScore: number
@@ -494,41 +483,8 @@ export const bulkAddDailyTrackingEntries = async (entries: FullDailyTrackingEntr
             day: e.day,
             scores: e.scores,
             season: e.season,
-            timestamp: e.timestamp,
+            timestamp: new Date(e.timestamp),
             week: e.week
-          }
-        }
-      }
-    }
-  }))
-
-  const result = await PlusClanModel.bulkWrite(operations, { ordered: false })
-  return result
-}
-
-export const bulkAddHourlyTrackingEntries = async (entries: HourlyTrackingEntry[]) => {
-  await connectDB()
-
-  if (!entries.length) return { modifiedCount: 0 }
-
-  const operations = entries.map((e) => ({
-    updateOne: {
-      filter: { tag: formatTag(e.tag, true) },
-      update: {
-        $push: {
-          hourlyAverages: {
-            $each: [
-              {
-                attacksCompleted: e.attacksCompleted,
-                avg: e.avg,
-                day: e.day,
-                lastHourAvg: e.lastHourAvg,
-                season: e.season,
-                timestamp: e.timestamp,
-                week: e.week
-              }
-            ],
-            $slice: -300
           }
         }
       }
@@ -739,7 +695,7 @@ export const bulkUpdateWarLogLastUpdated = async (entries: LastUpdatedInput[]) =
       filter: { tag: formatTag(e.tag, true) },
       update: {
         $set: {
-          warLogsLastUpdated: e.timestamp
+          warLogsLastUpdated: new Date(e.timestamp)
         }
       }
     }
@@ -942,7 +898,7 @@ export const bulkUpdateClanLogs = async (entries: ClanLogsInput[]) => {
   const operations = entries.map((e) => ({
     replaceOne: {
       filter: { tag: formatTag(e.tag, true) },
-      replacement: e,
+      replacement: e as any,
       upsert: true
     }
   }))

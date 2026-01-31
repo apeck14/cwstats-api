@@ -1,14 +1,18 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { clanSchema } from '@/schemas/supercell'
 import { getRaceLog } from '@/services/supercell'
 
+type ClanParams = z.infer<typeof clanSchema>['params']
+
 /**
- * Get clan race log
+ * Get clan war log
  * @route GET /clan/:tag/log
  */
 export const getClanRaceLogController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as ClanParams
 
     const { data: log, error, status } = await getRaceLog(tag)
 

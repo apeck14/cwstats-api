@@ -16,20 +16,9 @@ export interface DailyTracking {
   week: number
 }
 
-export interface HourlyAverage {
-  attacksCompleted: number
-  avg: number
-  day: number
-  lastHourAvg: number
-  season: number
-  timestamp: Date
-  week: number
-}
-
 export interface PlusClan extends Document {
   active: boolean
   dailyTracking: DailyTracking[]
-  hourlyAverages: HourlyAverage[]
   tag: string
 }
 
@@ -55,24 +44,10 @@ const dailyTrackingSchema = new Schema(
   { _id: false }
 )
 
-const hourlyAverageSchema = new Schema(
-  {
-    attacksCompleted: { required: true, type: Number },
-    avg: { required: true, type: Number },
-    day: { max: 4, min: 1, required: true, type: Number },
-    lastHourAvg: { required: true, type: Number },
-    season: { required: true, type: Number },
-    timestamp: { required: true, type: Date },
-    week: { max: 5, min: 1, required: true, type: Number }
-  },
-  { _id: false }
-)
-
 const plusClanSchema = new Schema<PlusClan>(
   {
     active: { default: true, required: true, type: Boolean },
     dailyTracking: { default: [], required: true, type: [dailyTrackingSchema] },
-    hourlyAverages: { default: [], required: true, type: [hourlyAverageSchema] },
     tag: { required: true, trim: true, type: String, unique: true }
   },
   { collection: 'CWStats+', versionKey: false }

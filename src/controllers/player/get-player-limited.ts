@@ -1,7 +1,11 @@
 import { Request, Response } from 'express'
 import { omit } from 'lodash'
+import { z } from 'zod'
 
+import { playerSchema } from '@/schemas/supercell'
 import { getPlayer } from '@/services/supercell'
+
+type PlayerParams = z.infer<typeof playerSchema>['params']
 
 /**
  * Get player (limited)
@@ -9,7 +13,7 @@ import { getPlayer } from '@/services/supercell'
  */
 export const playerLimitedController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as PlayerParams
 
     const { data: player, error, status } = await getPlayer(tag)
 

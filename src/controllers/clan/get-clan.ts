@@ -1,7 +1,11 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
 import { getClanBadge } from '@/lib/utils'
+import { clanSchema } from '@/schemas/supercell'
 import { getClan } from '@/services/supercell'
+
+type ClanParams = z.infer<typeof clanSchema>['params']
 
 /**
  * Get clan
@@ -9,7 +13,7 @@ import { getClan } from '@/services/supercell'
  */
 export const clanController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as ClanParams
 
     const { data: clan, error, status } = await getClan(tag)
 

@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { playerSchema } from '@/schemas/supercell'
 import { getPlayerBattleLog } from '@/services/supercell'
+
+type PlayerParams = z.infer<typeof playerSchema>['params']
 
 /**
  * Get player battle log
@@ -8,7 +12,7 @@ import { getPlayerBattleLog } from '@/services/supercell'
  */
 export const playerLogController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as PlayerParams
 
     const { data: log, error, status } = await getPlayerBattleLog(tag)
 

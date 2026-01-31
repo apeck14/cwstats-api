@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { getWarLogSchema } from '@/schemas/mongo'
 import { getWarLogExists } from '@/services/mongo'
+
+type WarLogParams = z.infer<typeof getWarLogSchema>['params']
 
 /**
  * Get war log
@@ -9,7 +13,7 @@ import { getWarLogExists } from '@/services/mongo'
  */
 export const getWarLogController = async (req: Request, res: Response) => {
   try {
-    const { key } = req.params
+    const { key } = req.params as WarLogParams
 
     const logExists = await getWarLogExists(key)
 

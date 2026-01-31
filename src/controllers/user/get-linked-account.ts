@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { linkedAccountSchema } from '@/schemas/supercell'
 import { getLinkedAccount } from '@/services/mongo'
+
+type LinkedAccountParams = z.infer<typeof linkedAccountSchema>['params']
 
 /**
  * Get linked account
@@ -8,7 +12,7 @@ import { getLinkedAccount } from '@/services/mongo'
  */
 export const linkedAccountController = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params
+    const { userId } = req.params as LinkedAccountParams
 
     const linkedAccount = await getLinkedAccount(userId)
 

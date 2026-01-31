@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { guildSchema } from '@/schemas/mongo'
 import { getGuild } from '@/services/mongo'
+
+type GuildParams = z.infer<typeof guildSchema>['params']
 
 /**
  * Get guild data by id
@@ -8,7 +12,7 @@ import { getGuild } from '@/services/mongo'
  */
 export const getGuildController = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
+    const { id } = req.params as GuildParams
 
     const guild = await getGuild(id)
 

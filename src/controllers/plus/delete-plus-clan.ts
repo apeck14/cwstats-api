@@ -1,8 +1,12 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
 import { formatTag } from '@/lib/format'
+import { deletePlusClanSchema } from '@/schemas/mongo'
 import { deletePlusClan, deleteWarLogClanAttacks, getLinkedClan, sliceGuildPlusFeatures } from '@/services/mongo'
 import { hasActiveSubscription } from '@/services/stripe'
+
+type PlusClanParams = z.infer<typeof deletePlusClanSchema>['params']
 
 /**
  * Delete plus clan
@@ -10,7 +14,7 @@ import { hasActiveSubscription } from '@/services/stripe'
  */
 export const deletePlusClanController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as PlusClanParams
 
     const isPro = await hasActiveSubscription(tag)
 

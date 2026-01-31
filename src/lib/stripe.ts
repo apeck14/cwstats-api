@@ -4,7 +4,7 @@ import logger from '@/lib/logger'
 import { setStripeCustomerId } from '@/services/mongo'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-12-15.clover',
+  apiVersion: '2026-01-28.clover',
   maxNetworkRetries: 3,
   timeout: 30000 // 30 seconds
 })

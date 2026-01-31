@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { guildSchema } from '@/schemas/mongo'
 import { getLinkedClansByGuild } from '@/services/mongo'
+
+type GuildParams = z.infer<typeof guildSchema>['params']
 
 /**
  * Get all linked clans by guild
@@ -8,7 +12,7 @@ import { getLinkedClansByGuild } from '@/services/mongo'
  */
 export const getGuildClansController = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
+    const { id } = req.params as GuildParams
 
     const linkedClans = await getLinkedClansByGuild(id)
 

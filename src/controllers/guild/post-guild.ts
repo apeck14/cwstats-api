@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { guildSchema } from '@/schemas/mongo'
 import { createGuild } from '@/services/mongo'
+
+type GuildParams = z.infer<typeof guildSchema>['params']
 
 /**
  * Create a new guild
@@ -8,7 +12,7 @@ import { createGuild } from '@/services/mongo'
  */
 export const postGuildController = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
+    const { id } = req.params as GuildParams
 
     const { upsertedCount } = await createGuild(id)
 

@@ -1,12 +1,14 @@
 import { Request, Response } from 'express'
 import { omit } from 'lodash'
+import { z } from 'zod'
 
 import { getAvgFame, getClanBadge, getPlacements, getProjFame } from '@/lib/utils'
+import { clanSchema } from '@/schemas/supercell'
 import { getRiverRace } from '@/services/supercell'
 import { ApiRace } from '@/types/api/race'
 
-type BoatAccessorKey = 'fame' | 'periodPoints'
-type FameAccessorKey = 'fame' | 'periodPoints'
+type ClanParams = z.infer<typeof clanSchema>['params']
+type AccessorKey = 'fame' | 'periodPoints'
 
 /**
  * Get clan
@@ -14,7 +16,7 @@ type FameAccessorKey = 'fame' | 'periodPoints'
  */
 export const clanRaceController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as ClanParams
 
     const { data: race, error, status } = await getRiverRace(tag)
 
@@ -27,7 +29,7 @@ export const clanRaceController = async (req: Request, res: Response) => {
     const dayIndex = race.periodIndex % 7
     const clanTag = race.clan.tag
 
-    const { boatAccessor, fameAccessor }: { boatAccessor: BoatAccessorKey; fameAccessor: FameAccessorKey } = isColosseum
+    const { boatAccessor, fameAccessor }: { boatAccessor: AccessorKey; fameAccessor: AccessorKey } = isColosseum
       ? { boatAccessor: 'periodPoints', fameAccessor: 'fame' }
       : { boatAccessor: 'fame', fameAccessor: 'periodPoints' }
 

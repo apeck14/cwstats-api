@@ -1,7 +1,11 @@
 // delete a single clan attacks document
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
+import { clanSchema } from '@/schemas/supercell'
 import { deleteWarLogClanAttacks } from '@/services/mongo'
+
+type ClanParams = z.infer<typeof clanSchema>['params']
 
 /**
  * Delete a clan war logs attacks entry
@@ -9,7 +13,7 @@ import { deleteWarLogClanAttacks } from '@/services/mongo'
  */
 export const deleteWarLogsClanAttacksController = async (req: Request, res: Response) => {
   try {
-    const { tag } = req.params
+    const { tag } = req.params as ClanParams
 
     const { deletedCount } = await deleteWarLogClanAttacks(tag)
 

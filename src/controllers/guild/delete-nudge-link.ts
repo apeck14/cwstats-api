@@ -1,7 +1,11 @@
 import { Request, Response } from 'express'
+import { z } from 'zod'
 
 import { formatTag } from '@/lib/format'
+import { deleteGuildNudgeLinkSchema } from '@/schemas/mongo'
 import { deleteNudgeLink } from '@/services/mongo'
+
+type DeleteNudgeLinkParams = z.infer<typeof deleteGuildNudgeLinkSchema>['params']
 
 /**
  * Delete a nudge link from a guild
@@ -9,7 +13,7 @@ import { deleteNudgeLink } from '@/services/mongo'
  */
 export const deleteGuildNudgeLinkController = async (req: Request, res: Response) => {
   try {
-    const { id, tag } = req.params
+    const { id, tag } = req.params as DeleteNudgeLinkParams
 
     const formattedTag = formatTag(tag, true)
 
