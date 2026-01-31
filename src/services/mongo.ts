@@ -949,6 +949,107 @@ export const setClanLogClanStatus = async (tag: string, enabled: boolean) => {
   return result
 }
 
+/**
+ * Unset a specific war log webhook URL for a clan (webhookUrl1 or webhookUrl2)
+ * @param tag - Clan tag
+ * @param webhookNumber - Which webhook to unset (1 or 2)
+ */
+export const unsetWarLogWebhook = async (tag: string, webhookNumber: 1 | 2) => {
+  await connectDB()
+
+  const field = webhookNumber === 1 ? 'webhookUrl1' : 'webhookUrl2'
+
+  const result = await ProClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $unset: { [field]: 1 }
+    }
+  )
+
+  return result
+}
+
+/**
+ * Unset a specific clan log webhook URL for a clan (webhookUrl1 or webhookUrl2)
+ * @param tag - Clan tag
+ * @param webhookNumber - Which webhook to unset (1 or 2)
+ */
+export const unsetClanLogWebhook = async (tag: string, webhookNumber: 1 | 2) => {
+  await connectDB()
+
+  const field = `clanLogs.webhookUrl${webhookNumber}`
+
+  const result = await ProClanModel.updateOne(
+    { tag: formatTag(tag, true) },
+    {
+      $unset: { [field]: 1 }
+    }
+  )
+
+  return result
+}
+
+/**
+ * Unset the seasonal report channel ID for a linked clan
+ * @param guildId - Discord guild ID
+ * @param tag - Clan tag
+ */
+export const unsetSeasonalReportChannel = async (guildId: string, tag: string) => {
+  await connectDB()
+
+  const result = await LinkedClanModel.updateOne(
+    { guildID: guildId, tag: formatTag(tag, true) },
+    {
+      $unset: { seasonalReportChannelId: 1 }
+    }
+  )
+
+  return result
+}
+
+/**
+ * Unset the war report channel ID for a linked clan
+ * @param guildId - Discord guild ID
+ * @param tag - Clan tag
+ */
+export const unsetWarReportChannel = async (guildId: string, tag: string) => {
+  await connectDB()
+
+  const result = await LinkedClanModel.updateOne(
+    { guildID: guildId, tag: formatTag(tag, true) },
+    {
+      $unset: { warReportChannelId: 1 }
+    }
+  )
+
+  return result
+}
+
+/**
+ * Unset the nudge channel ID for a specific scheduled nudge
+ * @param guildId - Discord guild ID
+ * @param tag - Clan tag
+ * @param scheduledHourUTC - The scheduled hour to identify the nudge
+ */
+export const unsetNudgeChannel = async (guildId: string, tag: string, scheduledHourUTC: number) => {
+  await connectDB()
+
+  // Remove the specific nudge from the scheduled array
+  const result = await GuildModel.updateOne(
+    { guildID: guildId },
+    {
+      $pull: {
+        'nudges.scheduled': {
+          clanTag: formatTag(tag, true),
+          scheduledHourUTC
+        }
+      }
+    }
+  )
+
+  return result
+}
+
 export const deleteClanLogEntry = async (tag: string) => {
   await connectDB()
 

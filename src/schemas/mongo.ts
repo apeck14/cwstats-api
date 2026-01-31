@@ -347,3 +347,28 @@ export const postWarReportSchema = z.object({
       path: ['channelId']
     })
 })
+
+export const patchUnsetWebhookSchema = z.object({
+  body: z.object({
+    tag: tagSchema,
+    webhookNumber: z.union([z.literal(1), z.literal(2)], {
+      message: 'webhookNumber must be 1 or 2'
+    })
+  })
+})
+
+export const patchUnsetChannelSchema = z.object({
+  body: z.object({
+    channelType: z.enum(['seasonal', 'war'], { message: "channelType must be 'seasonal' or 'war'" }),
+    guildId: discordIdSchema,
+    tag: tagSchema
+  })
+})
+
+export const patchUnsetNudgeChannelSchema = z.object({
+  body: z.object({
+    guildId: discordIdSchema,
+    scheduledHourUTC: z.number(),
+    tag: tagSchema
+  })
+})

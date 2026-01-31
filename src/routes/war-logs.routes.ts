@@ -5,6 +5,7 @@ import getWarLogClanAttacksController from '@/controllers/war-logs/get-attacks'
 import getWarLogClansController from '@/controllers/war-logs/get-clans'
 import getWarLogController from '@/controllers/war-logs/get-log'
 import patchWarLogsActiveController from '@/controllers/war-logs/patch-active'
+import patchUnsetWarLogWebhookController from '@/controllers/war-logs/patch-unset-webhook'
 import postBulkUpdateWarLogAttacksController from '@/controllers/war-logs/post-bulk-update-attacks'
 import postWarLogsBulkUpdateLastUpdatedController from '@/controllers/war-logs/post-bulk-update-last-updated'
 import postWarLogsController from '@/controllers/war-logs/post-logs'
@@ -26,6 +27,7 @@ router.post('/bulk-update-attacks', postBulkUpdateWarLogAttacksController)
 router.post('/bulk-update-last-updated', postWarLogsBulkUpdateLastUpdatedController)
 
 router.patch('/active', patchWarLogsActiveController)
+router.patch('/unset-webhook', patchUnsetWarLogWebhookController)
 
 router.delete('/:tag/attacks', validation(clanSchema), deleteWarLogsClanAttacksController)
 
